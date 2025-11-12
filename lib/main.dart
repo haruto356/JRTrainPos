@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'dart:io';
+
+import 'package:http/http.dart' as http;
+import 'package:path_provider/path_provider.dart';
 
 import 'my_line_screen.dart';
 import 'line_list_screen.dart';
@@ -43,6 +47,44 @@ class _MyHomePageState extends State<MyHomePage> {
   void _onTapBottomBar(int index){
     setState(() {
       _selectedScreenIndex = index;
+    });
+  }
+
+  final List<String> supportedLineList = [
+    'hokuriku',
+    'hokurikubiwako',
+    'kyoto',
+    'kobesanyo',
+  ];
+
+  @override
+  void initState() {
+    super.initState();
+
+    // json取得
+    Future(() async {
+      // 駅json
+      for(var i in supportedLineList) {
+        final jsonUrl = Uri.parse('https://www.train-guide.westjr.co.jp/api/v3/${i}_st.json');
+        final response = await http.get(jsonUrl);
+
+        // 取得に成功したらファイルとして保存する
+        if(response.statusCode == 200){
+          final saveDirTemp = await getTemporaryDirectory();
+          final filePath = '${saveDirTemp.path}/$i.json';
+
+          final file = File(filePath);
+          await file.writeAsString(response.body);
+        }
+        else{
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('駅データの取得に失敗しました($i)'), duration: Duration(seconds: 1),)
+          );
+        }
+
+        // 負荷軽減のためやや遅らせる
+        await Future.delayed(Duration(milliseconds: 200));
+      }
     });
   }
 
