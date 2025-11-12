@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'package:jr_train_pos/train_pos_screen.dart';
+
 class LineListScreen extends StatefulWidget {
   const LineListScreen({super.key});
 
@@ -14,6 +16,7 @@ class _LineListScreenState extends State<LineListScreen> {
       body: Center(
         child: Column(
           children: [
+            // 路線一覧
             const Line(lineName: '東海道本線', lineColor: 0xff2574b7, lineCode: ' A ', lineCodeColor: 0xffffffff,),
             const Line(lineName: '湖西線', lineColor: 0xff38aecf, lineCode: ' B ', lineCodeColor: 0xffffffff,),
             const Line(lineName: '草津線', lineColor: 0xff60983d, lineCode: ' C ', lineCodeColor: 0xffffffff,),
@@ -44,7 +47,15 @@ class Line extends StatelessWidget {
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
 
         child: InkWell(
-          onTap: (){},
+          // 画面遷移
+          onTap: (){
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => TrainPosScreen(lineName: lineName, lineColor: lineColor, lineCodeColor: lineCodeColor,)
+              )
+            );
+          },
           child: Padding(
             padding: EdgeInsets.all(14),
             child: Row(
