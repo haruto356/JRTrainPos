@@ -30,4 +30,16 @@ class FileOperation {
 
     return file.statSync().modified;
   }
+
+  // 一時フォルダにあるファイルの中身を返す関数
+  Future<String> getFileContent(String fileName) async {
+    // 存在確認
+    if(!(await isFileExistTempDir(fileName))){
+      return '';
+    }
+
+    final file = File('${(await getTemporaryDirectory()).path}/$fileName');
+
+    return file.readAsString();
+  }
 }

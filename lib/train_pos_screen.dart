@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:jr_train_pos/file_operation.dart';
 import 'dart:convert';
 
 import 'package:jr_train_pos/get_json_file.dart';
@@ -15,20 +16,55 @@ class TrainPosScreen extends StatefulWidget {
 }
 
 class _TrainPosScreenState extends State<TrainPosScreen> {
+  final fileOperation = FileOperation();
+  final getJsonFile = GetJsonFile();
+
   List<String> jsonString = [];
 
-  void drawStation() {
+  List<Widget> stationWidgetList = [];
 
+  // 駅ウィジェットのリストをjsonから作成する関数
+  Future<void> _updateStationWidgetList() async {
+    final List<String> lineFileList = getJsonFile.changeLineNameToJsonFile(widget.lineName);
+    List<String?> lineList = [];
+
+    stationWidgetList.add(StationEnd(lineColor: widget.lineColor));
+
+    for(var i in lineFileList){
+      final jsonStr = await fileOperation.getFileContent('$i.json');
+      // 順番維持のための遅延
+      await Future.delayed(Duration(milliseconds: 100));
+      Map<String, dynamic> lineMap = json.decode(jsonStr);
+
+      for(int i = 0; i < lineMap['stations'].length; i++) {
+        String station = lineMap['stations'][i]['info']['name'];
+        // 重複を排除
+        if(!lineList.contains(station)){
+          lineList.add(station);
+          lineList.add(null);
+        }
+      }
+    }
+
+    // Widgetの生成
+    for(var i in lineList){
+      stationWidgetList.add(Station(stationName: i, lineColor: widget.lineColor));
+    }
+    // 不要なnullを削除
+    lineList.removeLast();
+
+    stationWidgetList.add(StationEnd(lineColor: widget.lineColor));
+
+    setState(() {});
   }
 
   // 画面を描画する関数
-  Future<void> draw() async {
-    await dataRefresh();
-
+  Future<void> _draw() async {
+    await _dataRefresh();
   }
 
   // jsonデータを取得する関数
-  Future<void> dataRefresh() async {
+  Future<void> _dataRefresh() async {
     final getJsonFile = GetJsonFile();
 
     Future(() async {
@@ -53,7 +89,10 @@ class _TrainPosScreenState extends State<TrainPosScreen> {
   @override
   void initState() {
     super.initState();
-    draw();
+    Future(() async{
+      await _draw();
+      await _updateStationWidgetList();
+    });
   }
 
   @override
@@ -83,21 +122,7 @@ class _TrainPosScreenState extends State<TrainPosScreen> {
       body: SafeArea(
         child: SingleChildScrollView(
           child: Column(
-            children: [
-              StationEnd(lineColor: widget.lineColor),
-              Station(lineColor: widget.lineColor, stationName: '山科'),
-              Station(lineColor: widget.lineColor, stationName: null),
-              Station(lineColor: widget.lineColor, stationName: '京都'),
-              Station(lineColor: widget.lineColor, stationName: null),
-              Station(lineColor: widget.lineColor, stationName: '西大路'),
-              Station(lineColor: widget.lineColor, stationName: null),
-              Station(lineColor: widget.lineColor, stationName: '桂川'),
-              Station(lineColor: widget.lineColor, stationName: null),
-              Station(lineColor: widget.lineColor, stationName: '長岡京'),
-              Station(lineColor: widget.lineColor, stationName: null),
-              Station(lineColor: widget.lineColor, stationName: '山崎'),
-              StationEnd(lineColor: widget.lineColor,),
-            ],
+            children: stationWidgetList,
           ),
         ),
       ),

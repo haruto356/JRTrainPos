@@ -52,6 +52,7 @@ class _MyHomePageState extends State<MyHomePage> {
     'hokurikubiwako',
     'kyoto',
     'kobesanyo',
+    'kosei',
   ];
 
   @override
