@@ -25,4 +25,20 @@ class GetJsonFile {
       throw Exception();
     }
   }
+
+  // 列車情報を取得し、ファイルに保存する関数
+  Future<void> getTrainInfo() async {
+    try {
+      final jsonUrl = Uri.parse('https://www.train-guide.westjr.co.jp/api/v3/trainmonitorinfo.json');
+      final response = await http.get(jsonUrl);
+
+      // 取得に成功したらファイルに保存する
+      if(response.statusCode == 200) {
+        await FileOperation().saveFileTempDir('train_info.json', response.body);
+      }
+
+    } catch(e) {
+      throw Exception();
+    }
+  }
 }

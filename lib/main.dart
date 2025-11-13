@@ -74,6 +74,15 @@ class _MyHomePageState extends State<MyHomePage> {
         // 負荷軽減のためやや遅らせる
         await Future.delayed(Duration(milliseconds: 200));
       }
+
+      // 列車情報を取得
+      try {
+        await getJsonFile.getTrainInfo();
+      } catch (e) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('列車情報の取得に失敗しました'), duration: Duration(seconds: 1),),
+        );
+      }
     });
   }
 
