@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'dart:convert';
+
 import 'package:jr_train_pos/get_json_file.dart';
 
 class TrainPosScreen extends StatefulWidget {
@@ -13,7 +15,9 @@ class TrainPosScreen extends StatefulWidget {
 }
 
 class _TrainPosScreenState extends State<TrainPosScreen> {
-  String json = '';
+  List<String> jsonString = [];
+  List<String> encodedJson = [];
+  List<Text> jsonText = [];
 
   @override
   void initState() {
@@ -26,12 +30,19 @@ class _TrainPosScreenState extends State<TrainPosScreen> {
 
       for (var i in lineList) {
         try {
-          json += await getJsonFile.getTrainPos(i);
+          jsonString.add(await getJsonFile.getTrainPos(i));
         } catch(e) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(content: Text('列車走行位置データの取得に失敗しました(${widget.lineName})'), duration: Duration(seconds: 1),),
           );
         }
+      }
+
+      // 整形して表示（デバッグ用）
+      final encoder = JsonEncoder.withIndent(' ');
+      for(var i in jsonString){
+        encodedJson.add(encoder.convert(json.decode(i)));
+        jsonText.add(Text(encodedJson.last));
       }
 
       setState(() {});
@@ -40,7 +51,7 @@ class _TrainPosScreenState extends State<TrainPosScreen> {
 
   @override
   Widget build(BuildContext context) {
-    if(json == ''){
+    if(encodedJson.isEmpty){
       return Scaffold(
         appBar: AppBar(
           title: Text(widget.lineName),
@@ -65,7 +76,9 @@ class _TrainPosScreenState extends State<TrainPosScreen> {
       body: SafeArea(
         child: SingleChildScrollView(
           child: Center(
-            child: Text(json),
+            child: Column(
+              children: jsonText,
+            ),
           ),
         ),
       ),
