@@ -16,8 +16,10 @@ class TrainPosScreen extends StatefulWidget {
 
 class _TrainPosScreenState extends State<TrainPosScreen> {
   List<String> jsonString = [];
-  List<String> encodedJson = [];
-  List<Text> jsonText = [];
+
+  void drawStation() {
+
+  }
 
   // 画面を描画する関数
   Future<void> draw() async {
@@ -42,13 +44,6 @@ class _TrainPosScreenState extends State<TrainPosScreen> {
         }
       }
 
-      // 整形して表示（デバッグ用）
-      final encoder = JsonEncoder.withIndent(' ');
-      for(var i in jsonString){
-        encodedJson.add(encoder.convert(json.decode(i)));
-        jsonText.add(Text(encodedJson.last));
-      }
-
       await getJsonFile.getTrainInfo();
 
       setState(() {});
@@ -63,7 +58,7 @@ class _TrainPosScreenState extends State<TrainPosScreen> {
 
   @override
   Widget build(BuildContext context) {
-    if(encodedJson.isEmpty){
+    if(jsonString.isEmpty){
       return Scaffold(
         appBar: AppBar(
           title: Text(widget.lineName),
@@ -87,13 +82,133 @@ class _TrainPosScreenState extends State<TrainPosScreen> {
 
       body: SafeArea(
         child: SingleChildScrollView(
-          child: Center(
-            child: Column(
-              children: jsonText,
-            ),
+          child: Column(
+            children: [
+              StationEnd(lineColor: widget.lineColor),
+              Station(lineColor: widget.lineColor, stationName: '山科'),
+              Station(lineColor: widget.lineColor, stationName: null),
+              Station(lineColor: widget.lineColor, stationName: '京都'),
+              Station(lineColor: widget.lineColor, stationName: null),
+              Station(lineColor: widget.lineColor, stationName: '西大路'),
+              Station(lineColor: widget.lineColor, stationName: null),
+              Station(lineColor: widget.lineColor, stationName: '桂川'),
+              Station(lineColor: widget.lineColor, stationName: null),
+              Station(lineColor: widget.lineColor, stationName: '長岡京'),
+              Station(lineColor: widget.lineColor, stationName: null),
+              Station(lineColor: widget.lineColor, stationName: '山崎'),
+              StationEnd(lineColor: widget.lineColor,),
+            ],
           ),
         ),
       ),
+    );
+  }
+}
+
+class Train extends StatelessWidget {
+  const Train({super.key, required this.direction, required this.congestion, required this.lineColor});
+  final int direction; // -1が下向き、1が上向き
+  final int congestion; // 混雑度 -1 ~ 150?
+  final int lineColor; // 路線カラー
+
+  @override
+  Widget build(BuildContext context) {
+
+    return Container(
+      margin: EdgeInsets.all(5),
+      width: 40,
+      height: 50,
+      child: ElevatedButton(
+        style: ElevatedButton.styleFrom(
+          backgroundColor: Color(lineColor),
+          shape: BeveledRectangleBorder(
+            borderRadius: BorderRadius.only(
+              topRight: Radius.circular((9999 * (direction + 1)).toDouble()),
+              topLeft: Radius.circular((9999 * (direction + 1)).toDouble()),
+              bottomRight: Radius.circular((9999 * (direction - 1)).toDouble().abs()),
+              bottomLeft: Radius.circular((9999 * (direction - 1)).toDouble().abs())
+            ),
+          )
+        ),
+        onPressed: (){},
+        child: Text('a'),
+      ),
+    );
+  }
+}
+
+
+class Station extends StatelessWidget {
+  const Station({super.key, required this.stationName, required this.lineColor});
+  final int lineColor;
+  final String? stationName;
+
+  @override
+  Widget build(BuildContext context) {
+    // 駅
+    if(stationName != null){
+      return Container(
+        height: 70,
+        color: Colors.white12,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            SizedBox(width: 15,),
+            Text(stationName!, style: TextStyle(fontSize: 16),),
+            Spacer(),
+            Stack(
+              alignment: Alignment.center,
+              children: [
+                Container(
+                  width: 12,
+                  color: Color(lineColor),
+                ),
+                Container(
+                  height: 10,
+                  width: 10,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    shape: BoxShape.circle
+                  ),
+                )
+              ],
+            ),
+            Spacer(),
+            // バランスをとるためのダミー
+            Text(stationName!, style: TextStyle(color: Colors.white12, fontSize: 16),),
+            SizedBox(width: 15,),
+          ],
+        ),
+      );
+    }
+    // 駅間
+    else {
+      return Container(
+        height: 70,
+        color: Colors.white,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Container(
+              width: 12,
+              color: Color(lineColor),
+            )
+          ],
+        ),
+      );
+    }
+  }
+}
+
+class StationEnd extends StatelessWidget{
+  const StationEnd({super.key, required this.lineColor});
+  final int lineColor;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 20,
+      color: Colors.white,
     );
   }
 }
