@@ -1,6 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
     <application
-        android:label="jr_train_pos"
+        android:label="非公式JRW列車位置"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
