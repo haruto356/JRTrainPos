@@ -41,4 +41,46 @@ class GetJsonFile {
       throw Exception();
     }
   }
+
+  // 車両走行位置を取得する関数
+  Future<String> getTrainPos(String lineName) async {
+    String result = '';
+
+    // 取得
+    try {
+      final jsonUrl = Uri.parse('https://www.train-guide.westjr.co.jp/api/v3/$lineName.json');
+      final response = await http.get(jsonUrl);
+
+      if(response.statusCode == 200){
+        result = response.body;
+      }
+      else{
+        throw Exception();
+      }
+    } catch(e) {
+      throw Exception();
+    }
+
+    return result;
+  }
+
+  // 日本語路線名からjsonファイル用の路線名に変換する関数（東海道本線などの都合により配列を返す）
+  List<String> changeLineNameToJsonFile(String lineNameJa){
+    List<String> result = [];
+    result.clear();
+
+    switch(lineNameJa){
+      case '東海道本線':
+        result.add('hokuriku');
+        result.add('hokurikubiwako');
+        result.add('kyoto');
+        result.add('kobesanyo');
+        break;
+      case '湖西線':
+        result.add('kosei');
+        break;
+    }
+
+    return result;
+  }
 }
