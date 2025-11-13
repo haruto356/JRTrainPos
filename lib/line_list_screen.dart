@@ -72,7 +72,10 @@ class Line extends StatelessWidget {
                 Container(
                   width: 35,
                   padding: EdgeInsets.all(5),
-                  color: Color(lineColor),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(3),
+                    color: Color(lineColor),
+                  ),
                   child: Text(
                     lineCode,
                     textAlign: TextAlign.center,
