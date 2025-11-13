@@ -19,10 +19,14 @@ class _TrainPosScreenState extends State<TrainPosScreen> {
   List<String> encodedJson = [];
   List<Text> jsonText = [];
 
-  @override
-  void initState() {
-    super.initState();
+  // 画面を描画する関数
+  Future<void> draw() async {
+    await dataRefresh();
 
+  }
+
+  // jsonデータを取得する関数
+  Future<void> dataRefresh() async {
     final getJsonFile = GetJsonFile();
 
     Future(() async {
@@ -45,8 +49,16 @@ class _TrainPosScreenState extends State<TrainPosScreen> {
         jsonText.add(Text(encodedJson.last));
       }
 
+      await getJsonFile.getTrainInfo();
+
       setState(() {});
     });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    draw();
   }
 
   @override
