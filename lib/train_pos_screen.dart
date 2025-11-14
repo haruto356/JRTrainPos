@@ -179,7 +179,7 @@ class Station extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             SizedBox(width: 15,),
-            Text(stationName!, style: TextStyle(fontSize: 16),),
+            Text(stationName!, style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600,),),
             Spacer(),
             Stack(
               alignment: Alignment.center,
@@ -200,7 +200,7 @@ class Station extends StatelessWidget {
             ),
             Spacer(),
             // バランスをとるためのダミー
-            Text(stationName!, style: TextStyle(color: Colors.white12, fontSize: 16),),
+            Text(stationName!, style: TextStyle(color: Colors.white12, fontSize: 15, fontWeight: FontWeight.w600,),),
             SizedBox(width: 15,),
           ],
         ),
