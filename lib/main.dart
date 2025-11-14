@@ -47,12 +47,23 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
+  // 駅リストを取得する路線一覧
   final List<String> supportedLineList = [
     'hokuriku',
     'hokurikubiwako',
     'kyoto',
     'kobesanyo',
     'kosei',
+    'kusatsu',
+    'nara',
+    'sagano',
+    'sanin1',
+    'osakahigashi',
+    'takarazuka',
+    'fukuchiyama',
+    'tozai',
+    'gakkentoshi',
+    'osakaloop',
   ];
 
   @override

@@ -79,6 +79,30 @@ class GetJsonFile {
       case '湖西線':
         result.add('kosei');
         break;
+      case '草津線':
+        result.add('kusatsu');
+        break;
+      case '奈良線':
+        result.add('nara');
+        break;
+      case '嵯峨野山陰線':
+        result.add('sagano');
+        result.add('sanin1');
+        break;
+      case 'おおさか東線':
+        result.add('osakahigashi');
+        break;
+      case '宝塚線':
+        result.add('takarazuka');
+        result.add('fukuchiyama');
+        break;
+      case '東西線・学研都市線':
+        result.add('gakkentoshi');
+        result.add('tozai');
+        break;
+      case '大阪環状線':
+        result.add('osakaloop');
+        break;
     }
 
     return result;
