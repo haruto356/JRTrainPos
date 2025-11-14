@@ -28,12 +28,11 @@ class _TrainPosScreenState extends State<TrainPosScreen> {
     final List<String> lineFileList = getJsonFile.changeLineNameToJsonFile(widget.lineName);
     List<String?> lineList = [];
 
+    // 余白
     stationWidgetList.add(StationEnd(lineColor: widget.lineColor));
 
     for(var i in lineFileList){
       final jsonStr = await fileOperation.getFileContent('$i.json');
-      // 順番維持のための遅延
-      await Future.delayed(Duration(milliseconds: 100));
       Map<String, dynamic> lineMap = json.decode(jsonStr);
 
       for(int i = 0; i < lineMap['stations'].length; i++) {
@@ -46,13 +45,14 @@ class _TrainPosScreenState extends State<TrainPosScreen> {
       }
     }
 
-    // Widgetの生成
+    // Widgetをリストに追加
     for(var i in lineList){
       stationWidgetList.add(Station(stationName: i, lineColor: widget.lineColor));
     }
     // 不要なnullを削除
     lineList.removeLast();
 
+    // 余白
     stationWidgetList.add(StationEnd(lineColor: widget.lineColor));
 
     setState(() {});
