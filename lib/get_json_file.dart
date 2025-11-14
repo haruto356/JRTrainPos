@@ -8,7 +8,7 @@ class GetJsonFile {
     // 日付チェック（今日既に取得しているなら取得しない）
     DateTime now = DateTime.now();
     DateTime fileDate = await FileOperation().getFileModifiedDateTempDir('$lineName.json');
-    if(now.day == fileDate.day){
+    if(now.day == fileDate.day && now.year == fileDate.year){
       return;
     }
 
