@@ -19,16 +19,17 @@ class _TrainPosScreenState extends State<TrainPosScreen> {
   final _fileOperation = FileOperation();
   final _getJsonFile = GetJsonFile();
 
+  final List<String?> _stationList = [];
   final List<String> _trainPosJsonString = [];
   final Map<String, String> _trainPosMap = {}; // 列車番号、位置の順
-  final Map<String, String> _stationPosMap = {}; // 駅コード、駅名の順
+  final Map<String, String?> _stationPosMap = {}; // 駅コード、駅名の順
 
   final List<Widget> _stationWidgetList = [];
+  final List<Widget> _trainWidgetList = [];
 
   // 駅ウィジェットのリストをjsonから作成し、描画する関数
   Future<void> _drawStationList() async {
     final List<String> lineFileList = _getJsonFile.changeLineNameToJsonFile(widget.lineName);
-    List<String?> lineList = [];
 
     // 余白を追加
     _stationWidgetList.add(StationEnd());
@@ -40,9 +41,9 @@ class _TrainPosScreenState extends State<TrainPosScreen> {
       for(int j = 0; j < lineMap['stations'].length; j++) {
         String stationName = lineMap['stations'][j]['info']['name'];
         // 重複を排除
-        if(!lineList.contains(stationName)){
-          lineList.add(stationName);
-          lineList.add(null);
+        if(!_stationList.contains(stationName)){
+          _stationList.add(stationName);
+          _stationList.add(null);
         }
 
         // 駅コードと駅名を連想配列に格納
@@ -51,15 +52,32 @@ class _TrainPosScreenState extends State<TrainPosScreen> {
     }
 
     // 不要なnullを削除
-    lineList.removeLast();
+    _stationList.removeLast();
 
     // Widgetをリストに追加
-    for(var i in lineList){
+    for(var i in _stationList){
       _stationWidgetList.add(Station(stationName: i, lineColor: widget.lineColor));
     }
 
     // 余白を追加
     _stationWidgetList.add(StationEnd());
+
+    setState(() {});
+  }
+
+  // 列車を描画する関数
+  Future<void> _drawTrain() async {
+    await Future.delayed(Duration(seconds: 1));
+    _trainPosMap.forEach((key, value) {
+      final String firstPos = value.substring(0,4);
+      final String secondPos = value.substring(5,9);
+
+      final int listPos = _stationList.indexOf(_stationPosMap[firstPos]);
+
+      _trainWidgetList.add(Train(lineColor: widget.lineColor, pos: listPos));
+
+      print(listPos);
+    });
 
     setState(() {});
   }
@@ -102,6 +120,7 @@ class _TrainPosScreenState extends State<TrainPosScreen> {
     Future(() async{
       await _dataRefresh();
       await _drawStationList();
+      await _drawTrain();
     });
   }
 
@@ -131,11 +150,42 @@ class _TrainPosScreenState extends State<TrainPosScreen> {
       ),
 
       body: SafeArea(
-        child: SingleChildScrollView(
-          child: Column(
-            children: _stationWidgetList,
-          ),
+        child: Stack(
+          children: [
+            Positioned.fill(
+              child: SingleChildScrollView(
+                child: Stack(
+                  children: [
+                    Column(
+                      children: _stationWidgetList,
+                    ),
+                    ..._trainWidgetList
+                  ],
+                ),
+              ),
+            )
+          ],
         ),
+      ),
+    );
+  }
+}
+
+class Train extends StatelessWidget {
+  const Train({super.key, required this.lineColor, required this.pos});
+
+  final int lineColor;
+  final int pos;
+
+  @override
+  Widget build(BuildContext context) {
+    return Positioned(
+      top: pos * 70 + 40,
+      left: 130,
+      child: Container(
+        height: 30,
+        width: 30,
+        color: Color(lineColor),
       ),
     );
   }
