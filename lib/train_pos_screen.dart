@@ -16,23 +16,23 @@ class TrainPosScreen extends StatefulWidget {
 }
 
 class _TrainPosScreenState extends State<TrainPosScreen> {
-  final fileOperation = FileOperation();
-  final getJsonFile = GetJsonFile();
+  final _fileOperation = FileOperation();
+  final _getJsonFile = GetJsonFile();
 
-  List<String> jsonString = [];
+  final List<String> _trainPosJsonString = [];
 
-  List<Widget> stationWidgetList = [];
+  final List<Widget> _stationWidgetList = [];
 
-  // 駅ウィジェットのリストをjsonから作成する関数
-  Future<void> _updateStationWidgetList() async {
-    final List<String> lineFileList = getJsonFile.changeLineNameToJsonFile(widget.lineName);
+  // 駅ウィジェットのリストをjsonから作成し、描画する関数
+  Future<void> _drawStationList() async {
+    final List<String> lineFileList = _getJsonFile.changeLineNameToJsonFile(widget.lineName);
     List<String?> lineList = [];
 
     // 余白
-    stationWidgetList.add(StationEnd(lineColor: widget.lineColor));
+    _stationWidgetList.add(StationEnd(lineColor: widget.lineColor));
 
     for(var i in lineFileList){
-      final jsonStr = await fileOperation.getFileContent('$i.json');
+      final jsonStr = await _fileOperation.getFileContent('$i.json');
       Map<String, dynamic> lineMap = json.decode(jsonStr);
 
       for(int i = 0; i < lineMap['stations'].length; i++) {
@@ -47,20 +47,15 @@ class _TrainPosScreenState extends State<TrainPosScreen> {
 
     // Widgetをリストに追加
     for(var i in lineList){
-      stationWidgetList.add(Station(stationName: i, lineColor: widget.lineColor));
+      _stationWidgetList.add(Station(stationName: i, lineColor: widget.lineColor));
     }
     // 不要なnullを削除
     lineList.removeLast();
 
     // 余白
-    stationWidgetList.add(StationEnd(lineColor: widget.lineColor));
+    _stationWidgetList.add(StationEnd(lineColor: widget.lineColor));
 
     setState(() {});
-  }
-
-  // 画面を描画する関数
-  Future<void> _draw() async {
-    await _dataRefresh();
   }
 
   // jsonデータを取得する関数
@@ -68,11 +63,12 @@ class _TrainPosScreenState extends State<TrainPosScreen> {
     final getJsonFile = GetJsonFile();
 
     Future(() async {
+      // 列車走行位置の取得
       final List<String> lineList = getJsonFile.changeLineNameToJsonFile(widget.lineName);
 
       for (var i in lineList) {
         try {
-          jsonString.add(await getJsonFile.getTrainPos(i));
+          _trainPosJsonString.add(await getJsonFile.getTrainPos(i));
         } catch(e) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(content: Text('列車走行位置データの取得に失敗しました(${widget.lineName})'), duration: Duration(seconds: 1),),
@@ -80,6 +76,7 @@ class _TrainPosScreenState extends State<TrainPosScreen> {
         }
       }
 
+      // 列車詳細情報の取得
       await getJsonFile.getTrainInfo();
 
       setState(() {});
@@ -90,14 +87,15 @@ class _TrainPosScreenState extends State<TrainPosScreen> {
   void initState() {
     super.initState();
     Future(() async{
-      await _draw();
-      await _updateStationWidgetList();
+      await _dataRefresh();
+      await _drawStationList();
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    if(jsonString.isEmpty){
+    // 列車位置が取得できていないならロード画面を描画する
+    if(_trainPosJsonString.isEmpty){
       return Scaffold(
         appBar: AppBar(
           title: Text(widget.lineName),
@@ -122,46 +120,13 @@ class _TrainPosScreenState extends State<TrainPosScreen> {
       body: SafeArea(
         child: SingleChildScrollView(
           child: Column(
-            children: stationWidgetList,
+            children: _stationWidgetList,
           ),
         ),
       ),
     );
   }
 }
-
-class Train extends StatelessWidget {
-  const Train({super.key, required this.direction, required this.congestion, required this.lineColor});
-  final int direction; // -1が下向き、1が上向き
-  final int congestion; // 混雑度 -1 ~ 150?
-  final int lineColor; // 路線カラー
-
-  @override
-  Widget build(BuildContext context) {
-
-    return Container(
-      margin: EdgeInsets.all(5),
-      width: 40,
-      height: 50,
-      child: ElevatedButton(
-        style: ElevatedButton.styleFrom(
-          backgroundColor: Color(lineColor),
-          shape: BeveledRectangleBorder(
-            borderRadius: BorderRadius.only(
-              topRight: Radius.circular((9999 * (direction + 1)).toDouble()),
-              topLeft: Radius.circular((9999 * (direction + 1)).toDouble()),
-              bottomRight: Radius.circular((9999 * (direction - 1)).toDouble().abs()),
-              bottomLeft: Radius.circular((9999 * (direction - 1)).toDouble().abs())
-            ),
-          )
-        ),
-        onPressed: (){},
-        child: Text('a'),
-      ),
-    );
-  }
-}
-
 
 class Station extends StatelessWidget {
   const Station({super.key, required this.stationName, required this.lineColor});
