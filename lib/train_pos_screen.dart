@@ -20,7 +20,7 @@ class _TrainPosScreenState extends State<TrainPosScreen> {
   final _getJsonFile = GetJsonFile();
 
   final List<String> _trainPosJsonString = [];
-
+  final Map<String, String> _trainPosMap = {}; // 列車番号、位置の順
   final List<Widget> _stationWidgetList = [];
 
   // 駅ウィジェットのリストをjsonから作成し、描画する関数
@@ -61,15 +61,14 @@ class _TrainPosScreenState extends State<TrainPosScreen> {
 
   // jsonデータを取得する関数
   Future<void> _dataRefresh() async {
-    final getJsonFile = GetJsonFile();
 
     Future(() async {
-      // 列車走行位置の取得
-      final List<String> lineList = getJsonFile.changeLineNameToJsonFile(widget.lineName);
+      final List<String> lineList = _getJsonFile.changeLineNameToJsonFile(widget.lineName);
 
+      // 列車走行位置の取得
       for (var i in lineList) {
         try {
-          _trainPosJsonString.add(await getJsonFile.getTrainPos(i));
+          _trainPosJsonString.add(await _getJsonFile.getTrainPos(i));
         } catch(e) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(content: Text('列車走行位置データの取得に失敗しました(${widget.lineName})'), duration: Duration(seconds: 1),),
@@ -77,8 +76,16 @@ class _TrainPosScreenState extends State<TrainPosScreen> {
         }
       }
 
+      // 列車走行位置を連想配列に格納
+      for(var i in _trainPosJsonString){
+        final Map<String, dynamic> jsonMap = json.decode(i);
+        for(var j in jsonMap['trains']){
+          _trainPosMap[j['no']] = j['pos'];
+        }
+      }
+
       // 列車詳細情報の取得
-      await getJsonFile.getTrainInfo();
+      await _getJsonFile.getTrainInfo();
 
       setState(() {});
     });
