@@ -28,8 +28,8 @@ class _TrainPosScreenState extends State<TrainPosScreen> {
     final List<String> lineFileList = _getJsonFile.changeLineNameToJsonFile(widget.lineName);
     List<String?> lineList = [];
 
-    // 余白
-    _stationWidgetList.add(StationEnd(lineColor: widget.lineColor));
+    // 余白を追加
+    _stationWidgetList.add(StationEnd());
 
     for(var i in lineFileList){
       final jsonStr = await _fileOperation.getFileContent('$i.json');
@@ -45,15 +45,16 @@ class _TrainPosScreenState extends State<TrainPosScreen> {
       }
     }
 
+    // 不要なnullを削除
+    lineList.removeLast();
+
     // Widgetをリストに追加
     for(var i in lineList){
       _stationWidgetList.add(Station(stationName: i, lineColor: widget.lineColor));
     }
-    // 不要なnullを削除
-    lineList.removeLast();
 
-    // 余白
-    _stationWidgetList.add(StationEnd(lineColor: widget.lineColor));
+    // 余白を追加
+    _stationWidgetList.add(StationEnd());
 
     setState(() {});
   }
@@ -191,8 +192,7 @@ class Station extends StatelessWidget {
 }
 
 class StationEnd extends StatelessWidget{
-  const StationEnd({super.key, required this.lineColor});
-  final int lineColor;
+  const StationEnd({super.key});
 
   @override
   Widget build(BuildContext context) {
