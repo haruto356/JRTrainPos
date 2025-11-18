@@ -21,6 +21,8 @@ class _TrainPosScreenState extends State<TrainPosScreen> {
 
   final List<String> _trainPosJsonString = [];
   final Map<String, String> _trainPosMap = {}; // 列車番号、位置の順
+  final Map<String, String> _stationPosMap = {}; // 駅コード、駅名の順
+
   final List<Widget> _stationWidgetList = [];
 
   // 駅ウィジェットのリストをjsonから作成し、描画する関数
@@ -35,13 +37,16 @@ class _TrainPosScreenState extends State<TrainPosScreen> {
       final jsonStr = await _fileOperation.getFileContent('$i.json');
       Map<String, dynamic> lineMap = json.decode(jsonStr);
 
-      for(int i = 0; i < lineMap['stations'].length; i++) {
-        String station = lineMap['stations'][i]['info']['name'];
+      for(int j = 0; j < lineMap['stations'].length; j++) {
+        String stationName = lineMap['stations'][j]['info']['name'];
         // 重複を排除
-        if(!lineList.contains(station)){
-          lineList.add(station);
+        if(!lineList.contains(stationName)){
+          lineList.add(stationName);
           lineList.add(null);
         }
+
+        // 駅コードと駅名を連想配列に格納
+        _stationPosMap[lineMap['stations'][j]['info']['code']] = stationName;
       }
     }
 
