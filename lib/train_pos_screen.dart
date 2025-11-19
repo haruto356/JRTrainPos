@@ -21,7 +21,8 @@ class _TrainPosScreenState extends State<TrainPosScreen> {
 
   final List<String?> _stationList = ['####'];
   final List<String> _trainPosJsonString = [];
-  final Map<String, String> _trainPosMap = {}; // 列車番号、位置の順
+  final Map<String, String> _trainPosMapUp = {}; // 列車番号、位置の順
+  final Map<String, String> _trainPosMapDown = {}; // 列車番号、位置の順
   final Map<String, String?> _stationPosMap = {'####' : '####'}; // 駅コード、駅名の順
 
   final List<Widget> _stationWidgetList = [];
@@ -70,17 +71,28 @@ class _TrainPosScreenState extends State<TrainPosScreen> {
   // 列車を描画する関数
   Future<void> _drawTrain() async {
     // リストが更新されてから列車を描画する
-    while(_trainPosMap.isEmpty){
+    while(_trainPosMapUp.isEmpty || _trainPosMapDown.isEmpty){
       await Future.delayed(Duration(milliseconds: 50));
     }
-    _trainPosMap.forEach((key, value) {
+    // 上方向
+    _trainPosMapUp.forEach((key, value) {
       final String firstPos = value.substring(0,4);
       final String secondPos = value.substring(5,9);
 
       final int listPosFirst = _stationList.indexOf(_stationPosMap[firstPos]);
       final int listPosSecond = _stationList.indexOf(_stationPosMap[secondPos]);
 
-      _trainWidgetList.add(Train(lineColor: widget.lineColor, posFirst: listPosFirst, posSecond: listPosSecond,));
+      _trainWidgetList.add(Train(lineColor: widget.lineColor, posFirst: listPosFirst, posSecond: listPosSecond, direction: 0,));
+    });
+    // 下方向
+    _trainPosMapDown.forEach((key, value) {
+      final String firstPos = value.substring(0,4);
+      final String secondPos = value.substring(5,9);
+
+      final int listPosFirst = _stationList.indexOf(_stationPosMap[firstPos]);
+      final int listPosSecond = _stationList.indexOf(_stationPosMap[secondPos]);
+
+      _trainWidgetList.add(Train(lineColor: widget.lineColor, posFirst: listPosFirst, posSecond: listPosSecond, direction: 1,));
     });
 
     setState(() {});
@@ -107,7 +119,14 @@ class _TrainPosScreenState extends State<TrainPosScreen> {
       for(var i in _trainPosJsonString){
         final Map<String, dynamic> jsonMap = json.decode(i);
         for(var j in jsonMap['trains']){
-          _trainPosMap[j['no']] = j['pos'];
+          // 上方向
+          if(j['direction'] == 0) {
+            _trainPosMapUp[j['no']] = j['pos'];
+          }
+          // 下方向
+          else {
+            _trainPosMapDown[j['no']] = j['pos'];
+          }
         }
       }
 
@@ -176,38 +195,52 @@ class _TrainPosScreenState extends State<TrainPosScreen> {
 }
 
 class Train extends StatefulWidget {
-  const Train({super.key, required this.lineColor, required this.posFirst, required this.posSecond});
+  const Train({super.key, required this.lineColor, required this.posFirst, required this.posSecond, required this.direction});
 
   final int lineColor;
   final int posFirst;
   final int posSecond;
+  final int direction;
 
   @override
   State<Train> createState() => _TrainState();
 }
 
 class _TrainState extends State<Train> {
-  int _pos = 0;
+  int _posTop = 0;
+  double _posLeft = 0;
+  late double screenWidth;
 
   @override
   void initState() {
     super.initState();
 
+    //screenWidth = MediaQuery.of(context).size.width;
+
     // 停車中
     if(widget.posSecond == 0) {
-      _pos = widget.posFirst;
+      _posTop = widget.posFirst;
     }
     // 駅間
     else {
-      _pos = widget.posFirst - 1;
+      _posTop = widget.posFirst - 1;
+    }
+
+    // 上方向
+    if(widget.direction == 0) {
+      //_posLeft = screenWidth / 2 - 50;
+    }
+    // 下方向
+    else {
+      //_posLeft = screenWidth / 2 + 50;
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return Positioned(
-      top: _pos * 70 + 40,
-      left: 130,
+      top: _posTop * 70 + 40,
+      left: _posLeft,
       child: Container(
         height: 30,
         width: 30,
