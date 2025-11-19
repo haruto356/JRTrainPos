@@ -16,7 +16,7 @@ class TrainPosScreen extends StatefulWidget {
   State<TrainPosScreen> createState() => _TrainPosScreenState();
 }
 
-class _TrainPosScreenState extends State<TrainPosScreen> {
+class _TrainPosScreenState extends State<TrainPosScreen> with WidgetsBindingObserver {
   final _fileOperation = FileOperation();
   final _getJsonFile = GetJsonFile();
 
@@ -149,12 +149,23 @@ class _TrainPosScreenState extends State<TrainPosScreen> {
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
+
     Future(() async{
       await _getStationList();
       await _dataRefresh();
       await _drawStationList();
       await _drawTrain();
     });
+  }
+
+  // アプリが再開されたとき
+  @override
+  Future<void> didChangeAppLifecycleState(AppLifecycleState state) async {
+    if(state == AppLifecycleState.resumed) {
+      await _drawStationList();
+      await _drawTrain();
+    }
   }
 
   @override
