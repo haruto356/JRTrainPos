@@ -208,14 +208,11 @@ class Train extends StatefulWidget {
 
 class _TrainState extends State<Train> {
   int _posTop = 0;
-  double _posLeft = 0;
   late double screenWidth;
 
   @override
   void initState() {
     super.initState();
-
-    //screenWidth = MediaQuery.of(context).size.width;
 
     // 停車中
     if(widget.posSecond == 0) {
@@ -225,22 +222,13 @@ class _TrainState extends State<Train> {
     else {
       _posTop = widget.posFirst - 1;
     }
-
-    // 上方向
-    if(widget.direction == 0) {
-      //_posLeft = screenWidth / 2 - 50;
-    }
-    // 下方向
-    else {
-      //_posLeft = screenWidth / 2 + 50;
-    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Positioned(
       top: _posTop * 70 + 40,
-      left: _posLeft,
+      left: widget.direction == 0 ? MediaQuery.of(context).size.width / 2 - 75 : MediaQuery.of(context).size.width / 2 + 55,
       child: Container(
         height: 30,
         width: 30,
