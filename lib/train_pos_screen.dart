@@ -138,10 +138,19 @@ class _TrainPosScreenState extends State<TrainPosScreen> {
     });
   }
 
+  // 駅リストを取得する関数
+  Future<void> _getStationList() async {
+    final List<String> lineList = _getJsonFile.changeLineNameToJsonFile(widget.lineName);
+    for(var i in lineList){
+      await _getJsonFile.getStationList(i);
+    }
+  }
+
   @override
   void initState() {
     super.initState();
     Future(() async{
+      await _getStationList();
       await _dataRefresh();
       await _drawStationList();
       await _drawTrain();
