@@ -19,10 +19,10 @@ class _TrainPosScreenState extends State<TrainPosScreen> {
   final _fileOperation = FileOperation();
   final _getJsonFile = GetJsonFile();
 
-  final List<String?> _stationList = [];
+  final List<String?> _stationList = ['####'];
   final List<String> _trainPosJsonString = [];
   final Map<String, String> _trainPosMap = {}; // 列車番号、位置の順
-  final Map<String, String?> _stationPosMap = {}; // 駅コード、駅名の順
+  final Map<String, String?> _stationPosMap = {'####' : '####'}; // 駅コード、駅名の順
 
   final List<Widget> _stationWidgetList = [];
   final List<Widget> _trainWidgetList = [];
@@ -56,7 +56,9 @@ class _TrainPosScreenState extends State<TrainPosScreen> {
 
     // Widgetをリストに追加
     for(var i in _stationList){
-      _stationWidgetList.add(Station(stationName: i, lineColor: widget.lineColor));
+      if(i != '####') {
+        _stationWidgetList.add(Station(stationName: i, lineColor: widget.lineColor));
+      }
     }
 
     // 余白を追加
@@ -67,16 +69,18 @@ class _TrainPosScreenState extends State<TrainPosScreen> {
 
   // 列車を描画する関数
   Future<void> _drawTrain() async {
-    await Future.delayed(Duration(seconds: 1));
+    // リストが更新されてから列車を描画する
+    while(_trainPosMap.isEmpty){
+      await Future.delayed(Duration(milliseconds: 50));
+    }
     _trainPosMap.forEach((key, value) {
       final String firstPos = value.substring(0,4);
       final String secondPos = value.substring(5,9);
 
-      final int listPos = _stationList.indexOf(_stationPosMap[firstPos]);
+      final int listPosFirst = _stationList.indexOf(_stationPosMap[firstPos]);
+      final int listPosSecond = _stationList.indexOf(_stationPosMap[secondPos]);
 
-      _trainWidgetList.add(Train(lineColor: widget.lineColor, pos: listPos));
-
-      print(listPos);
+      _trainWidgetList.add(Train(lineColor: widget.lineColor, posFirst: listPosFirst, posSecond: listPosSecond,));
     });
 
     setState(() {});
@@ -171,21 +175,43 @@ class _TrainPosScreenState extends State<TrainPosScreen> {
   }
 }
 
-class Train extends StatelessWidget {
-  const Train({super.key, required this.lineColor, required this.pos});
+class Train extends StatefulWidget {
+  const Train({super.key, required this.lineColor, required this.posFirst, required this.posSecond});
 
   final int lineColor;
-  final int pos;
+  final int posFirst;
+  final int posSecond;
+
+  @override
+  State<Train> createState() => _TrainState();
+}
+
+class _TrainState extends State<Train> {
+  int _pos = 0;
+
+  @override
+  void initState() {
+    super.initState();
+
+    // 停車中
+    if(widget.posSecond == 0) {
+      _pos = widget.posFirst;
+    }
+    // 駅間
+    else {
+      _pos = widget.posFirst - 1;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Positioned(
-      top: pos * 70 + 40,
+      top: _pos * 70 + 40,
       left: 130,
       child: Container(
         height: 30,
         width: 30,
-        color: Color(lineColor),
+        color: Color(widget.lineColor),
       ),
     );
   }
