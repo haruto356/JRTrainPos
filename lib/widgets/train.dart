@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 
 class Train extends StatefulWidget {
-  const Train({super.key, required this.lineColor, required this.posFirst, required this.posSecond, required this.direction});
+  const Train({super.key, required this.lineColor, required this.trainMap, required this.stationList, required this.stationPosMap});
 
   final int lineColor;
-  final int posFirst;
-  final int posSecond;
-  final int direction;
+  final Map<String, String?> trainMap;
+  final List<String?> stationList;
+  final Map<String, String?> stationPosMap;
 
   @override
   State<Train> createState() => _TrainState();
@@ -14,19 +14,24 @@ class Train extends StatefulWidget {
 
 class _TrainState extends State<Train> {
   int _posTop = 0;
-  late double screenWidth;
+  int _direction = 0;
 
   @override
   void initState() {
     super.initState();
 
+    _direction = int.parse(widget.trainMap['direction']!);
+
+    int posFirst = widget.stationList.indexOf(widget.stationPosMap[widget.trainMap['pos']!.substring(0,4)]);
+    int posSecond = widget.stationList.indexOf(widget.stationPosMap[widget.trainMap['pos']!.substring(5,9)]);
+
     // 停車中
-    if(widget.posSecond == 0) {
-      _posTop = widget.posFirst;
+    if(posSecond == 0) {
+      _posTop = posFirst;
     }
     // 駅間
     else {
-      _posTop = widget.posFirst - 1;
+      _posTop = posFirst - 1;
     }
   }
 
@@ -34,7 +39,7 @@ class _TrainState extends State<Train> {
   Widget build(BuildContext context) {
     return Positioned(
       top: _posTop * 70 + 40,
-      left: widget.direction == 0 ? MediaQuery.of(context).size.width / 2 - 75 : MediaQuery.of(context).size.width / 2 + 55,
+      left: _direction == 0 ? MediaQuery.of(context).size.width / 2 - 75 : MediaQuery.of(context).size.width / 2 + 55,
       child: Container(
         height: 30,
         width: 30,

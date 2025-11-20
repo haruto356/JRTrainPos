@@ -21,9 +21,8 @@ class _TrainPosScreenState extends State<TrainPosScreen> with WidgetsBindingObse
   final _getJsonFile = GetJsonFile();
 
   final List<String?> _stationList = ['####'];
-  final List<String> _trainPosJsonString = [];
-  final Map<String, String> _trainPosMapUp = {}; // 列車番号、位置の順
-  final Map<String, String> _trainPosMapDown = {}; // 列車番号、位置の順
+  final List<String> _trainPosJsonStringList = [];
+  final List<Map<String, String?>> _trainJsonMapList = [];
   final Map<String, String?> _stationPosMap = {'####' : '####'}; // 駅コード、駅名の順
 
   final List<Widget> _stationWidgetList = [];
@@ -82,7 +81,7 @@ class _TrainPosScreenState extends State<TrainPosScreen> with WidgetsBindingObse
 
     // リストが更新されてから列車を描画する
     int i = 0;
-    while(_trainPosMapUp.isEmpty && _trainPosMapDown.isEmpty){
+    while(_trainJsonMapList.isEmpty){
       await Future.delayed(Duration(milliseconds: 50));
       i++;
       if(i >= 100) {
@@ -90,26 +89,11 @@ class _TrainPosScreenState extends State<TrainPosScreen> with WidgetsBindingObse
         return;
       }
     }
-    // 上方向
-    _trainPosMapUp.forEach((key, value) {
-      final String firstPos = value.substring(0,4);
-      final String secondPos = value.substring(5,9);
 
-      final int listPosFirst = _stationList.indexOf(_stationPosMap[firstPos]);
-      final int listPosSecond = _stationList.indexOf(_stationPosMap[secondPos]);
-
-      _trainWidgetList.add(Train(lineColor: widget.lineColor, posFirst: listPosFirst, posSecond: listPosSecond, direction: 0,));
-    });
-    // 下方向
-    _trainPosMapDown.forEach((key, value) {
-      final String firstPos = value.substring(0,4);
-      final String secondPos = value.substring(5,9);
-
-      final int listPosFirst = _stationList.indexOf(_stationPosMap[firstPos]);
-      final int listPosSecond = _stationList.indexOf(_stationPosMap[secondPos]);
-
-      _trainWidgetList.add(Train(lineColor: widget.lineColor, posFirst: listPosFirst, posSecond: listPosSecond, direction: 1,));
-    });
+    // Trainウィジェットをリストに追加
+    for(var j in _trainJsonMapList) {
+      _trainWidgetList.add(Train(lineColor: widget.lineColor, trainMap: j, stationList: _stationList, stationPosMap: _stationPosMap));
+    }
 
     if(mounted) {
       setState(() {});
@@ -118,9 +102,8 @@ class _TrainPosScreenState extends State<TrainPosScreen> with WidgetsBindingObse
 
   // jsonデータを取得する関数
   Future<void> _dataRefresh() async {
-    _trainPosJsonString.clear();
-    _trainPosMapUp.clear();
-    _trainPosMapDown.clear();
+    _trainPosJsonStringList.clear();
+    _trainJsonMapList.clear();
 
     Future(() async {
       final List<String> lineList = _getJsonFile.changeLineNameToJsonFile(widget.lineName);
@@ -128,7 +111,7 @@ class _TrainPosScreenState extends State<TrainPosScreen> with WidgetsBindingObse
       // 列車走行位置の取得
       for (var i in lineList) {
         try {
-          _trainPosJsonString.add(await _getJsonFile.getTrainPos(i));
+          _trainPosJsonStringList.add(await _getJsonFile.getTrainPos(i));
         } catch(e) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(content: Text('列車走行位置データの取得に失敗しました(${widget.lineName})'), duration: Duration(seconds: 1),),
@@ -136,18 +119,15 @@ class _TrainPosScreenState extends State<TrainPosScreen> with WidgetsBindingObse
         }
       }
 
-      // 列車走行位置を連想配列に格納
-      for(var i in _trainPosJsonString){
+      // 列車jsonデータをリストに格納
+      for(var i in _trainPosJsonStringList){
         final Map<String, dynamic> jsonMap = json.decode(i);
         for(var j in jsonMap['trains']){
-          // 上方向
-          if(j['direction'] == 0) {
-            _trainPosMapUp[j['no']] = j['pos'];
-          }
-          // 下方向
-          else {
-            _trainPosMapDown[j['no']] = j['pos'];
-          }
+          // dynamicをMap<String, String?>に変換してからリストに追加
+          final temp = (j as Map).map(
+            (key, value) => MapEntry(key.toString(), value?.toString()),
+          );
+          _trainJsonMapList.add(temp);
         }
       }
 
@@ -217,7 +197,7 @@ class _TrainPosScreenState extends State<TrainPosScreen> with WidgetsBindingObse
   @override
   Widget build(BuildContext context) {
     // 列車位置が取得できていないならロード画面を描画する
-    if(_trainPosJsonString.isEmpty){
+    if(_trainPosJsonStringList.isEmpty){
       return Scaffold(
         appBar: AppBar(
           title: Text(widget.lineName),
