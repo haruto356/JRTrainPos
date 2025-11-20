@@ -34,6 +34,8 @@ class _TrainPosScreenState extends State<TrainPosScreen> with WidgetsBindingObse
 
   // 駅ウィジェットのリストをjsonから作成し、描画する関数
   Future<void> _drawStationList() async {
+    _stationWidgetList.clear();
+
     final List<String> lineFileList = _getJsonFile.changeLineNameToJsonFile(widget.lineName);
 
     // 余白を追加
@@ -79,8 +81,14 @@ class _TrainPosScreenState extends State<TrainPosScreen> with WidgetsBindingObse
     _trainWidgetList.clear();
 
     // リストが更新されてから列車を描画する
-    while(_trainPosMapUp.isEmpty || _trainPosMapDown.isEmpty){
+    int i = 0;
+    while(_trainPosMapUp.isEmpty && _trainPosMapDown.isEmpty){
       await Future.delayed(Duration(milliseconds: 50));
+      i++;
+      if(i >= 100) {
+        // しばらく待ってもリストが空の場合、その路線に列車が存在しないとする
+        return;
+      }
     }
     // 上方向
     _trainPosMapUp.forEach((key, value) {
@@ -170,16 +178,18 @@ class _TrainPosScreenState extends State<TrainPosScreen> with WidgetsBindingObse
     await _drawTrain();
 
     while(!_scrollController.hasClients){
-      await Future.delayed(Duration(milliseconds: 100));
+      await Future.delayed(Duration(milliseconds: 50));
     }
     _scrollController.jumpTo(scrollOffset);
 
     // 連打対策として一定時間ボタンを無効化
     await Future.delayed(Duration(seconds: 5));
 
-    setState(() {
-      _isRefreshButtonDisabled = false;
-    });
+    if(mounted) {
+      setState(() {
+        _isRefreshButtonDisabled = false;
+      });
+    }
   }
 
   @override
