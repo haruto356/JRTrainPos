@@ -29,6 +29,9 @@ class _TrainPosScreenState extends State<TrainPosScreen> with WidgetsBindingObse
   final List<Widget> _stationWidgetList = [];
   final List<Widget> _trainWidgetList = [];
 
+  bool _isRefreshButtonDisabled = false;
+  final ScrollController _scrollController = ScrollController();
+
   // 駅ウィジェットのリストをjsonから作成し、描画する関数
   Future<void> _drawStationList() async {
     final List<String> lineFileList = _getJsonFile.changeLineNameToJsonFile(widget.lineName);
@@ -66,11 +69,15 @@ class _TrainPosScreenState extends State<TrainPosScreen> with WidgetsBindingObse
     // 余白を追加
     _stationWidgetList.add(StationEnd());
 
+    if(mounted){
     setState(() {});
+    }
   }
 
   // 列車を描画する関数
   Future<void> _drawTrain() async {
+    _trainWidgetList.clear();
+
     // リストが更新されてから列車を描画する
     while(_trainPosMapUp.isEmpty || _trainPosMapDown.isEmpty){
       await Future.delayed(Duration(milliseconds: 50));
@@ -96,11 +103,16 @@ class _TrainPosScreenState extends State<TrainPosScreen> with WidgetsBindingObse
       _trainWidgetList.add(Train(lineColor: widget.lineColor, posFirst: listPosFirst, posSecond: listPosSecond, direction: 1,));
     });
 
-    setState(() {});
+    if(mounted) {
+      setState(() {});
+    }
   }
 
   // jsonデータを取得する関数
   Future<void> _dataRefresh() async {
+    _trainPosJsonString.clear();
+    _trainPosMapUp.clear();
+    _trainPosMapDown.clear();
 
     Future(() async {
       final List<String> lineList = _getJsonFile.changeLineNameToJsonFile(widget.lineName);
@@ -144,6 +156,30 @@ class _TrainPosScreenState extends State<TrainPosScreen> with WidgetsBindingObse
     for(var i in lineList){
       await _getJsonFile.getStationList(i);
     }
+  }
+
+  // 更新ボタンが押されたとき
+  Future<void> _onPressedRefreshButton() async {
+    final double scrollOffset = _scrollController.offset;
+
+    setState(() {
+      _isRefreshButtonDisabled = true;
+    });
+
+    await _dataRefresh();
+    await _drawTrain();
+
+    while(!_scrollController.hasClients){
+      await Future.delayed(Duration(milliseconds: 100));
+    }
+    _scrollController.jumpTo(scrollOffset);
+
+    // 連打対策として一定時間ボタンを無効化
+    await Future.delayed(Duration(seconds: 5));
+
+    setState(() {
+      _isRefreshButtonDisabled = false;
+    });
   }
 
   @override
@@ -191,6 +227,12 @@ class _TrainPosScreenState extends State<TrainPosScreen> with WidgetsBindingObse
         titleTextStyle: TextStyle(color: Color(widget.lineCodeColor), fontSize: 20),
         backgroundColor: Color(widget.lineColor),
         iconTheme: IconThemeData(color: Color(widget.lineCodeColor)),
+        actions: [
+          IconButton(
+            onPressed: _isRefreshButtonDisabled ? null : _onPressedRefreshButton,
+            icon: Icon(Icons.refresh),
+          ),
+        ],
       ),
 
       body: SafeArea(
@@ -198,6 +240,7 @@ class _TrainPosScreenState extends State<TrainPosScreen> with WidgetsBindingObse
           children: [
             Positioned.fill(
               child: SingleChildScrollView(
+                controller: _scrollController,
                 child: Stack(
                   children: [
                     Column(
