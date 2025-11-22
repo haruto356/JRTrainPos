@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:jr_train_pos/file_operation.dart';
 import 'dart:convert';
 
@@ -192,6 +193,18 @@ class _TrainPosScreenState extends State<TrainPosScreen> with WidgetsBindingObse
       await _drawStationList();
       await _drawTrain();
     }
+  }
+
+  @override
+  void dispose(){
+    super.dispose();
+    // ステータスバーの色変更
+    SystemChrome.setSystemUIOverlayStyle(
+        SystemUiOverlayStyle(
+            statusBarBrightness: Brightness.light,
+            statusBarIconBrightness: Brightness.dark
+        )
+    );
   }
 
   @override

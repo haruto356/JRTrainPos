@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import 'my_line_screen.dart';
 import 'line_list_screen.dart';
@@ -49,6 +50,14 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    // ステータスバーの色変更
+    SystemChrome.setSystemUIOverlayStyle(
+      SystemUiOverlayStyle(
+        statusBarBrightness: Brightness.light,
+        statusBarIconBrightness: Brightness.dark
+      )
+    );
+
     return Scaffold(
       body: SafeArea(
         child: _screens[_selectedScreenIndex],
