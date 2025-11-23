@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
 
 class Train extends StatefulWidget {
@@ -16,9 +17,41 @@ class _TrainState extends State<Train> {
   int _posTop = 0;
   int _direction = 0;
 
+  // 詳細画面に表示する情報
+  String _trainNo = '';
+  String _nickname = '';
+  String _trainType = '';
+  String _dest = '';
+  int _delayMinutes = 0;
+  int _numberOfCars = 0;
+
+  // 車両詳細情報を変数に格納する
+  void _updateTrainInfo(){
+    final Map<String, String?> map = widget.trainMap;
+
+    _trainNo = map['no']!;
+    _nickname = map['nickname']?? '';
+    _trainType = map['displayType']!;
+    _dest = map['dest']?? '';
+    // 行先がjson文字列の場合
+    if(_dest.length > 10){
+      // 正しいjsonに変換
+      _dest = _dest.replaceAll('{', '{"')
+        .replaceAll(':', '": "')
+        .replaceAll(',', '", "')
+        .replaceAll('}', '"}');
+      // 行先を取り出す
+      _dest = (json.decode(_dest) as Map<String, dynamic>)['text'].toString();
+    }
+    _delayMinutes = int.parse(map['delayMinutes']?? '0');
+    _numberOfCars = int.parse(map['numberOfCars']?? '0');
+  }
+
   @override
   void initState() {
     super.initState();
+
+    _updateTrainInfo();
 
     _direction = int.parse(widget.trainMap['direction']!);
 
@@ -51,9 +84,11 @@ class _TrainState extends State<Train> {
                   color: Color(widget.lineColor),
                   child: Row(
                     children: [
-                      Text(widget.trainMap['displayType']!),
+                      Text(_trainType),
                       Spacer(),
-                      widget.trainMap['numberOfCars'] == null ? Text('') : Text('${widget.trainMap['numberOfCars']!}両'),
+                      _dest == '' ? Text('') : Text('$_dest行き'),
+                      Spacer(),
+                      _numberOfCars == 0 ? Text('') : Text('$_numberOfCars両')
                     ],
                   ),
                 ),
