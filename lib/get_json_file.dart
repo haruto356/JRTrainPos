@@ -8,7 +8,7 @@ class GetJsonFile {
     // 日付チェック（今日既に取得しているなら取得しない）
     DateTime now = DateTime.now();
     DateTime fileDate = await FileOperation().getFileModifiedDateTempDir('$lineName.json');
-    if(now.day == fileDate.day && now.year == fileDate.year){
+    if(now.year == fileDate.year && now.month == fileDate.month && now.day == fileDate.day){
       return;
     }
 
@@ -28,6 +28,14 @@ class GetJsonFile {
 
   // 列車情報を取得し、ファイルに保存する関数
   Future<void> getTrainInfo() async {
+    // 日付チェック
+    DateTime now = DateTime.now();
+    DateTime fileDate = await FileOperation().getFileModifiedDateTempDir('train_info.json');
+    // 5秒以内に取得しているなら新たに取得しない
+    if(now.difference(fileDate).inSeconds < 5){
+      return;
+    }
+
     try {
       final jsonUrl = Uri.parse('https://www.train-guide.westjr.co.jp/api/v3/trainmonitorinfo.json');
       final response = await http.get(jsonUrl);
