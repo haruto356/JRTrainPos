@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:jr_train_pos/file_operation.dart';
 
 class Train extends StatefulWidget {
   const Train({super.key, required this.lineColor, required this.trainMap, required this.stationList, required this.stationPosMap});
@@ -24,9 +25,12 @@ class _TrainState extends State<Train> {
   String _dest = '';
   int _delayMinutes = 0;
   int _numberOfCars = 0;
+  List<dynamic>? _trainInfoJsonList = [];
+  List<int> _trainCarsNo = [];
+  List<int> _trainCarsCongestion = [];
 
   // 車両詳細情報を変数に格納する
-  void _updateTrainInfo(){
+  Future<void> _updateTrainInfo() async {
     final Map<String, String?> map = widget.trainMap;
 
     _trainNo = map['no']!;
@@ -45,13 +49,30 @@ class _TrainState extends State<Train> {
     }
     _delayMinutes = int.parse(map['delayMinutes']?? '0');
     _numberOfCars = int.parse(map['numberOfCars']?? '0');
+
+    // 列車情報から情報を取得
+    try {
+      final jsonStr = await FileOperation().getFileContent('train_info.json');
+      _trainInfoJsonList = json.decode(jsonStr)['trains'][_trainNo][0]['cars'] as List<dynamic>;
+    } catch(e){
+      // 車両が存在しない場合
+      _trainInfoJsonList = null;
+      return;
+    }
+
+    for(var i in _trainInfoJsonList!){
+      _trainCarsNo.add(i['carNo']);
+      _trainCarsCongestion.add(i['congestion']);
+    }
   }
 
   @override
   void initState() {
     super.initState();
 
-    _updateTrainInfo();
+    Future(() async {
+      await _updateTrainInfo();
+    });
 
     _direction = int.parse(widget.trainMap['direction']!);
 
@@ -92,6 +113,11 @@ class _TrainState extends State<Train> {
                     ],
                   ),
                 ),
+                // jsonから車両データを正しく取得できたら情報を表示する
+                if(_trainInfoJsonList != null)...{
+                  Text(_trainCarsNo.toString()),
+                  Text(_trainCarsCongestion.toString()),
+                }
               ],
             );
           });
