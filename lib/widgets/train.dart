@@ -53,9 +53,18 @@ class _TrainState extends State<Train> {
     // 列車情報から情報を取得
     try {
       final jsonStr = await FileOperation().getFileContent('train_info.json');
-      _trainInfoJsonList = json.decode(jsonStr)['trains'][_trainNo][0]['cars'] as List<dynamic>;
+      final carList = json.decode(jsonStr)['trains'][_trainNo];
+
+      // 車両情報を1両ごとにリストに追加
+      for(var i in carList[0]['cars']){
+        _trainInfoJsonList?.add(i);
+      }
+      // 新快速等、連結車両用
+      for(var i in carList[1]['cars']){
+        _trainInfoJsonList?.add(i);
+      }
     } catch(e){
-      // 車両が存在しない場合
+      // 車両情報が存在しない場合
       _trainInfoJsonList = null;
       return;
     }
