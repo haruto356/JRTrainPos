@@ -25,9 +25,9 @@ class _TrainState extends State<Train> {
   String _dest = '';
   int _delayMinutes = 0;
   int _numberOfCars = 0;
-  List<dynamic>? _trainInfoJsonList = [];
-  List<int> _trainCarsNo = [];
-  List<int> _trainCarsCongestion = [];
+  final List<dynamic> _trainInfoJsonList = [];
+  final List<int> _trainCarsNo = [];
+  final List<int> _trainCarsCongestion = [];
 
   // 車両詳細情報を変数に格納する
   Future<void> _updateTrainInfo() async {
@@ -51,25 +51,29 @@ class _TrainState extends State<Train> {
     _numberOfCars = int.parse(map['numberOfCars']?? '0');
 
     // 列車情報から情報を取得
-    try {
-      final jsonStr = await FileOperation().getFileContent('train_info.json');
-      final carList = json.decode(jsonStr)['trains'][_trainNo];
+    final jsonStr = await FileOperation().getFileContent('train_info.json');
+    final carList = json.decode(jsonStr)['trains'][_trainNo];
 
-      // 車両情報を1両ごとにリストに追加
-      for(var i in carList[0]['cars']){
-        _trainInfoJsonList?.add(i);
-      }
-      // 新快速等、連結車両用
-      for(var i in carList[1]['cars']){
-        _trainInfoJsonList?.add(i);
-      }
-    } catch(e){
-      // 車両情報が存在しない場合
-      _trainInfoJsonList = null;
+    // 列車詳細情報がないなら終了
+    if(carList == null){
       return;
     }
 
-    for(var i in _trainInfoJsonList!){
+    // 車両情報を1両ごとにリストに追加
+    for(var i in carList[0]['cars']){
+      _trainInfoJsonList.add(i);
+      if(_trainNo == '803T'){
+      }
+    }
+    // 新快速等、連結車両用
+    if(carList.length == 2) {
+      for (var i in carList[1]['cars']) {
+        _trainInfoJsonList.add(i);
+      }
+    }
+
+    // 情報表示用リストに追加
+    for(var i in _trainInfoJsonList){
       _trainCarsNo.add(i['carNo']);
       _trainCarsCongestion.add(i['congestion']);
     }
@@ -123,7 +127,7 @@ class _TrainState extends State<Train> {
                   ),
                 ),
                 // jsonから車両データを正しく取得できたら情報を表示する
-                if(_trainInfoJsonList != null)...{
+                if(_trainInfoJsonList.isNotEmpty)...{
                   Text(_trainCarsNo.toString()),
                   Text(_trainCarsCongestion.toString()),
                 }
