@@ -32,6 +32,10 @@ class _TrainPosScreenState extends State<TrainPosScreen> with WidgetsBindingObse
   bool _isRefreshButtonDisabled = false;
   final ScrollController _scrollController = ScrollController();
 
+  // ウィジェットのキャッシュ
+  late final Widget _lineColorMarkerCache;
+  late final Widget _stationBetweenWidgetCache;
+
   // 駅ウィジェットのリストをjsonから作成し、描画する関数
   Future<void> _drawStationList() async {
     _stationWidgetList.clear();
@@ -64,7 +68,12 @@ class _TrainPosScreenState extends State<TrainPosScreen> with WidgetsBindingObse
     // Widgetをリストに追加
     for(var i in _stationList){
       if(i != '####') {
-        _stationWidgetList.add(Station(stationName: i, lineColor: widget.lineColor));
+        if(i == null){
+          _stationWidgetList.add(_stationBetweenWidgetCache);
+        }
+        else {
+          _stationWidgetList.add(Station(stationName: i, lineColor: widget.lineColor, lineColorMarker: _lineColorMarkerCache,));
+        }
       }
     }
 
@@ -72,7 +81,7 @@ class _TrainPosScreenState extends State<TrainPosScreen> with WidgetsBindingObse
     _stationWidgetList.add(StationEnd());
 
     if(mounted){
-    setState(() {});
+      setState(() {});
     }
   }
 
@@ -178,6 +187,10 @@ class _TrainPosScreenState extends State<TrainPosScreen> with WidgetsBindingObse
     super.initState();
     WidgetsBinding.instance.addObserver(this);
 
+    // ウィジェットのキャッシュを作成
+    _lineColorMarkerCache = LineColorMarker(lineColor: widget.lineColor);
+    _stationBetweenWidgetCache = Station(stationName: null, lineColor: widget.lineColor, lineColorMarker: _lineColorMarkerCache);
+
     Future(() async{
       await _getStationList();
       await _dataRefresh();
@@ -261,10 +274,12 @@ class _TrainPosScreenState extends State<TrainPosScreen> with WidgetsBindingObse
   }
 }
 
+// 駅ウィジェット
 class Station extends StatelessWidget {
-  const Station({super.key, required this.stationName, required this.lineColor});
+  const Station({super.key, required this.stationName, required this.lineColor, required this.lineColorMarker});
   final int lineColor;
   final String? stationName;
+  final Widget lineColorMarker;
 
   @override
   Widget build(BuildContext context) {
@@ -278,25 +293,9 @@ class Station extends StatelessWidget {
           children: [
             SizedBox(width: 15,),
             Text(stationName!, style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600,),),
-            Spacer(),
-            Stack(
-              alignment: Alignment.center,
-              children: [
-                Container(
-                  width: 12,
-                  color: Color(lineColor),
-                ),
-                Container(
-                  height: 10,
-                  width: 10,
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    shape: BoxShape.circle
-                  ),
-                )
-              ],
-            ),
-            Spacer(),
+            const Spacer(),
+            lineColorMarker,
+            const Spacer(),
             // バランスをとるためのダミー
             Text(stationName!, style: TextStyle(color: Colors.white12, fontSize: 15, fontWeight: FontWeight.w600,),),
             SizedBox(width: 15,),
@@ -323,6 +322,7 @@ class Station extends StatelessWidget {
   }
 }
 
+// 駅の終わりのウィジェット
 class StationEnd extends StatelessWidget{
   const StationEnd({super.key});
 
@@ -331,6 +331,33 @@ class StationEnd extends StatelessWidget{
     return Container(
       height: 20,
       color: Colors.white,
+    );
+  }
+}
+
+// 駅ウィジェットの路線カラー表示ウィジェット
+class LineColorMarker extends StatelessWidget{
+  const LineColorMarker({super.key, required this.lineColor});
+  final int lineColor;
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      alignment: Alignment.center,
+      children: [
+        Container(
+          width: 12,
+          color: Color(lineColor),
+        ),
+        Container(
+          height: 10,
+          width: 10,
+          decoration: const BoxDecoration(
+              color: Colors.white,
+              shape: BoxShape.circle
+          ),
+        )
+      ],
     );
   }
 }
