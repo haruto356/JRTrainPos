@@ -90,9 +90,9 @@ class _TrainPosScreenState extends State<TrainPosScreen> with WidgetsBindingObse
     // リストが更新されてから列車を描画する
     int i = 0;
     while(_trainJsonMapList.isEmpty){
-      await Future.delayed(Duration(milliseconds: 50));
+      await Future.delayed(Duration(milliseconds: 1));
       i++;
-      if(i >= 100) {
+      if(i >= 2000) {
         // しばらく待ってもリストが空の場合、その路線に列車が存在しないとする
         return;
       }
@@ -163,7 +163,7 @@ class _TrainPosScreenState extends State<TrainPosScreen> with WidgetsBindingObse
     });
 
     while(!_scrollController.hasClients){
-      await Future.delayed(Duration(milliseconds: 50));
+      await Future.delayed(Duration(milliseconds: 1));
     }
     _scrollController.jumpTo(scrollOffset);
 
