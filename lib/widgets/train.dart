@@ -130,6 +130,8 @@ class _TrainState extends State<Train> {
                 if(_trainInfoJsonList.isNotEmpty)...{
                   Text(_trainCarsNo.toString()),
                   Text(_trainCarsCongestion.toString()),
+                  Text('$_delayMinutes分遅れ'),
+                  Text(_nickname),
                 }
               ],
             );
