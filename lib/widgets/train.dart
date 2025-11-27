@@ -111,12 +111,17 @@ class _TrainState extends State<Train> {
         onTap: (){
           // 下から列車情報画面を表示
           showModalBottomSheet(context: context, builder: (BuildContext context){
-            return Column(
-              children: [
-                Container(
-                  height: 50,
-                  color: Color(widget.lineColor),
-                  child: Row(
+            return Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(20),
+                  topRight: Radius.circular(20),
+                ),
+              ),
+              child: Column(
+                children: [
+                  SizedBox(height: 20,),
+                  Row(
                     children: [
                       Text(_trainType),
                       Spacer(),
@@ -125,15 +130,15 @@ class _TrainState extends State<Train> {
                       _numberOfCars == 0 ? Text('') : Text('$_numberOfCars両')
                     ],
                   ),
-                ),
-                // jsonから車両データを正しく取得できたら情報を表示する
-                if(_trainInfoJsonList.isNotEmpty)...{
-                  Text(_trainCarsNo.toString()),
-                  Text(_trainCarsCongestion.toString()),
-                  Text('$_delayMinutes分遅れ'),
-                  Text(_nickname),
-                }
-              ],
+                  // jsonから車両データを正しく取得できたら情報を表示する
+                  if(_trainInfoJsonList.isNotEmpty)...{
+                    Text(_trainCarsNo.toString()),
+                    Text(_trainCarsCongestion.toString()),
+                    Text('$_delayMinutes分遅れ'),
+                    Text(_nickname),
+                  }
+                ],
+              )
             );
           });
         },
