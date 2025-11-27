@@ -32,6 +32,8 @@ class _TrainPosScreenState extends State<TrainPosScreen> with WidgetsBindingObse
   bool _isRefreshButtonDisabled = false;
   final ScrollController _scrollController = ScrollController();
 
+  bool _isWidgetCreated = false;
+
   // ウィジェットのキャッシュ
   late final Widget _lineColorMarkerCache;
   late final Widget _stationBetweenWidgetCache;
@@ -79,10 +81,6 @@ class _TrainPosScreenState extends State<TrainPosScreen> with WidgetsBindingObse
 
     // 余白を追加
     _stationWidgetList.add(StationEnd());
-
-    if(mounted){
-      setState(() {});
-    }
   }
 
   // 列車を描画する関数
@@ -103,10 +101,6 @@ class _TrainPosScreenState extends State<TrainPosScreen> with WidgetsBindingObse
     // Trainウィジェットをリストに追加
     for(var j in _trainJsonMapList) {
       _trainWidgetList.add(Train(lineColor: widget.lineColor, trainMap: j, stationList: _stationList, stationPosMap: _stationPosMap));
-    }
-
-    if(mounted) {
-      setState(() {});
     }
   }
 
@@ -143,8 +137,6 @@ class _TrainPosScreenState extends State<TrainPosScreen> with WidgetsBindingObse
 
       // 列車詳細情報の取得
       await _getJsonFile.getTrainInfo();
-
-      setState(() {});
     });
   }
 
@@ -166,6 +158,9 @@ class _TrainPosScreenState extends State<TrainPosScreen> with WidgetsBindingObse
 
     await _dataRefresh();
     await _drawTrain();
+    setState(() {
+
+    });
 
     while(!_scrollController.hasClients){
       await Future.delayed(Duration(milliseconds: 50));
@@ -196,6 +191,12 @@ class _TrainPosScreenState extends State<TrainPosScreen> with WidgetsBindingObse
       await _dataRefresh();
       await _drawStationList();
       await _drawTrain();
+
+      if(mounted){
+        setState(() {
+          _isWidgetCreated = true;
+        });
+      }
     });
   }
 
@@ -213,17 +214,17 @@ class _TrainPosScreenState extends State<TrainPosScreen> with WidgetsBindingObse
     super.dispose();
     // ステータスバーの色変更
     SystemChrome.setSystemUIOverlayStyle(
-        SystemUiOverlayStyle(
-            statusBarBrightness: Brightness.light,
-            statusBarIconBrightness: Brightness.dark
-        )
+      SystemUiOverlayStyle(
+        statusBarBrightness: Brightness.light,
+        statusBarIconBrightness: Brightness.dark
+      )
     );
   }
 
   @override
   Widget build(BuildContext context) {
     // 列車位置が取得できていないならロード画面を描画する
-    if(_trainPosJsonStringList.isEmpty){
+    if(!_isWidgetCreated){
       return Scaffold(
         appBar: AppBar(
           title: Text(widget.lineName),
