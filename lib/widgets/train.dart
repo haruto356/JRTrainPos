@@ -98,7 +98,12 @@ class _TrainState extends State<Train> {
     }
     // 駅間
     else {
-      _posTop = posFirst - 1;
+      if(posFirst < posSecond){
+        _posTop = posFirst + 1;
+      }
+      else{
+        _posTop = posFirst - 1;
+      }
     }
   }
 
