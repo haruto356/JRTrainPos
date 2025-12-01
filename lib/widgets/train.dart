@@ -110,7 +110,7 @@ class _TrainState extends State<Train> {
   @override
   Widget build(BuildContext context) {
     return Positioned(
-      top: _posTop * 70 + 40,
+      top: _posTop * 70 + 25,
       left: _direction == 0 ? MediaQuery.of(context).size.width / 2 - 85 : MediaQuery.of(context).size.width / 2 + 45,
       child: InkWell(
         onTap: (){
@@ -147,15 +147,55 @@ class _TrainState extends State<Train> {
             );
           });
         },
-        child: Transform.scale(
-          scaleY: _direction == 0 ? 1 : -1,
-          child: Image(
-            image: AssetImage('assets/images/train.png'),
-            height: 45,
-            width: 45,
-            color: Color(widget.lineColor),
-          ),
+        child: _direction == 0 ?
+          // 上向き
+          Column(
+            children: [
+              Image(
+                image: AssetImage('assets/images/train.png'),
+                height: 45,
+                width: 45,
+                color: Color(widget.lineColor),
+              ),
+              // 遅延分数
+              if(_delayMinutes > 0)
+                Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(5),
+                    color: Colors.orange[400],
+                  ),
+                  padding: EdgeInsets.only(left: 8, right: 8),
+                  child: Text('$_delayMinutes分遅れ', style: TextStyle(fontSize: 10,color: Colors.white),),
+                ),
+            ],
+          )
+
+          // 下向き
+        : Column(
+          children: [
+            // 遅延分数
+            if(_delayMinutes > 0)
+              Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(5),
+                  color: Colors.orange[400],
+                ),
+                padding: EdgeInsets.only(left: 8, right: 8),
+                child: Text('$_delayMinutes分遅れ', style: TextStyle(fontSize: 10,color: Colors.white),),
+              ),
+
+            Transform.scale(
+              scaleY: -1,
+              child: Image(
+                image: AssetImage('assets/images/train.png'),
+                height: 45,
+                width: 45,
+                color: Color(widget.lineColor),
+              ),
+            ),
+          ],
         ),
+
       ),
     );
   }
