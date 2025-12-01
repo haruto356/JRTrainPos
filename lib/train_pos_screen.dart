@@ -293,12 +293,12 @@ class Station extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             SizedBox(width: 15,),
-            Text(stationName!, style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600,),),
+            Text(stationName!, style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600,),),
             const Spacer(),
             lineColorMarker,
             const Spacer(),
             // バランスをとるためのダミー
-            Text(stationName!, style: TextStyle(color: Colors.white12, fontSize: 15, fontWeight: FontWeight.w600,),),
+            Text(stationName!, style: TextStyle(color: Colors.white12, fontSize: 14, fontWeight: FontWeight.w600,),),
             SizedBox(width: 15,),
           ],
         ),

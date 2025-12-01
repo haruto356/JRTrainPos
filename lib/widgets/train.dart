@@ -111,7 +111,7 @@ class _TrainState extends State<Train> {
   Widget build(BuildContext context) {
     return Positioned(
       top: _posTop * 70 + 25,
-      left: _direction == 0 ? MediaQuery.of(context).size.width / 2 - 85 : MediaQuery.of(context).size.width / 2 + 45,
+      left: _direction == 0 ? MediaQuery.of(context).size.width / 2 - 75 : MediaQuery.of(context).size.width / 2 + 30,
       child: InkWell(
         onTap: (){
           // 下から列車情報画面を表示
@@ -153,8 +153,8 @@ class _TrainState extends State<Train> {
             children: [
               Image(
                 image: AssetImage('assets/images/train.png'),
-                height: 45,
-                width: 45,
+                height: 50,
+                width: 50,
                 color: Color(widget.lineColor),
               ),
               // 遅延分数
@@ -164,7 +164,7 @@ class _TrainState extends State<Train> {
                     borderRadius: BorderRadius.circular(5),
                     color: Colors.orange[400],
                   ),
-                  padding: EdgeInsets.only(left: 8, right: 8),
+                  padding: EdgeInsets.only(left: 5, right: 5),
                   child: Text('$_delayMinutes分遅れ', style: TextStyle(fontSize: 10,color: Colors.white),),
                 ),
             ],
@@ -180,7 +180,7 @@ class _TrainState extends State<Train> {
                   borderRadius: BorderRadius.circular(5),
                   color: Colors.orange[400],
                 ),
-                padding: EdgeInsets.only(left: 8, right: 8),
+                padding: EdgeInsets.only(left: 5, right: 5),
                 child: Text('$_delayMinutes分遅れ', style: TextStyle(fontSize: 10,color: Colors.white),),
               ),
 
@@ -188,8 +188,8 @@ class _TrainState extends State<Train> {
               scaleY: -1,
               child: Image(
                 image: AssetImage('assets/images/train.png'),
-                height: 45,
-                width: 45,
+                height: 50,
+                width: 50,
                 color: Color(widget.lineColor),
               ),
             ),
