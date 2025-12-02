@@ -158,15 +158,16 @@ class _TrainState extends State<Train> {
                 color: Color(widget.lineColor),
               ),
               // 遅延分数
-              if(_delayMinutes > 0)
+              if(_delayMinutes > 0)...{
                 Container(
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(5),
                     color: Colors.orange[400],
                   ),
                   padding: EdgeInsets.only(left: 5, right: 5),
-                  child: Text('$_delayMinutes分遅れ', style: TextStyle(fontSize: 10,color: Colors.white),),
+                  child: Text('$_delayMinutes分遅れ', style: TextStyle(fontSize: 10, color: Colors.white),),
                 ),
+              },
             ],
           )
 
@@ -174,15 +175,16 @@ class _TrainState extends State<Train> {
         : Column(
           children: [
             // 遅延分数
-            if(_delayMinutes > 0)
+            if(_delayMinutes > 0)...{
               Container(
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(5),
                   color: Colors.orange[400],
                 ),
                 padding: EdgeInsets.only(left: 5, right: 5),
-                child: Text('$_delayMinutes分遅れ', style: TextStyle(fontSize: 10,color: Colors.white),),
+                child: Text('$_delayMinutes分遅れ', style: TextStyle(fontSize: 10, color: Colors.white),),
               ),
+            },
 
             Transform.scale(
               scaleY: -1,
