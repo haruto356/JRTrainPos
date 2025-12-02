@@ -193,15 +193,6 @@ class _TrainPosScreenState extends State<TrainPosScreen> with WidgetsBindingObse
     });
   }
 
-  // アプリが再開されたとき
-  @override
-  Future<void> didChangeAppLifecycleState(AppLifecycleState state) async {
-    if(state == AppLifecycleState.resumed) {
-      await _drawStationList();
-      await _drawTrain();
-    }
-  }
-
   @override
   void dispose(){
     super.dispose();
