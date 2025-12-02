@@ -240,27 +240,21 @@ class _TrainPosScreenState extends State<TrainPosScreen> with WidgetsBindingObse
         actions: [
           IconButton(
             onPressed: _isRefreshButtonDisabled ? null : _onPressedRefreshButton,
-            icon: Icon(Icons.refresh),
+            icon: const Icon(Icons.refresh),
           ),
         ],
       ),
 
       body: SafeArea(
-        child: Stack(
-          children: [
-            Positioned.fill(
-              child: SingleChildScrollView(
-                child: Stack(
-                  children: [
-                    Column(
-                      children: _stationWidgetList,
-                    ),
-                    ..._trainWidgetList
-                  ],
-                ),
+        child: SingleChildScrollView(
+          child: Stack(
+            children: [
+              Column(
+                children: _stationWidgetList,
               ),
-            )
-          ],
+              ..._trainWidgetList
+            ],
+          ),
         ),
       ),
     );
@@ -284,14 +278,14 @@ class Station extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            SizedBox(width: 15,),
+            const SizedBox(width: 15,),
             Text(stationName!, style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600,),),
             const Spacer(),
             lineColorMarker,
             const Spacer(),
             // バランスをとるためのダミー
             Text(stationName!, style: TextStyle(color: Colors.white12, fontSize: 14, fontWeight: FontWeight.w600,),),
-            SizedBox(width: 15,),
+            const SizedBox(width: 15,),
           ],
         ),
       );
