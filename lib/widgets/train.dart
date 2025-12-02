@@ -20,6 +20,8 @@ class _TrainState extends State<Train> {
   int _posTop = 0;
   int _direction = 0;
 
+  Color _delayMinuteAccentColor = Color(0xffffffff);// 遅延分数の強調色
+
   // 詳細画面に表示する情報
   String _trainNo = '';
   String _nickname = '';
@@ -51,6 +53,17 @@ class _TrainState extends State<Train> {
     }
     _delayMinutes = int.parse(map['delayMinutes']?? '0');
     _numberOfCars = int.parse(map['numberOfCars']?? '0');
+
+    // 遅延分数の強調色の変更
+    if(_delayMinutes < 10){
+      _delayMinuteAccentColor = Color(0xffffa726);
+    }
+    else if(_delayMinutes < 30){
+      _delayMinuteAccentColor = Color(0xffff7043);
+    }
+    else {
+      _delayMinuteAccentColor = Colors.red;
+    }
 
     // 列車情報から情報を取得
     final jsonStr = await FileOperation().getFileContent('train_info.json');
@@ -173,7 +186,7 @@ class _TrainState extends State<Train> {
                   child: Container(
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(5),
-                      color: Colors.orange[400],
+                      color: _delayMinuteAccentColor,
                     ),
                     padding: EdgeInsets.only(left: 5, right: 5, bottom: 2),
                     child: Text('$_delayMinutes分遅れ', style: TextStyle(fontSize: 10, color: Colors.white),),
@@ -193,7 +206,7 @@ class _TrainState extends State<Train> {
                 child: Container(
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(5),
-                    color: Colors.orange[400],
+                    color: _delayMinuteAccentColor,
                   ),
                   padding: EdgeInsets.only(left: 5, right: 5, bottom: 2),
                   child: Text('$_delayMinutes分遅れ', style: TextStyle(fontSize: 10, color: Colors.white),),
