@@ -168,13 +168,16 @@ class _TrainState extends State<Train> {
               ),
               // 遅延分数
               if(_delayMinutes > 0)...{
-                Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(5),
-                    color: Colors.orange[400],
+                Transform.translate(
+                  offset: const Offset(0, -5),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(5),
+                      color: Colors.orange[400],
+                    ),
+                    padding: EdgeInsets.only(left: 5, right: 5, bottom: 2),
+                    child: Text('$_delayMinutes分遅れ', style: TextStyle(fontSize: 10, color: Colors.white),),
                   ),
-                  padding: EdgeInsets.only(left: 5, right: 5),
-                  child: Text('$_delayMinutes分遅れ', style: TextStyle(fontSize: 10, color: Colors.white),),
                 ),
               },
             ],
@@ -185,13 +188,16 @@ class _TrainState extends State<Train> {
           children: [
             // 遅延分数
             if(_delayMinutes > 0)...{
-              Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(5),
-                  color: Colors.orange[400],
+              Transform.translate(
+                offset: const Offset(0, 5),
+                child: Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(5),
+                    color: Colors.orange[400],
+                  ),
+                  padding: EdgeInsets.only(left: 5, right: 5, bottom: 2),
+                  child: Text('$_delayMinutes分遅れ', style: TextStyle(fontSize: 10, color: Colors.white),),
                 ),
-                padding: EdgeInsets.only(left: 5, right: 5),
-                child: Text('$_delayMinutes分遅れ', style: TextStyle(fontSize: 10, color: Colors.white),),
               ),
             },
 
