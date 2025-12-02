@@ -30,7 +30,6 @@ class _TrainPosScreenState extends State<TrainPosScreen> with WidgetsBindingObse
   final List<Widget> _trainWidgetList = [];
 
   bool _isRefreshButtonDisabled = false;
-  final ScrollController _scrollController = ScrollController();
 
   bool _isWidgetCreated = false;
 
@@ -150,22 +149,13 @@ class _TrainPosScreenState extends State<TrainPosScreen> with WidgetsBindingObse
 
   // 更新ボタンが押されたとき
   Future<void> _onPressedRefreshButton() async {
-    final double scrollOffset = _scrollController.offset;
-
     setState(() {
       _isRefreshButtonDisabled = true;
     });
 
     await _dataRefresh();
     await _drawTrain();
-    setState(() {
-
-    });
-
-    while(!_scrollController.hasClients){
-      await Future.delayed(Duration(milliseconds: 1));
-    }
-    _scrollController.jumpTo(scrollOffset);
+    setState(() {});
 
     // 連打対策として一定時間ボタンを無効化
     await Future.delayed(Duration(seconds: 5));
@@ -191,6 +181,9 @@ class _TrainPosScreenState extends State<TrainPosScreen> with WidgetsBindingObse
       await _dataRefresh();
       await _drawStationList();
       await _drawTrain();
+
+      // 情報更新待ち
+      await Future.delayed(Duration(milliseconds: 100));
 
       if(mounted){
         setState(() {
@@ -257,7 +250,6 @@ class _TrainPosScreenState extends State<TrainPosScreen> with WidgetsBindingObse
           children: [
             Positioned.fill(
               child: SingleChildScrollView(
-                controller: _scrollController,
                 child: Stack(
                   children: [
                     Column(
