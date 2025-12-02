@@ -15,6 +15,8 @@ class Train extends StatefulWidget {
 }
 
 class _TrainState extends State<Train> {
+  bool _isWidgetCreated = false;
+
   int _posTop = 0;
   int _direction = 0;
 
@@ -85,6 +87,9 @@ class _TrainState extends State<Train> {
 
     Future(() async {
       await _updateTrainInfo();
+      setState(() {
+        _isWidgetCreated = true;
+      });
     });
 
     _direction = int.parse(widget.trainMap['direction']!);
@@ -109,6 +114,10 @@ class _TrainState extends State<Train> {
 
   @override
   Widget build(BuildContext context) {
+    if(!_isWidgetCreated){
+      return SizedBox();
+    }
+
     return Positioned(
       top: _posTop * 70 + 25,
       left: _direction == 0 ? MediaQuery.of(context).size.width / 2 - 75 : MediaQuery.of(context).size.width / 2 + 30,
