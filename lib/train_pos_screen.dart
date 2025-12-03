@@ -97,9 +97,68 @@ class _TrainPosScreenState extends State<TrainPosScreen> with WidgetsBindingObse
       }
     }
 
-    // Trainウィジェットをリストに追加
+    // 追加したposのリスト
+    Set<String> addedPosList = {};
+    Set<String> addedTrainNo = {};
+
+    // 下方向のTrainウィジェットをリストに追加
     for(var j in _trainJsonMapList) {
-      _trainWidgetList.add(Train(lineColor: widget.lineColor, trainMap: j, stationList: _stationList, stationPosMap: _stationPosMap));
+      if(j['direction'].toString() == '0'){
+        continue;
+      }
+
+      String currentPos = j['pos'].toString();
+
+      // 既に追加済みならスキップ
+      if(addedPosList.contains(currentPos) || addedTrainNo.contains(j['no'])){
+        continue;
+      }
+
+      // 同じ位置の列車を抽出
+      List<Map<String, String?>> trainList = _trainJsonMapList
+        .where((train) => train['pos'].toString() == currentPos && train['direction'].toString() == '1' && !addedTrainNo.contains(train['no']))
+        .toList();
+
+      _trainWidgetList.add(Train(
+        lineColor: widget.lineColor,
+        trainMap: trainList,
+        stationList: _stationList,
+        stationPosMap: _stationPosMap,
+      ));
+
+      addedPosList.add(currentPos);
+      addedTrainNo.add(j['no'].toString());
+    }
+
+    addedPosList.clear();
+
+    // 上方向のTrainウィジェットをリストに追加
+    for(var j in _trainJsonMapList) {
+      if(j['direction'].toString() == '1'){
+        continue;
+      }
+
+      String currentPos = j['pos'].toString();
+
+      // 既に追加済みならスキップ
+      if(addedPosList.contains(currentPos) || addedTrainNo.contains(j['no'].toString())){
+        continue;
+      }
+
+      // 同じ位置の列車を抽出
+      List<Map<String, String?>> trainList = _trainJsonMapList
+          .where((train) => train['pos'].toString() == currentPos && train['direction'].toString() == '0' && !addedTrainNo.contains(train['no'].toString()))
+          .toList();
+
+      _trainWidgetList.add(Train(
+        lineColor: widget.lineColor,
+        trainMap: trainList,
+        stationList: _stationList,
+        stationPosMap: _stationPosMap,
+      ));
+
+      addedPosList.add(currentPos);
+      addedTrainNo.add(j['no'].toString());
     }
   }
 

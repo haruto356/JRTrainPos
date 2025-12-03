@@ -6,7 +6,7 @@ class Train extends StatefulWidget {
   const Train({super.key, required this.lineColor, required this.trainMap, required this.stationList, required this.stationPosMap});
 
   final int lineColor;
-  final Map<String, String?> trainMap;
+  final List<Map<String, String?>> trainMap;
   final List<String?> stationList;
   final Map<String, String?> stationPosMap;
 
@@ -35,7 +35,10 @@ class _TrainState extends State<Train> {
 
   // 車両詳細情報を変数に格納する
   Future<void> _updateTrainInfo() async {
-    final Map<String, String?> map = widget.trainMap;
+    final Map<String, String?> map = {};
+    for(var i in widget.trainMap){
+      map.addAll(i);
+    }
 
     _trainNo = map['no']!;
     _nickname = map['nickname']?? '';
@@ -105,10 +108,10 @@ class _TrainState extends State<Train> {
       });
     });
 
-    _direction = int.parse(widget.trainMap['direction']!);
+    _direction = int.parse(widget.trainMap[0]['direction']!);
 
-    int posFirst = widget.stationList.indexOf(widget.stationPosMap[widget.trainMap['pos']!.substring(0,4)]);
-    int posSecond = widget.stationList.indexOf(widget.stationPosMap[widget.trainMap['pos']!.substring(5,9)]);
+    int posFirst = widget.stationList.indexOf(widget.stationPosMap[widget.trainMap[0]['pos']!.substring(0,4)]);
+    int posSecond = widget.stationList.indexOf(widget.stationPosMap[widget.trainMap[0]['pos']!.substring(5,9)]);
 
     // 停車中
     if(posSecond == 0) {
@@ -157,6 +160,7 @@ class _TrainState extends State<Train> {
                       _numberOfCars == 0 ? Text('') : Text('$_numberOfCars両')
                     ],
                   ),
+                  Text(widget.trainMap.toString()),
                   // jsonから車両データを正しく取得できたら情報を表示する
                   if(_trainInfoJsonList.isNotEmpty)...{
                     Text(_trainCarsNo.toString()),
@@ -177,7 +181,7 @@ class _TrainState extends State<Train> {
                 image: AssetImage('assets/images/train.png'),
                 height: 50,
                 width: 50,
-                color: Color(widget.lineColor),
+                color: widget.trainMap.length == 1 ? Color(widget.lineColor) : Colors.black,
               ),
               // 遅延分数
               if(_delayMinutes > 0)...{
