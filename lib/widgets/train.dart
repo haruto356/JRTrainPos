@@ -80,8 +80,6 @@ class _TrainState extends State<Train> {
     // 車両情報を1両ごとにリストに追加
     for(var i in carList[0]['cars']){
       _trainInfoJsonList.add(i);
-      if(_trainNo == '803T'){
-      }
     }
     // 新快速等、連結車両用
     if(carList.length == 2) {
