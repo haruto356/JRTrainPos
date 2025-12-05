@@ -99,7 +99,6 @@ class _TrainPosScreenState extends State<TrainPosScreen> with WidgetsBindingObse
 
     // 追加したposのリスト
     Set<String> addedPosList = {};
-    Set<String> addedTrainNo = {};
 
     // 下方向のTrainウィジェットをリストに追加
     for(var j in _trainJsonMapList) {
@@ -110,13 +109,13 @@ class _TrainPosScreenState extends State<TrainPosScreen> with WidgetsBindingObse
       String currentPos = j['pos'].toString();
 
       // 既に追加済みならスキップ
-      if(addedPosList.contains(currentPos) || addedTrainNo.contains(j['no'])){
+      if(addedPosList.contains(currentPos)){
         continue;
       }
 
       // 同じ位置の列車を抽出
       List<Map<String, String?>> trainList = _trainJsonMapList
-        .where((train) => train['pos'].toString() == currentPos && train['direction'].toString() == '1' && !addedTrainNo.contains(train['no']))
+        .where((train) => train['pos'].toString() == currentPos && train['direction'].toString() == '1')
         .toList();
 
       _trainWidgetList.add(Train(
@@ -127,11 +126,9 @@ class _TrainPosScreenState extends State<TrainPosScreen> with WidgetsBindingObse
       ));
 
       addedPosList.add(currentPos);
-      addedTrainNo.add(j['no'].toString());
     }
 
     addedPosList.clear();
-    print(_trainJsonMapList);
 
     // 上方向のTrainウィジェットをリストに追加
     for(var j in _trainJsonMapList) {
@@ -140,16 +137,15 @@ class _TrainPosScreenState extends State<TrainPosScreen> with WidgetsBindingObse
       }
 
       String currentPos = j['pos'].toString();
-      String currentNo = j['no'].toString();
 
       // 既に追加済みならスキップ
-      if(addedPosList.contains(currentPos) || addedTrainNo.contains(currentNo)){
+      if(addedPosList.contains(currentPos)){
         continue;
       }
 
       // 同じ位置の列車を抽出
       List<Map<String, String?>> trainList = _trainJsonMapList
-          .where((train) => train['pos'].toString() == currentPos && train['direction'].toString() == '0' && !addedTrainNo.contains(currentNo))
+          .where((train) => train['pos'].toString() == currentPos && train['direction'].toString() == '0')
           .toList();
 
       _trainWidgetList.add(Train(
@@ -160,7 +156,6 @@ class _TrainPosScreenState extends State<TrainPosScreen> with WidgetsBindingObse
       ));
 
       addedPosList.add(currentPos);
-      addedTrainNo.add(currentNo);
     }
   }
 
