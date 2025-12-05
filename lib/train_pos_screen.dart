@@ -131,6 +131,7 @@ class _TrainPosScreenState extends State<TrainPosScreen> with WidgetsBindingObse
     }
 
     addedPosList.clear();
+    print(_trainJsonMapList);
 
     // 上方向のTrainウィジェットをリストに追加
     for(var j in _trainJsonMapList) {
@@ -139,15 +140,16 @@ class _TrainPosScreenState extends State<TrainPosScreen> with WidgetsBindingObse
       }
 
       String currentPos = j['pos'].toString();
+      String currentNo = j['no'].toString();
 
       // 既に追加済みならスキップ
-      if(addedPosList.contains(currentPos) || addedTrainNo.contains(j['no'].toString())){
+      if(addedPosList.contains(currentPos) || addedTrainNo.contains(currentNo)){
         continue;
       }
 
       // 同じ位置の列車を抽出
       List<Map<String, String?>> trainList = _trainJsonMapList
-          .where((train) => train['pos'].toString() == currentPos && train['direction'].toString() == '0' && !addedTrainNo.contains(train['no'].toString()))
+          .where((train) => train['pos'].toString() == currentPos && train['direction'].toString() == '0' && !addedTrainNo.contains(currentNo))
           .toList();
 
       _trainWidgetList.add(Train(
@@ -158,7 +160,7 @@ class _TrainPosScreenState extends State<TrainPosScreen> with WidgetsBindingObse
       ));
 
       addedPosList.add(currentPos);
-      addedTrainNo.add(j['no'].toString());
+      addedTrainNo.add(currentNo);
     }
   }
 
@@ -181,15 +183,24 @@ class _TrainPosScreenState extends State<TrainPosScreen> with WidgetsBindingObse
         }
       }
 
+      // 車両No重複検知用リスト
+      List<String> addedTrainNoList = [];
+
       // 列車jsonデータをリストに格納
       for(var i in _trainPosJsonStringList){
+
         final Map<String, dynamic> jsonMap = json.decode(i);
         for(var j in jsonMap['trains']){
           // dynamicをMap<String, String?>に変換してからリストに追加
           final temp = (j as Map).map(
             (key, value) => MapEntry(key.toString(), value?.toString()),
           );
-          _trainJsonMapList.add(temp);
+
+          // 既に該当する車両Noがあるときのみリストに追加
+          if(!addedTrainNoList.contains(temp['no'])){
+            _trainJsonMapList.add(temp);
+            addedTrainNoList.add(temp['no'].toString());
+          }
         }
       }
 
