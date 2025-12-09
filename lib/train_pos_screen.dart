@@ -75,7 +75,13 @@ class _TrainPosScreenState extends State<TrainPosScreen> with WidgetsBindingObse
           _stationWidgetList.add(_stationBetweenWidgetCache);
         }
         else {
-          _stationWidgetList.add(Station(stationName: i, lineColor: widget.lineColor, lineColorMarker: _lineColorMarkerCache,));
+          final terminalStationList = _lineManager.getTerminalStation(widget.lineName);
+          bool isTerminalStation = false;
+
+          if(terminalStationList.contains(i)){
+            isTerminalStation = true;
+          }
+          _stationWidgetList.add(Station(stationName: i, lineColor: widget.lineColor, lineColorMarker: _lineColorMarkerCache, isTerminalStation: isTerminalStation,));
         }
       }
     }
@@ -241,7 +247,7 @@ class _TrainPosScreenState extends State<TrainPosScreen> with WidgetsBindingObse
 
     // ウィジェットのキャッシュを作成
     _lineColorMarkerCache = LineColorMarker(lineColor: widget.lineColor);
-    _stationBetweenWidgetCache = Station(stationName: null, lineColor: widget.lineColor, lineColorMarker: _lineColorMarkerCache);
+    _stationBetweenWidgetCache = Station(stationName: null, lineColor: widget.lineColor, lineColorMarker: _lineColorMarkerCache, isTerminalStation: false,);
 
     Future(() async{
       await _getStationList();
@@ -321,10 +327,11 @@ class _TrainPosScreenState extends State<TrainPosScreen> with WidgetsBindingObse
 
 // 駅ウィジェット
 class Station extends StatelessWidget {
-  const Station({super.key, required this.stationName, required this.lineColor, required this.lineColorMarker});
+  const Station({super.key, required this.stationName, required this.lineColor, required this.lineColorMarker, required this.isTerminalStation});
   final int lineColor;
   final String? stationName;
   final Widget lineColorMarker;
+  final bool isTerminalStation;
 
   @override
   Widget build(BuildContext context) {
@@ -337,12 +344,12 @@ class Station extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             const SizedBox(width: 15,),
-            Text(stationName!, style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600,),),
+            Text(stationName!, style: TextStyle(fontSize: isTerminalStation? 17 : 14, fontWeight: FontWeight.w600),),
             const Spacer(),
             lineColorMarker,
             const Spacer(),
             // バランスをとるためのダミー
-            Text(stationName!, style: TextStyle(color: Colors.white12, fontSize: 14, fontWeight: FontWeight.w600,),),
+            Text(stationName!, style: TextStyle(color: Colors.white12, fontSize: isTerminalStation? 17 : 14, fontWeight: FontWeight.w600,),),
             const SizedBox(width: 15,),
           ],
         ),
