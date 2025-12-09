@@ -108,20 +108,20 @@ class _TrainState extends State<Train> {
 
     _direction = int.parse(widget.trainMap[0]['direction']!);
 
-    int posFirst = widget.stationList.indexOf(widget.stationPosMap[widget.trainMap[0]['pos']!.substring(0,4)]);
-    int posSecond = widget.stationList.indexOf(widget.stationPosMap[widget.trainMap[0]['pos']!.substring(5,9)]);
+    int posFirstIndex = widget.stationList.indexOf(widget.stationPosMap[widget.trainMap[0]['pos']!.substring(0,4)]);
+    int posSecondIndex = widget.stationList.indexOf(widget.stationPosMap[widget.trainMap[0]['pos']!.substring(5,9)]);
 
     // 停車中
-    if(posSecond == 0) {
-      _posTop = posFirst;
+    if(posSecondIndex == 0) {
+      _posTop = posFirstIndex - 1;
     }
     // 駅間
     else {
-      if(posFirst < posSecond){
-        _posTop = posFirst + 1;
+      if(posFirstIndex < posSecondIndex){
+        _posTop = posFirstIndex;
       }
       else{
-        _posTop = posFirst - 1;
+        _posTop = posFirstIndex - 2;
       }
     }
   }
