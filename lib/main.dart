@@ -19,6 +19,11 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.blueGrey),
         fontFamily: 'NotoSansJP',
+        appBarTheme: AppBarTheme(
+          titleTextStyle: TextStyle(
+            fontFamily: 'NotoSansJP'
+          )
+        )
       ),
       home: const MyHomePage(),
     );
