@@ -4,6 +4,7 @@ import 'package:jr_train_pos/file_operation.dart';
 import 'dart:convert';
 
 import 'package:jr_train_pos/get_json_file.dart';
+import 'package:jr_train_pos/line_manager.dart';
 import 'package:jr_train_pos/widgets/train.dart';
 
 class TrainPosScreen extends StatefulWidget {
@@ -20,6 +21,7 @@ class TrainPosScreen extends StatefulWidget {
 class _TrainPosScreenState extends State<TrainPosScreen> with WidgetsBindingObserver {
   final _fileOperation = FileOperation();
   final _getJsonFile = GetJsonFile();
+  final _lineManager = LineManager();
 
   final List<String?> _stationList = ['####'];
   final List<String> _trainPosJsonStringList = [];
@@ -41,7 +43,7 @@ class _TrainPosScreenState extends State<TrainPosScreen> with WidgetsBindingObse
   Future<void> _drawStationList() async {
     _stationWidgetList.clear();
 
-    final List<String> lineFileList = _getJsonFile.changeLineNameToJsonFile(widget.lineName);
+    final List<String> lineFileList = _lineManager.changeLineNameToJsonFile(widget.lineName);
 
     // 余白を追加
     _stationWidgetList.add(StationEnd());
@@ -165,7 +167,7 @@ class _TrainPosScreenState extends State<TrainPosScreen> with WidgetsBindingObse
     _trainJsonMapList.clear();
 
     Future(() async {
-      final List<String> lineList = _getJsonFile.changeLineNameToJsonFile(widget.lineName);
+      final List<String> lineList = _lineManager.changeLineNameToJsonFile(widget.lineName);
 
       // 列車走行位置の取得
       for (var i in lineList) {
@@ -206,7 +208,7 @@ class _TrainPosScreenState extends State<TrainPosScreen> with WidgetsBindingObse
 
   // 駅リストを取得する関数
   Future<void> _getStationList() async {
-    final List<String> lineList = _getJsonFile.changeLineNameToJsonFile(widget.lineName);
+    final List<String> lineList = _lineManager.changeLineNameToJsonFile(widget.lineName);
     for(var i in lineList){
       await _getJsonFile.getStationList(i);
     }
