@@ -23,6 +23,8 @@ class _TrainPosScreenState extends State<TrainPosScreen> with WidgetsBindingObse
   final _getJsonFile = GetJsonFile();
   final _lineManager = LineManager();
 
+  final ScrollController _scrollController = ScrollController();
+
   final List<String?> _stationList = ['####'];
   final List<String> _trainPosJsonStringList = [];
   final List<Map<String, String?>> _trainJsonMapList = [];
@@ -240,6 +242,72 @@ class _TrainPosScreenState extends State<TrainPosScreen> with WidgetsBindingObse
     }
   }
 
+  // 主要駅にジャンプするダイアログのオプションを作る関数
+  List<SimpleDialogOption> _createDialogOption() {
+    final List<String> terminalStationList = _lineManager.getTerminalStation(widget.lineName);
+    final List<SimpleDialogOption> dialogOptionList = [];
+
+    // 指定された駅までジャンプする関数
+    onDialogOptionPressed(String stationName){
+      if(stationName == '一番上'){
+        _scrollController.jumpTo(0);
+      }
+      else if(stationName == '一番下'){
+        _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
+      }
+      else {
+        // 指定した駅が真ん中に来るように-4で調整
+        double jumpPos = (_stationList.indexOf(stationName) - 4) * 70.0;
+        // ジャンプ先が0未満
+        if(jumpPos < 0){
+          jumpPos = 0.0;
+        }
+        // ジャンプ先がスクロール範囲外
+        else if(jumpPos > _scrollController.position.maxScrollExtent){
+          jumpPos = _scrollController.position.maxScrollExtent;
+        }
+        _scrollController.jumpTo(jumpPos);
+      }
+    }
+
+    // 一番上を追加
+    dialogOptionList.add(
+      SimpleDialogOption(
+        onPressed: (){
+          onDialogOptionPressed('一番上');
+          Navigator.pop(context);
+        },
+        child: const Text('一番上'),
+      )
+    );
+
+    // 主要駅を追加
+    for(var i in terminalStationList){
+      dialogOptionList.add(
+        SimpleDialogOption(
+          onPressed: (){
+            onDialogOptionPressed(i);
+            Navigator.pop(context);
+          },
+          child: Text('$i駅'),
+        )
+      );
+    }
+
+    // 一番下を追加
+    dialogOptionList.add(
+      SimpleDialogOption(
+        onPressed: (){
+          onDialogOptionPressed('一番下');
+          Navigator.pop(context);
+        },
+        child: const Text('一番下'),
+      )
+    );
+
+    return dialogOptionList;
+  }
+
   @override
   void initState() {
     super.initState();
@@ -276,6 +344,8 @@ class _TrainPosScreenState extends State<TrainPosScreen> with WidgetsBindingObse
         statusBarIconBrightness: Brightness.dark
       )
     );
+
+    _scrollController.dispose();
   }
 
   @override
@@ -285,7 +355,7 @@ class _TrainPosScreenState extends State<TrainPosScreen> with WidgetsBindingObse
       return Scaffold(
         appBar: AppBar(
           title: Text(widget.lineName),
-          titleTextStyle: TextStyle(color: Color(widget.lineCodeColor), fontSize: 20),
+          titleTextStyle: TextStyle(color: Color(widget.lineCodeColor), fontSize: 20, fontFamily: 'NotoSansJP'),
           backgroundColor: Color(widget.lineColor),
           iconTheme: IconThemeData(color: Color(widget.lineCodeColor)),
         ),
@@ -298,7 +368,7 @@ class _TrainPosScreenState extends State<TrainPosScreen> with WidgetsBindingObse
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.lineName),
-        titleTextStyle: TextStyle(color: Color(widget.lineCodeColor), fontSize: 20),
+        titleTextStyle: TextStyle(color: Color(widget.lineCodeColor), fontSize: 20, fontFamily: 'NotoSansJP'),
         backgroundColor: Color(widget.lineColor),
         iconTheme: IconThemeData(color: Color(widget.lineCodeColor)),
         actions: [
@@ -309,8 +379,24 @@ class _TrainPosScreenState extends State<TrainPosScreen> with WidgetsBindingObse
         ],
       ),
 
+      floatingActionButton: FloatingActionButton(
+        onPressed: (){
+          // 選択肢を表示
+          showDialog(
+            context: context,
+            builder: (context) {
+              return SimpleDialog(
+                title: const Text('移動先を選択'),
+                children: _createDialogOption(),
+              );
+            }
+          );
+        },
+      ),
+
       body: SafeArea(
         child: SingleChildScrollView(
+          controller: _scrollController,
           child: Stack(
             children: [
               Column(
