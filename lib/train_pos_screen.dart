@@ -77,13 +77,13 @@ class _TrainPosScreenState extends State<TrainPosScreen> with WidgetsBindingObse
           _stationWidgetList.add(_stationBetweenWidgetCache);
         }
         else {
-          final terminalStationList = _lineManager.getTerminalStation(widget.lineName);
-          bool isTerminalStation = false;
+          final mainStationList = _lineManager.getMainStation(widget.lineName);
+          bool isMainStation = false;
 
-          if(terminalStationList.contains(i)){
-            isTerminalStation = true;
+          if(mainStationList.contains(i)){
+            isMainStation = true;
           }
-          _stationWidgetList.add(Station(stationName: i, lineColor: widget.lineColor, lineColorMarker: _lineColorMarkerCache, isTerminalStation: isTerminalStation,));
+          _stationWidgetList.add(Station(stationName: i, lineColor: widget.lineColor, lineColorMarker: _lineColorMarkerCache, isMainStation: isMainStation,));
         }
       }
     }
@@ -244,7 +244,7 @@ class _TrainPosScreenState extends State<TrainPosScreen> with WidgetsBindingObse
 
   // 主要駅にジャンプするダイアログのオプションを作る関数
   List<SimpleDialogOption> _createDialogOption() {
-    final List<String> terminalStationList = _lineManager.getTerminalStation(widget.lineName);
+    final List<String> mainStationList = _lineManager.getMainStation(widget.lineName);
     final List<SimpleDialogOption> dialogOptionList = [];
 
     // 指定された駅までジャンプする関数
@@ -282,7 +282,7 @@ class _TrainPosScreenState extends State<TrainPosScreen> with WidgetsBindingObse
     );
 
     // 主要駅を追加
-    for(var i in terminalStationList){
+    for(var i in mainStationList){
       dialogOptionList.add(
         SimpleDialogOption(
           onPressed: (){
@@ -315,7 +315,7 @@ class _TrainPosScreenState extends State<TrainPosScreen> with WidgetsBindingObse
 
     // ウィジェットのキャッシュを作成
     _lineColorMarkerCache = LineColorMarker(lineColor: widget.lineColor);
-    _stationBetweenWidgetCache = Station(stationName: null, lineColor: widget.lineColor, lineColorMarker: _lineColorMarkerCache, isTerminalStation: false,);
+    _stationBetweenWidgetCache = Station(stationName: null, lineColor: widget.lineColor, lineColorMarker: _lineColorMarkerCache, isMainStation: false,);
 
     Future(() async{
       await _getStationList();
@@ -413,11 +413,11 @@ class _TrainPosScreenState extends State<TrainPosScreen> with WidgetsBindingObse
 
 // 駅ウィジェット
 class Station extends StatelessWidget {
-  const Station({super.key, required this.stationName, required this.lineColor, required this.lineColorMarker, required this.isTerminalStation});
+  const Station({super.key, required this.stationName, required this.lineColor, required this.lineColorMarker, required this.isMainStation});
   final int lineColor;
   final String? stationName;
   final Widget lineColorMarker;
-  final bool isTerminalStation;
+  final bool isMainStation;
 
   @override
   Widget build(BuildContext context) {
@@ -430,12 +430,12 @@ class Station extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             const SizedBox(width: 15,),
-            Text(stationName!, style: TextStyle(fontSize: isTerminalStation? 17 : 14, fontWeight: FontWeight.w600),),
+            Text(stationName!, style: TextStyle(fontSize: isMainStation? 17 : 14, fontWeight: FontWeight.w600),),
             const Spacer(),
             lineColorMarker,
             const Spacer(),
             // バランスをとるためのダミー
-            Text(stationName!, style: TextStyle(color: Colors.white12, fontSize: isTerminalStation? 17 : 14, fontWeight: FontWeight.w600,),),
+            Text(stationName!, style: TextStyle(color: Colors.white12, fontSize: isMainStation? 17 : 14, fontWeight: FontWeight.w600,),),
             const SizedBox(width: 15,),
           ],
         ),

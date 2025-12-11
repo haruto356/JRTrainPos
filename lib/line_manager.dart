@@ -31,40 +31,40 @@ class LineManager {
     return lineWidgetList;
   }
   
-  List<String> getTerminalStation(String lineNameJa){
-    List<String> terminalStationList = [];
+  List<String> getMainStation(String lineNameJa){
+    List<String> mainStationList = [];
     
     switch(lineNameJa){
       case A:
-        terminalStationList.addAll(['米原', '京都', '大阪', '三ノ宮', '姫路']);
+        mainStationList.addAll(['米原', '京都', '大阪', '三ノ宮', '姫路']);
         break;
       case B:
-        terminalStationList.addAll(['京都']);
+        mainStationList.addAll(['京都']);
         break;
       case C:
-        terminalStationList.addAll(['草津', '貴生川']);
+        mainStationList.addAll(['草津', '貴生川']);
         break;
       case D:
-        terminalStationList.addAll(['京都', '木津']);
+        mainStationList.addAll(['京都', '木津']);
         break;
       case E:
-        terminalStationList.addAll(['京都', '綾部', '福知山']);
+        mainStationList.addAll(['京都', '綾部', '福知山']);
         break;
       case F:
-        terminalStationList.addAll(['大阪', '放出', '久宝寺']);
+        mainStationList.addAll(['大阪', '放出', '久宝寺']);
         break;
       case G:
-        terminalStationList.addAll(['大阪', '宝塚', '福知山']);
+        mainStationList.addAll(['大阪', '宝塚', '福知山']);
         break;
       case H:
-        terminalStationList.addAll(['木津', '放出', '京橋', '北新地']);
+        mainStationList.addAll(['木津', '放出', '京橋', '北新地']);
         break;
       case O:
-        terminalStationList.addAll(['大阪', '天王寺', '京橋']);
+        mainStationList.addAll(['大阪', '天王寺', '京橋']);
         break;
     }
 
-    return terminalStationList;
+    return mainStationList;
   }
 
   // 日本語路線名からjsonファイル用の路線名に変換する関数（東海道本線などの都合により配列を返す）
