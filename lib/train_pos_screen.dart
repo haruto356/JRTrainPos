@@ -101,7 +101,7 @@ class _TrainPosScreenState extends State<TrainPosScreen> with WidgetsBindingObse
     while(_trainJsonMapList.isEmpty){
       await Future.delayed(Duration(milliseconds: 1));
       i++;
-      if(i >= 2000) {
+      if(i >= 5000) {
         // しばらく待ってもリストが空の場合、その路線に列車が存在しないとする
         return;
       }
