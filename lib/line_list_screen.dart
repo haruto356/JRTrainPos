@@ -14,9 +14,7 @@ class _LineListScreenState extends State<LineListScreen> {
     return Scaffold(
       body: SingleChildScrollView(
         child: Center(
-          child: Column(
-            children: LineManager().getAllLineWidgetList(),
-          )
+          child: Column(children: LineManager().getAllLineWidgetList()),
         ),
       ),
     );

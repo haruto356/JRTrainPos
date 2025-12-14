@@ -3,7 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:jr_train_pos/train_pos_screen.dart';
 
 class Line extends StatelessWidget {
-  const Line({super.key, required this.lineName, required this.lineColor, required this.lineCode, required this.lineCodeColor});
+  const Line({
+    super.key,
+    required this.lineName,
+    required this.lineColor,
+    required this.lineCode,
+    required this.lineCodeColor,
+  });
 
   final String lineName; // 路線名
   final int lineColor; // 路線カラー
@@ -20,12 +26,17 @@ class Line extends StatelessWidget {
 
         child: InkWell(
           // 画面遷移
-          onTap: (){
+          onTap: () {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => TrainPosScreen(lineName: lineName, lineColor: lineColor, lineCodeColor: lineCodeColor,)
-              )
+                builder:
+                    (context) => TrainPosScreen(
+                      lineName: lineName,
+                      lineColor: lineColor,
+                      lineCodeColor: lineCodeColor,
+                    ),
+              ),
             );
           },
           child: Padding(
@@ -33,7 +44,7 @@ class Line extends StatelessWidget {
             child: Row(
               children: [
                 // 路線番号
-                SizedBox(width: 15,),
+                SizedBox(width: 15),
                 Container(
                   width: 35,
                   padding: EdgeInsets.all(5),
@@ -53,13 +64,16 @@ class Line extends StatelessWidget {
                 ),
 
                 // 路線名
-                SizedBox(width: 20,),
-                Text(lineName, style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold),),
+                SizedBox(width: 20),
+                Text(
+                  lineName,
+                  style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold),
+                ),
 
                 // アイコン
-                const Spacer(flex: 10,),
+                const Spacer(flex: 10),
                 Icon(Icons.keyboard_arrow_right),
-                const Spacer(flex: 1,)
+                const Spacer(flex: 1),
               ],
             ),
           ),

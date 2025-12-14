@@ -15,26 +15,71 @@ class LineManager {
 
   // 路線一覧画面に表示するウィジェットのリスト
   final List<Widget> lineWidgetList = [
-    Line(lineName: A, lineColor: 0xff2574b7, lineCode: 'A', lineCodeColor: 0xffffffff,),
-    Line(lineName: B, lineColor: 0xff38aecf, lineCode: 'B', lineCodeColor: 0xffffffff,),
-    Line(lineName: C, lineColor: 0xff60983d, lineCode: 'C', lineCodeColor: 0xffffffff,),
-    Line(lineName: D, lineColor: 0xffa67129, lineCode: 'D', lineCodeColor: 0xffffffff,),
-    Line(lineName: E, lineColor: 0xff898fd9, lineCode: 'E', lineCodeColor: 0xffffffff,),
-    Line(lineName: F, lineColor: 0xff4b7187, lineCode: 'F', lineCodeColor: 0xffffffff,),
-    Line(lineName: G, lineColor: 0xfffabc3c, lineCode: 'G', lineCodeColor: 0xff000000,),
-    Line(lineName: H, lineColor: 0xffda5a83, lineCode: 'H', lineCodeColor: 0xffffffff,),
-    Line(lineName: O, lineColor: 0xffed1749, lineCode: 'O', lineCodeColor: 0xffffffff,),
+    Line(
+      lineName: A,
+      lineColor: 0xff2574b7,
+      lineCode: 'A',
+      lineCodeColor: 0xffffffff,
+    ),
+    Line(
+      lineName: B,
+      lineColor: 0xff38aecf,
+      lineCode: 'B',
+      lineCodeColor: 0xffffffff,
+    ),
+    Line(
+      lineName: C,
+      lineColor: 0xff60983d,
+      lineCode: 'C',
+      lineCodeColor: 0xffffffff,
+    ),
+    Line(
+      lineName: D,
+      lineColor: 0xffa67129,
+      lineCode: 'D',
+      lineCodeColor: 0xffffffff,
+    ),
+    Line(
+      lineName: E,
+      lineColor: 0xff898fd9,
+      lineCode: 'E',
+      lineCodeColor: 0xffffffff,
+    ),
+    Line(
+      lineName: F,
+      lineColor: 0xff4b7187,
+      lineCode: 'F',
+      lineCodeColor: 0xffffffff,
+    ),
+    Line(
+      lineName: G,
+      lineColor: 0xfffabc3c,
+      lineCode: 'G',
+      lineCodeColor: 0xff000000,
+    ),
+    Line(
+      lineName: H,
+      lineColor: 0xffda5a83,
+      lineCode: 'H',
+      lineCodeColor: 0xffffffff,
+    ),
+    Line(
+      lineName: O,
+      lineColor: 0xffed1749,
+      lineCode: 'O',
+      lineCodeColor: 0xffffffff,
+    ),
   ];
 
   // 全ての路線ウィジェットを返す関数
-  List<Widget> getAllLineWidgetList(){
+  List<Widget> getAllLineWidgetList() {
     return lineWidgetList;
   }
-  
-  List<String> getMainStation(String lineNameJa){
+
+  List<String> getMainStation(String lineNameJa) {
     List<String> mainStationList = [];
-    
-    switch(lineNameJa){
+
+    switch (lineNameJa) {
       case A:
         mainStationList.addAll(['米原', '京都', '大阪', '三ノ宮', '姫路']);
         break;
@@ -68,11 +113,11 @@ class LineManager {
   }
 
   // 日本語路線名からjsonファイル用の路線名に変換する関数（東海道本線などの都合により配列を返す）
-  List<String> changeLineNameToJsonFile(String lineNameJa){
+  List<String> changeLineNameToJsonFile(String lineNameJa) {
     List<String> result = [];
     result.clear();
 
-    switch(lineNameJa){
+    switch (lineNameJa) {
       case A:
         result.add('hokuriku');
         result.add('hokurikubiwako');

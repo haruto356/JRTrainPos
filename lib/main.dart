@@ -20,10 +20,8 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.blueGrey),
         fontFamily: 'NotoSansJP',
         appBarTheme: AppBarTheme(
-          titleTextStyle: TextStyle(
-            fontFamily: 'NotoSansJP'
-          )
-        )
+          titleTextStyle: TextStyle(fontFamily: 'NotoSansJP'),
+        ),
       ),
       home: const MyHomePage(),
     );
@@ -38,16 +36,11 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-
-  final _screens = [
-    MyLineScreen(),
-    LineListScreen(),
-    SettingScreen()
-  ];
+  final _screens = [MyLineScreen(), LineListScreen(), SettingScreen()];
 
   int _selectedScreenIndex = 0;
 
-  void _onTapBottomBar(int index){
+  void _onTapBottomBar(int index) {
     setState(() {
       _selectedScreenIndex = index;
     });
@@ -59,14 +52,12 @@ class _MyHomePageState extends State<MyHomePage> {
     SystemChrome.setSystemUIOverlayStyle(
       SystemUiOverlayStyle(
         statusBarBrightness: Brightness.light,
-        statusBarIconBrightness: Brightness.dark
-      )
+        statusBarIconBrightness: Brightness.dark,
+      ),
     );
 
     return Scaffold(
-      body: SafeArea(
-        child: _screens[_selectedScreenIndex],
-      ),
+      body: SafeArea(child: _screens[_selectedScreenIndex]),
 
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _selectedScreenIndex,

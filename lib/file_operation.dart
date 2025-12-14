@@ -8,7 +8,7 @@ class FileOperation {
     try {
       final file = File('${(await getTemporaryDirectory()).path}/$fileName');
       await file.writeAsString(fileContent);
-    } catch(e) {
+    } catch (e) {
       throw Exception();
     }
   }
@@ -22,7 +22,7 @@ class FileOperation {
 
   // 一時フォルダにあるファイルの最終変更日時を取得する関数
   Future<DateTime> getFileModifiedDateTempDir(String fileName) async {
-    if(!(await isFileExistTempDir(fileName))){
+    if (!(await isFileExistTempDir(fileName))) {
       return DateTime(1970);
     }
 
@@ -34,7 +34,7 @@ class FileOperation {
   // 一時フォルダにあるファイルの中身を返す関数
   Future<String> getFileContent(String fileName) async {
     // 存在確認
-    if(!(await isFileExistTempDir(fileName))){
+    if (!(await isFileExistTempDir(fileName))) {
       return '';
     }
 

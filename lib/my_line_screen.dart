@@ -10,10 +10,6 @@ class MyLineScreen extends StatefulWidget {
 class _MyLineScreenState extends State<MyLineScreen> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
-        child: Text('MY路線'),
-      ),
-    );
+    return Scaffold(body: Center(child: Text('MY路線')));
   }
 }
