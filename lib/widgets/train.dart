@@ -222,7 +222,7 @@ class _TrainState extends State<Train> {
                 image: AssetImage('assets/images/train.png'),
                 height: 50,
                 width: 50,
-                color: widget.trainMap.length == 1 ? Color(widget.lineColor) : Colors.black,
+                color: Color(widget.lineColor),
               ),
             ),
           ],
