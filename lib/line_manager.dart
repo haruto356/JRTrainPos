@@ -84,25 +84,25 @@ class LineManager {
         mainStationList.addAll(['米原', '京都', '大阪', '三ノ宮', '姫路']);
         break;
       case B:
-        mainStationList.addAll(['京都']);
+        mainStationList.addAll(['京都', '比叡山坂本', '近江今津']);
         break;
       case C:
-        mainStationList.addAll(['草津', '貴生川']);
+        mainStationList.addAll(['草津', '貴生川', '柘植']);
         break;
       case D:
-        mainStationList.addAll(['京都', '木津']);
+        mainStationList.addAll(['京都', '宇治', '木津']);
         break;
       case E:
-        mainStationList.addAll(['京都', '綾部', '福知山']);
+        mainStationList.addAll(['京都', '亀岡', '園部', '綾部', '福知山']);
         break;
       case F:
         mainStationList.addAll(['大阪', '放出', '久宝寺']);
         break;
       case G:
-        mainStationList.addAll(['大阪', '宝塚', '福知山']);
+        mainStationList.addAll(['大阪', '宝塚', '新三田', '福知山']);
         break;
       case H:
-        mainStationList.addAll(['木津', '放出', '京橋', '北新地']);
+        mainStationList.addAll(['木津', '四条畷', '放出', '京橋', '北新地']);
         break;
       case O:
         mainStationList.addAll(['大阪', '天王寺', '京橋']);
