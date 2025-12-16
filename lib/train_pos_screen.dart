@@ -117,7 +117,7 @@ class _TrainPosScreenState extends State<TrainPosScreen>
       i++;
       if (i >= 5000) {
         // しばらく待ってもリストが空の場合、その路線に列車が存在しないとする
-        return;
+        break;
       }
     }
 
@@ -363,7 +363,15 @@ class _TrainPosScreenState extends State<TrainPosScreen>
       await _drawTrain();
 
       // 情報更新待ち
-      await Future.delayed(Duration(milliseconds: 100));
+      int i = 0;
+      while (_trainJsonMapList.isEmpty) {
+        await Future.delayed(Duration(milliseconds: 1));
+        i++;
+        if (i >= 5000) {
+          // しばらく待ったらループを抜ける
+          break;
+        }
+      }
 
       if (mounted) {
         setState(() {
