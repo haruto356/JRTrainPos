@@ -74,6 +74,17 @@ class _TrainState extends State<Train> {
       _delayMinuteAccentColor = Colors.red;
     }
 
+    // アイコンの上に表示する種別を設定
+    if(_trainType.contains('特急')){
+      _trainTypeChar = '特';
+    }
+    else if(_trainType == '新快速'){
+      _trainTypeChar = '新';
+    }
+    else if(_trainType.contains('快速') || _trainType == '関空紀州'){
+      _trainTypeChar = '快';
+    }
+
     // 列車情報から情報を取得
     final jsonStr = await FileOperation().getFileContent('train_info.json');
     final carList = json.decode(jsonStr)['trains'][_trainNo];
@@ -98,16 +109,6 @@ class _TrainState extends State<Train> {
     for (var i in _trainInfoJsonList) {
       _trainCarsNo.add(i['carNo']);
       _trainCarsCongestion.add(i['congestion']);
-    }
-
-    if(_trainType.contains('特急')){
-      _trainTypeChar = '特';
-    }
-    else if(_trainType == '新快速'){
-      _trainTypeChar = '新';
-    }
-    else if(_trainType.contains('快速')){
-      _trainTypeChar = '快';
     }
   }
 
