@@ -27,6 +27,7 @@ class _TrainState extends State<Train> {
   int _direction = 0;
 
   Color _delayMinuteAccentColor = Color(0xffffffff); // 遅延分数の強調色
+  String _trainTypeChar = ''; // 特、快などの種別を1文字で表す
 
   // 詳細画面に表示する情報
   String _trainNo = '';
@@ -97,6 +98,16 @@ class _TrainState extends State<Train> {
     for (var i in _trainInfoJsonList) {
       _trainCarsNo.add(i['carNo']);
       _trainCarsCongestion.add(i['congestion']);
+    }
+
+    if(_trainType.contains('特急')){
+      _trainTypeChar = '特';
+    }
+    else if(_trainType == '新快速'){
+      _trainTypeChar = '新';
+    }
+    else if(_trainType.contains('快速')){
+      _trainTypeChar = '快';
     }
   }
 
@@ -191,15 +202,25 @@ class _TrainState extends State<Train> {
                 // 上向き
                 Column(
                   children: [
-                    Image(
-                      image: AssetImage('assets/images/train.png'),
-                      height: 50,
-                      width: 50,
-                      color:
+                    Stack(
+                      children: [
+                        Image(
+                          image: AssetImage('assets/images/train.png'),
+                          height: 50,
+                          width: 50,
+                          color:
                           widget.trainMap.length == 1
                               ? Color(widget.lineColor)
                               : Colors.black,
+                        ),
+                        Positioned(
+                          top: 15,
+                          left: 15,
+                          child: Text(_trainTypeChar, style: TextStyle(fontSize: 18, color: Colors.white),),
+                        ),
+                      ],
                     ),
+
                     // 遅延分数
                     if (_delayMinutes > 0) ...{
                       Transform.translate(
@@ -248,17 +269,26 @@ class _TrainState extends State<Train> {
                       ),
                     },
 
-                    Transform.scale(
-                      scaleY: -1,
-                      child: Image(
-                        image: AssetImage('assets/images/train.png'),
-                        height: 50,
-                        width: 50,
-                        color:
+                    Stack(
+                      children: [
+                        Transform.scale(
+                          scaleY: -1,
+                          child: Image(
+                            image: AssetImage('assets/images/train.png'),
+                            height: 50,
+                            width: 50,
+                            color:
                             widget.trainMap.length == 1
                                 ? Color(widget.lineColor)
                                 : Colors.black,
-                      ),
+                          ),
+                        ),
+                        Positioned(
+                          top: 8,
+                          left: 15,
+                          child: Text(_trainTypeChar, style: TextStyle(fontSize: 18, color: Colors.white),),
+                        ),
+                      ],
                     ),
                   ],
                 ),
