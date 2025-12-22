@@ -63,7 +63,7 @@ class _MyHomePageState extends State<MyHomePage> {
         currentIndex: _selectedScreenIndex,
         onTap: _onTapBottomBar,
         items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.train), label: 'MY路線'),
+          BottomNavigationBarItem(icon: Icon(Icons.train), label: 'My路線'),
           BottomNavigationBarItem(icon: Icon(Icons.list), label: '路線一覧'),
           BottomNavigationBarItem(icon: Icon(Icons.settings), label: '設定'),
         ],

@@ -76,6 +76,11 @@ class LineManager {
     return lineWidgetList;
   }
 
+  // 指定した路線のウィジェットを返す関数
+  Widget getLineWidget(int index){
+    return lineWidgetList[index];
+  }
+
   List<String> getMainStation(String lineNameJa) {
     List<String> mainStationList = [];
 
