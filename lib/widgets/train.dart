@@ -215,8 +215,8 @@ class _TrainState extends State<Train> {
                               : Colors.black,
                         ),
                         Positioned(
-                          top: 15,
-                          left: 15,
+                          top: 14,
+                          left: 14,
                           child: Text(_trainTypeChar, style: TextStyle(fontSize: 18, color: Colors.white),),
                         ),
                       ],
@@ -285,8 +285,8 @@ class _TrainState extends State<Train> {
                           ),
                         ),
                         Positioned(
-                          top: 8,
-                          left: 15,
+                          top: 7,
+                          left: 14,
                           child: Text(_trainTypeChar, style: TextStyle(fontSize: 18, color: Colors.white),),
                         ),
                       ],
