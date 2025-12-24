@@ -362,17 +362,6 @@ class _TrainPosScreenState extends State<TrainPosScreen>
       await _drawStationList();
       await _drawTrain();
 
-      // 情報更新待ち
-      int i = 0;
-      while (_trainJsonMapList.isEmpty) {
-        await Future.delayed(Duration(milliseconds: 1));
-        i++;
-        if (i >= 5000) {
-          // しばらく待ったらループを抜ける
-          break;
-        }
-      }
-
       if (mounted) {
         setState(() {
           _isWidgetCreated = true;
