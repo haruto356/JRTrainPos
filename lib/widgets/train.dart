@@ -214,10 +214,11 @@ class _TrainState extends State<Train> {
                               ? Color(widget.lineColor)
                               : Colors.black,
                         ),
-                        Positioned(
-                          top: 14,
-                          left: 14,
-                          child: Text(_trainTypeChar, style: TextStyle(fontSize: 18, color: Colors.white),),
+                        Positioned.fill(
+                          top: 4,
+                          child: Center(
+                            child: Text(_trainTypeChar, style: TextStyle(fontSize: 18, color: Colors.white),),
+                          ),
                         ),
                       ],
                     ),
@@ -284,10 +285,11 @@ class _TrainState extends State<Train> {
                                 : Colors.black,
                           ),
                         ),
-                        Positioned(
-                          top: 7,
-                          left: 14,
-                          child: Text(_trainTypeChar, style: TextStyle(fontSize: 18, color: Colors.white),),
+                        Positioned.fill(
+                          top: -8,
+                          child: Center(
+                            child: Text(_trainTypeChar, style: TextStyle(fontSize: 18, color: Colors.white),),
+                          ),
                         ),
                       ],
                     ),
