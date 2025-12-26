@@ -212,12 +212,15 @@ class _TrainPosScreenState extends State<TrainPosScreen>
         try {
           _trainPosJsonStringList.add(await _getJsonFile.getTrainPos(i));
         } catch (e) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text('列車走行位置データの取得に失敗しました(${widget.lineName})'),
-              duration: Duration(seconds: 1),
-            ),
-          );
+          if(mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text('列車走行位置データの取得に失敗しました(${widget
+                    .lineName})'),
+                duration: Duration(seconds: 1),
+              ),
+            );
+          }
         }
       }
 
