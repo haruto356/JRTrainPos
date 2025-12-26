@@ -158,7 +158,7 @@ class _TrainState extends State<Train> {
           _direction == 0
               ? MediaQuery.of(context).size.width / 2 - 75
               : MediaQuery.of(context).size.width / 2 + 30,
-      child: InkWell(
+      child: GestureDetector(
         onTap: () {
           // 下から列車情報画面を表示
           showModalBottomSheet(
