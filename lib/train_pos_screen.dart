@@ -426,6 +426,7 @@ class _TrainPosScreenState extends State<TrainPosScreen>
       ),
 
       floatingActionButton: FloatingActionButton(
+        child: const Icon(Icons.import_export),
         onPressed: () {
           // 選択肢を表示
           showDialog(
