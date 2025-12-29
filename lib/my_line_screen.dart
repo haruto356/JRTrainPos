@@ -50,7 +50,17 @@ class _MyLineScreenState extends State<MyLineScreen> {
 
     // my路線が登録されていないとき
     if(_myLineList.isEmpty){
-      return Scaffold(body: Center(child: Text('MY路線が登録されていません'),),);
+      return Scaffold(
+        floatingActionButton: FloatingActionButton(
+          child: Icon(Icons.add),
+          onPressed: (){
+
+          },
+        ),
+        body: Center(
+          child: Text('MY路線が登録されていません'),
+        ),
+      );
     }
     return Scaffold(
       body: Column(
