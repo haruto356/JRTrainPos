@@ -51,9 +51,12 @@ class _TrainPosScreenState extends State<TrainPosScreen>
   Future<void> _drawStationList() async {
     _stationWidgetList.clear();
 
-    final List<String> lineFileList = _lineManager.changeLineNameToJsonFile(
-      widget.lineName,
-    );
+    // 駅リストを取得
+    final List<String> lineList = _lineManager.changeLineNameToJsonFile(widget.lineName);
+    for (var i in lineList) {
+      await _getJsonFile.getStationList(i);
+    }
+    final List<String> lineFileList = _lineManager.changeLineNameToJsonFile(widget.lineName);
 
     // 余白を追加
     _stationWidgetList.add(StationEnd());
@@ -109,18 +112,52 @@ class _TrainPosScreenState extends State<TrainPosScreen>
   // 列車を描画する関数
   Future<void> _drawTrain() async {
     _trainWidgetList.clear();
+    _trainPosJsonStringList.clear();
+    _trainJsonMapList.clear();
 
-    // リストが更新されてから列車を描画する
-    int i = 0;
-    while (_trainJsonMapList.isEmpty) {
-      await Future.delayed(Duration(milliseconds: 1));
-      i++;
-      if (i >= 5000) {
-        // しばらく待ってもリストが空の場合、その路線に列車が存在しないとする
-        break;
+    // 列車詳細情報の取得
+    await _getJsonFile.getTrainInfo();
+
+    // 列車データを取得
+    final List<String> lineList = _lineManager.changeLineNameToJsonFile(widget.lineName);
+
+    // 列車走行位置の取得
+    for (var i in lineList) {
+      try {
+        _trainPosJsonStringList.add(await _getJsonFile.getTrainPos(i));
+      } catch (e) {
+        if(mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('列車走行位置データの取得に失敗しました(${widget.lineName})'),
+              duration: Duration(seconds: 1),
+            ),
+          );
+        }
       }
     }
 
+    // 車両No重複検知用リスト
+    List<String> addedTrainNoList = [];
+
+    // 列車jsonデータをリストに格納
+    for (var i in _trainPosJsonStringList) {
+      final Map<String, dynamic> jsonMap = json.decode(i);
+      for (var j in jsonMap['trains']) {
+        // dynamicをMap<String, String?>に変換してからリストに追加
+        final temp = (j as Map).map(
+              (key, value) => MapEntry(key.toString(), value?.toString()),
+        );
+
+        // 既に該当する車両Noがあるときのみリストに追加
+        if (!addedTrainNoList.contains(temp['no'])) {
+          _trainJsonMapList.add(temp);
+          addedTrainNoList.add(temp['no'].toString());
+        }
+      }
+    }
+
+    // 列車の描画
     // 追加したposのリスト
     Set<String> addedPosList = {};
 
@@ -197,75 +234,12 @@ class _TrainPosScreenState extends State<TrainPosScreen>
     }
   }
 
-  // jsonデータを取得する関数
-  Future<void> _dataRefresh() async {
-    _trainPosJsonStringList.clear();
-    _trainJsonMapList.clear();
-
-    Future(() async {
-      final List<String> lineList = _lineManager.changeLineNameToJsonFile(
-        widget.lineName,
-      );
-
-      // 列車走行位置の取得
-      for (var i in lineList) {
-        try {
-          _trainPosJsonStringList.add(await _getJsonFile.getTrainPos(i));
-        } catch (e) {
-          if(mounted) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text('列車走行位置データの取得に失敗しました(${widget
-                    .lineName})'),
-                duration: Duration(seconds: 1),
-              ),
-            );
-          }
-        }
-      }
-
-      // 車両No重複検知用リスト
-      List<String> addedTrainNoList = [];
-
-      // 列車jsonデータをリストに格納
-      for (var i in _trainPosJsonStringList) {
-        final Map<String, dynamic> jsonMap = json.decode(i);
-        for (var j in jsonMap['trains']) {
-          // dynamicをMap<String, String?>に変換してからリストに追加
-          final temp = (j as Map).map(
-            (key, value) => MapEntry(key.toString(), value?.toString()),
-          );
-
-          // 既に該当する車両Noがあるときのみリストに追加
-          if (!addedTrainNoList.contains(temp['no'])) {
-            _trainJsonMapList.add(temp);
-            addedTrainNoList.add(temp['no'].toString());
-          }
-        }
-      }
-
-      // 列車詳細情報の取得
-      await _getJsonFile.getTrainInfo();
-    });
-  }
-
-  // 駅リストを取得する関数
-  Future<void> _getStationList() async {
-    final List<String> lineList = _lineManager.changeLineNameToJsonFile(
-      widget.lineName,
-    );
-    for (var i in lineList) {
-      await _getJsonFile.getStationList(i);
-    }
-  }
-
   // 更新ボタンが押されたとき
   Future<void> _onPressedRefreshButton() async {
     setState(() {
       _isRefreshButtonDisabled = true;
     });
 
-    await _dataRefresh();
     await _drawTrain();
     setState(() {});
 
@@ -360,8 +334,6 @@ class _TrainPosScreenState extends State<TrainPosScreen>
     );
 
     Future(() async {
-      await _getStationList();
-      await _dataRefresh();
       await _drawStationList();
       await _drawTrain();
 
