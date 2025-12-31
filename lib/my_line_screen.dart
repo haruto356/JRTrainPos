@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:jr_train_pos/line_manager.dart';
+import 'package:jr_train_pos/my_line_edit_screen.dart';
 import 'package:jr_train_pos/shared_pref.dart';
 
 class MyLineScreen extends StatefulWidget {
@@ -16,26 +17,31 @@ class _MyLineScreenState extends State<MyLineScreen> {
   late List<String> _myLineList;
   bool _isGetMyLineList = false;
 
-  // my路線に登録されている路線のウィジェットを作成する関数
-  List<Widget> _createLineWidget(){
-    final List<Widget> widgetList = [];
+  late FloatingActionButton _floatingActionButton;
 
-    for(var i in _myLineList){
-      widgetList.add(_lineManager.getLineWidget(int.parse(i)));
-    }
-
-    return widgetList;
+  // SharedPreferencesからデータを取得する関数
+  Future<void> _getMyLineList() async{
+    _myLineList = await _sharedPref.getMyLineList();
+    setState(() {
+      _isGetMyLineList = true;
+    });
   }
 
   @override
   void initState() {
     super.initState();
 
+    // my路線編集ボタン
+    _floatingActionButton = FloatingActionButton(
+      onPressed: () async {
+        await Navigator.push(context, MaterialPageRoute(builder: (context) => MyLineEditScreen()));
+        _getMyLineList();
+      },
+      child: const Icon(Icons.edit),
+    );
+
     Future(() async{
-      _myLineList = await _sharedPref.getMyLineList();
-      setState(() {
-        _isGetMyLineList = true;
-      });
+      _getMyLineList();
     });
   }
 
@@ -51,27 +57,30 @@ class _MyLineScreenState extends State<MyLineScreen> {
     // my路線が登録されていないとき
     if(_myLineList.isEmpty){
       return Scaffold(
-        floatingActionButton: FloatingActionButton(
-          child: Icon(Icons.add),
-          onPressed: (){
-
-          },
-        ),
+        floatingActionButton: _floatingActionButton,
         body: Center(
-          child: Text('MY路線が登録されていません'),
+          child: Text('My路線が登録されていません'),
         ),
       );
     }
-    return Scaffold(
-      body: Column(
-        children:[
-          Padding(
-            padding: EdgeInsets.all(12),
-            child: const Text('My路線', style: TextStyle(fontSize: 16),),
+
+    // my路線が登録されているとき
+    else {
+      return Scaffold(
+        floatingActionButton: _floatingActionButton,
+        body: SingleChildScrollView(
+          child: Column(
+            children: [
+              Padding(
+                padding: EdgeInsets.all(12),
+                child: const Text('My路線', style: TextStyle(fontSize: 16),),
+              ),
+              for(var i in _myLineList)
+                _lineManager.getLineWidget(int.parse(i)),
+            ]
           ),
-          ..._createLineWidget(),
-        ]
-      ),
-    );
+        )
+      );
+    }
   }
 }

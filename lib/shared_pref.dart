@@ -2,7 +2,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class SharedPref {
   // my路線をSharedPreferenceに保存する関数
-  void saveMyLineList(List<dynamic> list) async {
+  Future<void> saveMyLineList(List<dynamic> list) async {
     final pref = await SharedPreferences.getInstance();
 
     // List<String>に変換

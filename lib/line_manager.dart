@@ -13,6 +13,19 @@ class LineManager {
   static const String H = '東西線・学研都市線';
   static const String O = '大阪環状線';
 
+  // 日本語路線名のリスト
+  final List<String> lineStringList = [
+    A,
+    B,
+    C,
+    D,
+    E,
+    F,
+    G,
+    H,
+    O
+  ];
+
   // 路線一覧画面に表示するウィジェットのリスト
   final List<Widget> lineWidgetList = [
     Line(
@@ -81,6 +94,12 @@ class LineManager {
     return lineWidgetList[index];
   }
 
+  // 日本語路線名のリストを返す関数
+  List<String> getLineStringList(){
+    return lineStringList;
+  }
+
+  // 指定した路線の主要駅を返す関数
   List<String> getMainStation(String lineNameJa) {
     List<String> mainStationList = [];
 
