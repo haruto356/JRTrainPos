@@ -67,6 +67,12 @@ class _TrainPosScreenState extends State<TrainPosScreen>
 
       for (int j = 0; j < lineMap['stations'].length; j++) {
         String stationName = lineMap['stations'][j]['info']['name'];
+
+        // 羽衣線の東羽衣駅は対象外とする
+        if(stationName == '東羽衣'){
+          continue;
+        }
+
         // 重複を排除
         if (!_stationList.contains(stationName)) {
           _stationList.add(stationName);
