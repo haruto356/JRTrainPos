@@ -76,25 +76,27 @@ class _MyLineEditScreenState extends State<MyLineEditScreen> {
       ),
       body: !_isWidgetCreated
         ? Center(child: CircularProgressIndicator(),)
-        : SingleChildScrollView(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              for(int i = 0; i < _lineListLength; i++)...{
+        : SafeArea(
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                for(int i = 0; i < _lineListLength; i++)...{
+                  Divider(),
+                  CheckboxListTile(
+                    title: Text(_lineList[i]),
+                    value: _checkboxList[i],
+                    controlAffinity: ListTileControlAffinity.leading,
+                    onChanged: (value) {
+                      setState(() {
+                        _checkboxList[i] = value!;
+                      });
+                    },
+                  ),
+                },
                 Divider(),
-                CheckboxListTile(
-                  title: Text(_lineList[i]),
-                  value: _checkboxList[i],
-                  controlAffinity: ListTileControlAffinity.leading,
-                  onChanged: (value) {
-                    setState(() {
-                      _checkboxList[i] = value!;
-                    });
-                  },
-                ),
-              },
-              Divider(),
-            ],
+              ],
+            ),
           ),
         )
     );
