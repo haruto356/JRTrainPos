@@ -82,19 +82,25 @@ class _MyLineEditScreenState extends State<MyLineEditScreen> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 for(int i = 0; i < _lineListLength; i++)...{
-                  Divider(),
-                  CheckboxListTile(
-                    title: Text(_lineList[i]),
-                    value: _checkboxList[i],
-                    controlAffinity: ListTileControlAffinity.leading,
-                    onChanged: (value) {
-                      setState(() {
-                        _checkboxList[i] = value!;
-                      });
-                    },
+                  Padding(
+                    padding: EdgeInsets.all(5),
+                    child: Material(
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                      color: Colors.white,
+                      child: CheckboxListTile(
+                        title: Text(_lineList[i]),
+                        value: _checkboxList[i],
+                        controlAffinity: ListTileControlAffinity.leading,
+                        onChanged: (value) {
+                          setState(() {
+                            _checkboxList[i] = value!;
+                          });
+                        },
+                      ),
+                    ),
                   ),
                 },
-                Divider(),
+                SizedBox(height: 10,),
               ],
             ),
           ),
