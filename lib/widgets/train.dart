@@ -81,7 +81,7 @@ class _TrainState extends State<Train> {
     else if(_trainType == '新快速'){
       _trainTypeChar = '新';
     }
-    else if(_trainType.contains('快速') || _trainType == '関空紀州'){
+    else if(_trainType.contains('快速') || _trainType == '関空紀州' || _trainType == '大和路快'){
       _trainTypeChar = '快';
     }
 
