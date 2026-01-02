@@ -97,6 +97,10 @@ class _TrainState extends State<Train> {
       }
       _trainCarsNo.add(noTemp);
       _trainCarsCongestion.add(congestionTemp);
+
+      if(_numberOfCars[i] == 0){
+        _numberOfCars[i] = _trainCarsNo[i].length;
+      }
     }
 
     // 遅延分数の強調色の変更
@@ -172,34 +176,35 @@ class _TrainState extends State<Train> {
           showModalBottomSheet(
             context: context,
             builder: (BuildContext context) {
-              return Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(20),
-                    topRight: Radius.circular(20),
+              return Column(
+                children: [
+                  Row(
+                    children: [SizedBox(height: 20),],
                   ),
-                ),
-                child: Column(
-                  children: [
-                    SizedBox(height: 20),
-                    for(int i = 0; i < _trainNo.length; i++)...{
-                      Padding(
-                        padding: EdgeInsets.all(5),
-                        child: Column(
-                          children: [
-                            Text(widget.trainMap[i].toString()),
-                            if(_trainCarsNo.isNotEmpty && _trainCarsCongestion.isNotEmpty && _trainCarsCongestion.length > i)...{
-                              Text(_trainCarsNo[i].toString()),
-                              Text(_trainCarsCongestion[i].toString()),
-                            },
-                            Text('${_delayMinutes[i]}分遅れ'),
-                            Text(_nickname[i]),
-                          ],
-                        ),
-                      )
-                    }
-                  ],
-                ),
+                  for(int i = 0; i < _trainNo.length; i++)...{
+                    Padding(
+                      padding: EdgeInsets.all(5),
+                      child: Column(
+                        children: [
+                          if(_numberOfCars[i] == 0)...{
+                            Text('${_trainType[i]}   ${_dest[i]}行き', textAlign: TextAlign.center,),
+                          }
+                          else...{
+                            Text('${_trainType[i]}   ${_dest[i]}行き   ${_numberOfCars[i]}両', textAlign: TextAlign.center,),
+                          },
+
+                          // 混雑情報の表示
+                          if(_trainCarsNo.isNotEmpty && _trainCarsCongestion.isNotEmpty && _trainCarsCongestion.length > i)...{
+                            Text(_trainCarsNo[i].toString()),
+                            Text(_trainCarsCongestion[i].toString()),
+                          },
+                          Text('${_delayMinutes[i]}分遅れ'),
+                          Text(_nickname[i]),
+                        ],
+                      ),
+                    )
+                  }
+                ],
               );
             },
           );
