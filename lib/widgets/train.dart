@@ -26,49 +26,83 @@ class _TrainState extends State<Train> {
   int _posTop = 0;
   int _direction = 0;
 
+  int _maxDelayMinutes = 0;
   Color _delayMinuteAccentColor = Color(0xffffffff); // 遅延分数の強調色
   String _trainTypeChar = ''; // 特、快などの種別を1文字で表す
 
   // 詳細画面に表示する情報
-  String _trainNo = '';
-  String _nickname = '';
-  String _trainType = '';
-  String _dest = '';
-  int _delayMinutes = 0;
-  int _numberOfCars = 0;
-  final List<dynamic> _trainInfoJsonList = [];
-  final List<int> _trainCarsNo = [];
-  final List<int> _trainCarsCongestion = [];
+  final List<String> _trainNo = [];
+  final List<String> _nickname = [];
+  final List<String> _trainType = [];
+  final List<String> _dest = [];
+  final List<int> _delayMinutes = [];
+  final List<int> _numberOfCars = [];
+  final List<List<int>> _trainCarsNo = [];
+  final List<List<int>> _trainCarsCongestion = [];
 
   // 車両詳細情報を変数に格納する
   Future<void> _updateTrainInfo() async {
-    final Map<String, String?> map = {};
-    for (var i in widget.trainMap) {
-      map.addAll(i);
-    }
+    final List<Map<String, String?>> trains = widget.trainMap;
+    final jsonStr = await FileOperation().getFileContent('train_info.json');
 
-    _trainNo = map['no']!;
-    _nickname = map['nickname'] ?? '';
-    _trainType = map['displayType']!;
-    _dest = map['dest'] ?? '';
-    // 行先がjson文字列の場合
-    if (_dest.length > 10) {
-      // 正しいjsonに変換
-      _dest = _dest
-          .replaceAll('{', '{"')
-          .replaceAll(':', '": "')
-          .replaceAll(',', '", "')
-          .replaceAll('}', '"}');
-      // 行先を取り出す
-      _dest = (json.decode(_dest) as Map<String, dynamic>)['text'].toString();
+    for(int i = 0; i < trains.length; i++){
+      _trainNo.add(trains[i]['no']!);
+      _nickname.add(trains[i]['nickname'] ?? '');
+      _trainType.add(trains[i]['displayType']!);
+      _delayMinutes.add(int.parse(trains[i]['delayMinutes'] ?? '0'));
+      _numberOfCars.add(int.parse(trains[i]['numberOfCars'] ?? '0'));
+
+      String dest = trains[i]['dest'] ?? '';
+      // 行先がjson文字列の場合
+      if(dest.length > 10) {
+        // 正しいjsonに変換
+        dest = dest.replaceAll('{', '{"').replaceAll(':', '": "').replaceAll(',', '", "').replaceAll('}', '"}');
+        // 行先を取り出す
+        dest = (json.decode(dest) as Map<String, dynamic>)['text'].toString();
+        _dest.add(dest);
+      }
+      else {
+        _dest.add(dest);
+      }
+
+      if(_maxDelayMinutes < _delayMinutes[i]){
+        _maxDelayMinutes = _delayMinutes[i];
+      }
+
+      // 列車情報から情報を取得
+      final List<dynamic> trainInfoJsonList = [];
+      final carList = json.decode(jsonStr)['trains'][_trainNo[i]];
+      // 列車詳細情報がないなら終了
+      if (carList == null) {
+        continue;
+      }
+
+      // 車両情報を1両ごとにリストに追加
+      for (var j in carList[0]['cars']) {
+        trainInfoJsonList.add(j);
+      }
+      // 新快速等、連結車両用
+      if (carList.length == 2) {
+        for (var j in carList[1]['cars']) {
+          trainInfoJsonList.add(j);
+        }
+      }
+
+      // 情報表示用リストに追加
+      final List<int> noTemp = [];
+      final List<int> congestionTemp = [];
+      for (var j in trainInfoJsonList) {
+        noTemp.add(j['carNo']);
+        congestionTemp.add(j['congestion']);
+      }
+      _trainCarsNo.add(noTemp);
+      _trainCarsCongestion.add(congestionTemp);
     }
-    _delayMinutes = int.parse(map['delayMinutes'] ?? '0');
-    _numberOfCars = int.parse(map['numberOfCars'] ?? '0');
 
     // 遅延分数の強調色の変更
-    if (_delayMinutes < 10) {
+    if (_maxDelayMinutes < 10) {
       _delayMinuteAccentColor = Color(0xffffa726);
-    } else if (_delayMinutes < 30) {
+    } else if (_maxDelayMinutes < 30) {
       _delayMinuteAccentColor = Color(0xffff7043);
     } else {
       _delayMinuteAccentColor = Colors.red;
@@ -78,37 +112,11 @@ class _TrainState extends State<Train> {
     if(_trainType.contains('特急')){
       _trainTypeChar = '特';
     }
-    else if(_trainType == '新快速'){
+    else if(_trainType.contains('新快速')){
       _trainTypeChar = '新';
     }
-    else if(_trainType.contains('快速') || _trainType == '関空紀州' || _trainType == '大和路快'){
+    else if(_trainType.contains('快速') || _trainType.contains('関空紀州') || _trainType.contains('大和路快')){
       _trainTypeChar = '快';
-    }
-
-    // 列車情報から情報を取得
-    final jsonStr = await FileOperation().getFileContent('train_info.json');
-    final carList = json.decode(jsonStr)['trains'][_trainNo];
-
-    // 列車詳細情報がないなら終了
-    if (carList == null) {
-      return;
-    }
-
-    // 車両情報を1両ごとにリストに追加
-    for (var i in carList[0]['cars']) {
-      _trainInfoJsonList.add(i);
-    }
-    // 新快速等、連結車両用
-    if (carList.length == 2) {
-      for (var i in carList[1]['cars']) {
-        _trainInfoJsonList.add(i);
-      }
-    }
-
-    // 情報表示用リストに追加
-    for (var i in _trainInfoJsonList) {
-      _trainCarsNo.add(i['carNo']);
-      _trainCarsCongestion.add(i['congestion']);
     }
   }
 
@@ -174,23 +182,22 @@ class _TrainState extends State<Train> {
                 child: Column(
                   children: [
                     SizedBox(height: 20),
-                    Row(
-                      children: [
-                        Text(_trainType),
-                        Spacer(),
-                        _dest == '' ? Text('') : Text('$_dest行き'),
-                        Spacer(),
-                        _numberOfCars == 0 ? Text('') : Text('$_numberOfCars両'),
-                      ],
-                    ),
-                    Text(widget.trainMap.toString()),
-                    // jsonから車両データを正しく取得できたら情報を表示する
-                    if (_trainInfoJsonList.isNotEmpty) ...{
-                      Text(_trainCarsNo.toString()),
-                      Text(_trainCarsCongestion.toString()),
-                      Text('$_delayMinutes分遅れ'),
-                      Text(_nickname),
-                    },
+                    for(int i = 0; i < _trainNo.length; i++)...{
+                      Padding(
+                        padding: EdgeInsets.all(5),
+                        child: Column(
+                          children: [
+                            Text(widget.trainMap[i].toString()),
+                            if(_trainCarsNo.isNotEmpty && _trainCarsCongestion.isNotEmpty && _trainCarsCongestion.length > i)...{
+                              Text(_trainCarsNo[i].toString()),
+                              Text(_trainCarsCongestion[i].toString()),
+                            },
+                            Text('${_delayMinutes[i]}分遅れ'),
+                            Text(_nickname[i]),
+                          ],
+                        ),
+                      )
+                    }
                   ],
                 ),
               );
@@ -224,7 +231,7 @@ class _TrainState extends State<Train> {
                     ),
 
                     // 遅延分数
-                    if (_delayMinutes > 0) ...{
+                    if (_maxDelayMinutes > 0) ...{
                       Transform.translate(
                         offset: const Offset(0, -5),
                         child: Container(
@@ -238,7 +245,7 @@ class _TrainState extends State<Train> {
                             bottom: 2,
                           ),
                           child: Text(
-                            '$_delayMinutes分遅れ',
+                            '$_maxDelayMinutes分遅れ',
                             style: TextStyle(fontSize: 10, color: Colors.white),
                           ),
                         ),
@@ -250,7 +257,7 @@ class _TrainState extends State<Train> {
                 : Column(
                   children: [
                     // 遅延分数
-                    if (_delayMinutes > 0) ...{
+                    if (_maxDelayMinutes > 0) ...{
                       Transform.translate(
                         offset: const Offset(0, 5),
                         child: Container(
@@ -264,7 +271,7 @@ class _TrainState extends State<Train> {
                             bottom: 2,
                           ),
                           child: Text(
-                            '$_delayMinutes分遅れ',
+                            '$_maxDelayMinutes分遅れ',
                             style: TextStyle(fontSize: 10, color: Colors.white),
                           ),
                         ),
