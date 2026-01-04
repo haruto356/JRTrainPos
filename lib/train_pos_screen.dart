@@ -53,9 +53,23 @@ class _TrainPosScreenState extends State<TrainPosScreen>
 
     // 駅リストを取得
     final List<String> lineList = _lineManager.changeLineNameToJsonFile(widget.lineName);
-    for (var i in lineList) {
-      await _getJsonFile.getStationList(i);
+    try {
+      for (var i in lineList) {
+        await _getJsonFile.getStationList(i);
+      }
+    } catch (e) {
+      if(mounted) {
+        Navigator.pop(context);
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('駅データの取得に失敗しました'),
+            duration: Duration(seconds: 2),
+          ),
+        );
+        return;
+      }
     }
+
     final List<String> lineFileList = _lineManager.changeLineNameToJsonFile(widget.lineName);
 
     // 余白を追加
@@ -122,7 +136,20 @@ class _TrainPosScreenState extends State<TrainPosScreen>
     _trainJsonMapList.clear();
 
     // 列車詳細情報の取得
-    await _getJsonFile.getTrainInfo();
+    try {
+      await _getJsonFile.getTrainInfo();
+    } catch (e) {
+      if(mounted) {
+        Navigator.pop(context);
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('列車情報データの取得に失敗しました'),
+            duration: Duration(seconds: 2),
+          ),
+        );
+        return;
+      }
+    }
 
     // 列車データを取得
     final List<String> lineList = _lineManager.changeLineNameToJsonFile(widget.lineName);
@@ -133,12 +160,14 @@ class _TrainPosScreenState extends State<TrainPosScreen>
         _trainPosJsonStringList.add(await _getJsonFile.getTrainPos(i));
       } catch (e) {
         if(mounted) {
+          Navigator.pop(context);
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: Text('列車走行位置データの取得に失敗しました(${widget.lineName})'),
-              duration: Duration(seconds: 1),
+              content: Text('列車走行位置データの取得に失敗しました'),
+              duration: Duration(seconds: 2),
             ),
           );
+          return;
         }
       }
     }

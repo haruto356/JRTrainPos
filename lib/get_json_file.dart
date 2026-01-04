@@ -3,6 +3,9 @@ import 'package:http/http.dart' as http;
 import 'package:jr_train_pos/file_operation.dart';
 
 class GetJsonFile {
+  // ファイル取得のタイムアウト時間
+  static const Duration timeOutDuration = Duration(seconds: 15);
+
   // 駅リストを取得し、ファイルに保存する関数
   Future<void> getStationList(String lineName) async {
     // 日付チェック（今日既に取得しているなら取得しない）
@@ -21,11 +24,13 @@ class GetJsonFile {
       final Uri jsonUrl = Uri.parse(
         'https://www.train-guide.westjr.co.jp/api/v3/${lineName}_st.json',
       );
-      final response = await http.get(jsonUrl);
+      final response = await http.get(jsonUrl).timeout(timeOutDuration);
 
       // 取得に成功したらファイルに保存する
       if (response.statusCode == 200) {
         await FileOperation().saveFileTempDir('$lineName.json', response.body);
+      } else{
+        throw Exception();
       }
     } catch (e) {
       throw Exception();
@@ -48,11 +53,13 @@ class GetJsonFile {
       final jsonUrl = Uri.parse(
         'https://www.train-guide.westjr.co.jp/api/v3/trainmonitorinfo.json',
       );
-      final response = await http.get(jsonUrl);
+      final response = await http.get(jsonUrl).timeout(timeOutDuration);
 
       // 取得に成功したらファイルに保存する
       if (response.statusCode == 200) {
         await FileOperation().saveFileTempDir('train_info.json', response.body);
+      } else {
+        throw Exception();
       }
     } catch (e) {
       throw Exception();
@@ -68,7 +75,7 @@ class GetJsonFile {
       final jsonUrl = Uri.parse(
         'https://www.train-guide.westjr.co.jp/api/v3/$lineName.json',
       );
-      final response = await http.get(jsonUrl);
+      final response = await http.get(jsonUrl).timeout(timeOutDuration);
 
       if (response.statusCode == 200) {
         result = response.body;
