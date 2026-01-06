@@ -117,10 +117,9 @@ class _TrainState extends State<Train> {
       if(i.contains('特急')){
         _trainTypeChar = '特';
         break;
-      } else if(i.contains('新快') && _trainTypeChar != '特'){
+      } else if(i.contains('新快')){
         _trainTypeChar = '新';
-        break;
-      } else if(i.contains('快') || i == '関空紀州'){
+      } else if(_trainTypeChar != '新' && (i.contains('快') || i == '関空紀州')){
         _trainTypeChar = '快';
       }
     }
