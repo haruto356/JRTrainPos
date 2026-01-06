@@ -113,14 +113,16 @@ class _TrainState extends State<Train> {
     }
 
     // アイコンの上に表示する種別を設定
-    if(_trainType.contains('特急')){
-      _trainTypeChar = '特';
-    }
-    else if(_trainType.contains('新快速')){
-      _trainTypeChar = '新';
-    }
-    else if(_trainType.contains('快速') || _trainType.contains('関空紀州') || _trainType.contains('大和路快')){
-      _trainTypeChar = '快';
+    for(var i in _trainType){
+      if(i.contains('特急')){
+        _trainTypeChar = '特';
+        break;
+      } else if(i.contains('新快') && _trainTypeChar != '特'){
+        _trainTypeChar = '新';
+        break;
+      } else if(i.contains('快') || i == '関空紀州'){
+        _trainTypeChar = '快';
+      }
     }
   }
 
