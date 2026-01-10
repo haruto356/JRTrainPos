@@ -35,27 +35,31 @@ class _SettingScreenState extends State<SettingScreen> {
     }
 
     return Scaffold(
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Text('設定'),
-            TextButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => LicensePage(
-                      applicationName: '非公式JRW列車位置',
-                      applicationVersion: appVersion,
-                    ),
+      body: Column(
+        children: [
+          const SizedBox(height: 20,),
+          const Text('設定', style: TextStyle(fontSize: 20),),
+          const SizedBox(height: 10,),
+          const Divider(),
+          TextButton(
+            onPressed: null,
+            child: const Text('初期表示駅の変更'),
+          ),
+          TextButton(
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => LicensePage(
+                    applicationName: '非公式JRW列車位置',
+                    applicationVersion: appVersion,
                   ),
-                );
-              },
-              child: const Text('ライセンス'),
-            )
-          ],
-        ),
+                ),
+              );
+            },
+            child: const Text('ライセンス'),
+          )
+        ],
       ),
     );
   }
