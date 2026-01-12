@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:jr_train_pos/file_operation.dart';
+import 'package:jr_train_pos/widgets/train_congestion.dart';
 
 class Train extends StatefulWidget {
   const Train({
@@ -193,14 +194,16 @@ class _TrainState extends State<Train> {
                           else...{
                             Text('${_trainType[i]}   ${_dest[i]}行き   ${_numberOfCars[i]}両', textAlign: TextAlign.center,),
                           },
+                          if(_nickname[i].isNotEmpty)
+                            Text(_nickname[i]),
 
                           // 混雑情報の表示
                           if(_trainCarsNo.isNotEmpty && _trainCarsCongestion.isNotEmpty && _trainCarsCongestion.length > i)...{
-                            Text(_trainCarsNo[i].toString()),
-                            Text(_trainCarsCongestion[i].toString()),
+                            // Text(_trainCarsNo[i].toString()),
+                            // Text(_trainCarsCongestion[i].toString()),
+                            TrainCongestion(trainCarNo: _trainCarsNo[i], trainCongestion: _trainCarsCongestion[i],)
                           },
                           Text('${_delayMinutes[i]}分遅れ'),
-                          Text(_nickname[i]),
                         ],
                       ),
                     )
