@@ -19,7 +19,7 @@ class Line extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.all(8),
+      margin: const EdgeInsets.all(8),
       child: Material(
         color: Colors.white,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
@@ -40,14 +40,14 @@ class Line extends StatelessWidget {
             );
           },
           child: Padding(
-            padding: EdgeInsets.all(14),
+            padding: const EdgeInsets.all(14),
             child: Row(
               children: [
                 // 路線番号
-                SizedBox(width: 15),
+                const SizedBox(width: 15),
                 Container(
                   width: 35,
-                  padding: EdgeInsets.all(5),
+                  padding: const EdgeInsets.all(5),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(3),
                     color: Color(lineColor),
@@ -64,15 +64,15 @@ class Line extends StatelessWidget {
                 ),
 
                 // 路線名
-                SizedBox(width: 20),
+                const SizedBox(width: 20),
                 Text(
                   lineName,
-                  style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold),
+                  style: const TextStyle(fontSize: 17, fontWeight: FontWeight.bold),
                 ),
 
                 // アイコン
                 const Spacer(flex: 10),
-                Icon(Icons.keyboard_arrow_right),
+                const Icon(Icons.keyboard_arrow_right),
                 const Spacer(flex: 1),
               ],
             ),

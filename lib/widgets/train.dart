@@ -28,7 +28,7 @@ class _TrainState extends State<Train> {
   int _direction = 0;
 
   int _maxDelayMinutes = 0;
-  Color _delayMinuteAccentColor = Color(0xffffffff); // 遅延分数の強調色
+  Color _delayMinuteAccentColor = const Color(0xffffffff); // 遅延分数の強調色
   String _trainTypeChar = ''; // 特、快などの種別を1文字で表す
 
   // 詳細画面に表示する情報
@@ -106,9 +106,9 @@ class _TrainState extends State<Train> {
 
     // 遅延分数の強調色の変更
     if (_maxDelayMinutes < 10) {
-      _delayMinuteAccentColor = Color(0xffffa726);
+      _delayMinuteAccentColor = const Color(0xffffa726);
     } else if (_maxDelayMinutes < 30) {
-      _delayMinuteAccentColor = Color(0xffff7043);
+      _delayMinuteAccentColor = const Color(0xffff7043);
     } else {
       _delayMinuteAccentColor = Colors.red;
     }
@@ -163,7 +163,7 @@ class _TrainState extends State<Train> {
   @override
   Widget build(BuildContext context) {
     if (!_isWidgetCreated) {
-      return SizedBox();
+      return const SizedBox();
     }
 
     return Positioned(
@@ -180,12 +180,12 @@ class _TrainState extends State<Train> {
             builder: (BuildContext context) {
               return Column(
                 children: [
-                  Row(
+                  const Row(
                     children: [SizedBox(height: 20),],
                   ),
                   for(int i = 0; i < _trainNo.length; i++)...{
                     Padding(
-                      padding: EdgeInsets.all(5),
+                      padding: const EdgeInsets.all(5),
                       child: Column(
                         children: [
                           if(_numberOfCars[i] == 0)...{
@@ -199,8 +199,6 @@ class _TrainState extends State<Train> {
 
                           // 混雑情報の表示
                           if(_trainCarsNo.isNotEmpty && _trainCarsCongestion.isNotEmpty && _trainCarsCongestion.length > i)...{
-                            // Text(_trainCarsNo[i].toString()),
-                            // Text(_trainCarsCongestion[i].toString()),
                             TrainCongestion(trainCarNo: _trainCarsNo[i], trainCongestion: _trainCarsCongestion[i],)
                           },
                           Text('${_delayMinutes[i]}分遅れ'),
@@ -222,7 +220,7 @@ class _TrainState extends State<Train> {
                     Stack(
                       children: [
                         Image(
-                          image: AssetImage('assets/images/train.png'),
+                          image: const AssetImage('assets/images/train.png'),
                           height: 50,
                           width: 50,
                           color:
@@ -233,7 +231,7 @@ class _TrainState extends State<Train> {
                         Positioned.fill(
                           top: 4,
                           child: Center(
-                            child: Text(_trainTypeChar, style: TextStyle(fontSize: 18, color: Colors.white),),
+                            child: Text(_trainTypeChar, style: const TextStyle(fontSize: 18, color: Colors.white),),
                           ),
                         ),
                       ],
@@ -248,14 +246,14 @@ class _TrainState extends State<Train> {
                             borderRadius: BorderRadius.circular(5),
                             color: _delayMinuteAccentColor,
                           ),
-                          padding: EdgeInsets.only(
+                          padding: const EdgeInsets.only(
                             left: 5,
                             right: 5,
                             bottom: 2,
                           ),
                           child: Text(
                             '$_maxDelayMinutes分遅れ',
-                            style: TextStyle(fontSize: 10, color: Colors.white),
+                            style: const TextStyle(fontSize: 10, color: Colors.white),
                           ),
                         ),
                       ),
@@ -274,14 +272,14 @@ class _TrainState extends State<Train> {
                             borderRadius: BorderRadius.circular(5),
                             color: _delayMinuteAccentColor,
                           ),
-                          padding: EdgeInsets.only(
+                          padding: const EdgeInsets.only(
                             left: 5,
                             right: 5,
                             bottom: 2,
                           ),
                           child: Text(
                             '$_maxDelayMinutes分遅れ',
-                            style: TextStyle(fontSize: 10, color: Colors.white),
+                            style: const TextStyle(fontSize: 10, color: Colors.white),
                           ),
                         ),
                       ),
@@ -292,7 +290,7 @@ class _TrainState extends State<Train> {
                         Transform.scale(
                           scaleY: -1,
                           child: Image(
-                            image: AssetImage('assets/images/train.png'),
+                            image: const AssetImage('assets/images/train.png'),
                             height: 50,
                             width: 50,
                             color:
@@ -304,7 +302,7 @@ class _TrainState extends State<Train> {
                         Positioned.fill(
                           top: -8,
                           child: Center(
-                            child: Text(_trainTypeChar, style: TextStyle(fontSize: 18, color: Colors.white),),
+                            child: Text(_trainTypeChar, style: const TextStyle(fontSize: 18, color: Colors.white),),
                           ),
                         ),
                       ],

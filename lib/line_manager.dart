@@ -48,115 +48,115 @@ class LineManager {
 
   // 路線一覧画面に表示するウィジェットのリスト
   final List<Widget> lineWidgetList = [
-    Line(
+    const Line(
       lineName: A,
       lineColor: 0xff2574b7,
       lineCode: 'A',
       lineCodeColor: 0xffffffff,
     ),
-    Line(
+    const Line(
       lineName: B,
       lineColor: 0xff38aecf,
       lineCode: 'B',
       lineCodeColor: 0xffffffff,
     ),
-    Line(
+    const Line(
       lineName: C,
       lineColor: 0xff60983d,
       lineCode: 'C',
       lineCodeColor: 0xffffffff,
     ),
-    Line(
+    const Line(
       lineName: D,
       lineColor: 0xffa67129,
       lineCode: 'D',
       lineCodeColor: 0xffffffff,
     ),
-    Line(
+    const Line(
       lineName: E,
       lineColor: 0xff898fd9,
       lineCode: 'E',
       lineCodeColor: 0xffffffff,
     ),
-    Line(
+    const Line(
       lineName: F,
       lineColor: 0xff4b7187,
       lineCode: 'F',
       lineCodeColor: 0xffffffff,
     ),
-    Line(
+    const Line(
       lineName: G,
       lineColor: 0xfffabc3c,
       lineCode: 'G',
       lineCodeColor: 0xff000000,
     ),
-    Line(
+    const Line(
       lineName: H,
       lineColor: 0xffda5a83,
       lineCode: 'H',
       lineCodeColor: 0xffffffff,
     ),
-    Line(
+    const Line(
       lineName: J,
       lineColor: 0xff9f2d5d,
       lineCode: 'J',
       lineCodeColor: 0xffffffff,
     ),
-    Line(
+    const Line(
       lineName: L,
       lineColor: 0xfff78b35,
       lineCode: 'L',
       lineCodeColor: 0xff000000,
     ),
-    Line(
+    const Line(
       lineName: O,
       lineColor: 0xffed1749,
       lineCode: 'O',
       lineCodeColor: 0xffffffff,
     ),
-    Line(
+    const Line(
       lineName: P,
       lineColor: 0xff133f85,
       lineCode: 'P',
       lineCodeColor: 0xffffffff,
     ),
-    Line(
+    const Line(
       lineName: Q,
       lineColor: 0xff35b17d,
       lineCode: 'Q',
       lineCodeColor: 0xffffffff,
     ),
-    Line(
+    const Line(
       lineName: R,
       lineColor: 0xfff78b35,
       lineCode: 'R',
       lineCodeColor: 0xff000000,
     ),
-    Line(
+    const Line(
       lineName: S,
       lineColor: 0xff2574b7,
       lineCode: 'S',
       lineCodeColor: 0xffffffff,
     ),
-    Line(
+    const Line(
       lineName: T,
       lineColor: 0xfff19eba,
       lineCode: 'T',
       lineCodeColor: 0xff000000,
     ),
-    Line(
+    const Line(
       lineName: U,
       lineColor: 0xffac1434,
       lineCode: 'U',
       lineCodeColor: 0xffffffff,
     ),
-    Line(
+    const Line(
       lineName: V,
       lineColor: 0xff562db3,
       lineCode: 'V',
       lineCodeColor: 0xffffffff,
     ),
-    Line(
+    const Line(
       lineName: W,
       lineColor: 0xff34a7b3,
       lineCode: 'W',

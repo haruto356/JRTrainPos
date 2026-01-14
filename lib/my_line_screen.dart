@@ -34,14 +34,14 @@ class _MyLineScreenState extends State<MyLineScreen> {
     // my路線編集ボタン
     _floatingActionButton = FloatingActionButton(
       onPressed: () async {
-        await Navigator.push(context, MaterialPageRoute(builder: (context) => MyLineEditScreen()));
-        _getMyLineList();
+        await Navigator.push(context, MaterialPageRoute(builder: (context) => const MyLineEditScreen()));
+        await _getMyLineList();
       },
       child: const Icon(Icons.edit),
     );
 
     Future(() async{
-      _getMyLineList();
+      await _getMyLineList();
     });
   }
 
@@ -49,7 +49,7 @@ class _MyLineScreenState extends State<MyLineScreen> {
   Widget build(BuildContext context) {
     // my路線が取得できていないとき
     if(!_isGetMyLineList){
-      return Center(
+      return const Center(
         child: CircularProgressIndicator(),
       );
     }
@@ -58,7 +58,7 @@ class _MyLineScreenState extends State<MyLineScreen> {
     if(_myLineList.isEmpty){
       return Scaffold(
         floatingActionButton: _floatingActionButton,
-        body: Center(
+        body: const Center(
           child: Text('My路線が登録されていません'),
         ),
       );
@@ -71,9 +71,9 @@ class _MyLineScreenState extends State<MyLineScreen> {
         body: SingleChildScrollView(
           child: Column(
             children: [
-              Padding(
+              const Padding(
                 padding: EdgeInsets.all(12),
-                child: const Text('My路線', style: TextStyle(fontSize: 16),),
+                child: Text('My路線', style: TextStyle(fontSize: 16),),
               ),
               for(var i in _myLineList)
                 _lineManager.getLineWidget(int.parse(i)),

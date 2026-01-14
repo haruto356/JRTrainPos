@@ -11,7 +11,7 @@ class SharedPref {
       strList.add(i.toString());
     }
 
-    pref.setStringList('myLine', strList);
+    await pref.setStringList('myLine', strList);
   }
 
   // SharedPreferenceに保存されているmy路線を取得する関数

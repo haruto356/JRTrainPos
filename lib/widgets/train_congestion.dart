@@ -12,8 +12,8 @@ class TrainCongestion extends StatelessWidget {
       children: [
         Row(
           children: [
-            Spacer(),
-            Icon(Icons.arrow_back),
+            const Spacer(),
+            const Icon(Icons.arrow_back),
             Row(
               children: [
                 const SizedBox(
@@ -24,7 +24,7 @@ class TrainCongestion extends StatelessWidget {
                   Column(
                     children: [
                       Text('${trainCarNo[i]}', textAlign: TextAlign.center,),
-                      Text('${trainCongestion[i]}', textAlign: TextAlign.center, style: TextStyle(fontSize: 12),),
+                      Text('${trainCongestion[i]}', textAlign: TextAlign.center, style: const TextStyle(fontSize: 12),),
                     ],
                   ),
                   const SizedBox(
@@ -34,7 +34,7 @@ class TrainCongestion extends StatelessWidget {
                 }
               ],
             ),
-            Spacer(),
+            const Spacer(),
           ],
         ),
       ],

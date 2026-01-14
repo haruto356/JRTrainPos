@@ -61,7 +61,7 @@ class _TrainPosScreenState extends State<TrainPosScreen>
       if(mounted) {
         Navigator.pop(context);
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
+          const SnackBar(
             content: Text('駅データの取得に失敗しました'),
             duration: Duration(seconds: 2),
           ),
@@ -73,7 +73,7 @@ class _TrainPosScreenState extends State<TrainPosScreen>
     final List<String> lineFileList = _lineManager.changeLineNameToJsonFile(widget.lineName);
 
     // 余白を追加
-    _stationWidgetList.add(StationEnd());
+    _stationWidgetList.add(const StationEnd());
 
     for (var i in lineFileList) {
       final jsonStr = await _fileOperation.getFileContent('$i.json');
@@ -126,7 +126,7 @@ class _TrainPosScreenState extends State<TrainPosScreen>
     }
 
     // 余白を追加
-    _stationWidgetList.add(StationEnd());
+    _stationWidgetList.add(const StationEnd());
   }
 
   // 列車を描画する関数
@@ -142,7 +142,7 @@ class _TrainPosScreenState extends State<TrainPosScreen>
       if(mounted) {
         Navigator.pop(context);
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
+          const SnackBar(
             content: Text('列車情報データの取得に失敗しました'),
             duration: Duration(seconds: 2),
           ),
@@ -162,7 +162,7 @@ class _TrainPosScreenState extends State<TrainPosScreen>
         if(mounted) {
           Navigator.pop(context);
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
+            const SnackBar(
               content: Text('列車走行位置データの取得に失敗しました'),
               duration: Duration(seconds: 2),
             ),
@@ -211,13 +211,12 @@ class _TrainPosScreenState extends State<TrainPosScreen>
 
       // 同じ位置の列車を抽出
       List<Map<String, String?>> trainList =
-          _trainJsonMapList
-              .where(
-                (train) =>
-                    train['pos'].toString() == currentPos &&
-                    train['direction'].toString() == '1',
-              )
-              .toList();
+        _trainJsonMapList.where(
+          (train) =>
+            train['pos'].toString() == currentPos &&
+            train['direction'].toString() == '1',
+        )
+        .toList();
 
       _trainWidgetList.add(
         Train(
@@ -248,13 +247,12 @@ class _TrainPosScreenState extends State<TrainPosScreen>
 
       // 同じ位置の列車を抽出
       List<Map<String, String?>> trainList =
-          _trainJsonMapList
-              .where(
-                (train) =>
-                    train['pos'].toString() == currentPos &&
-                    train['direction'].toString() == '0',
-              )
-              .toList();
+        _trainJsonMapList.where(
+          (train) =>
+            train['pos'].toString() == currentPos &&
+            train['direction'].toString() == '0',
+          )
+          .toList();
 
       _trainWidgetList.add(
         Train(
@@ -279,7 +277,7 @@ class _TrainPosScreenState extends State<TrainPosScreen>
     setState(() {});
 
     // 連打対策として一定時間ボタンを無効化
-    await Future.delayed(Duration(seconds: 5));
+    await Future.delayed(const Duration(seconds: 5));
 
     if (mounted) {
       setState(() {
@@ -385,7 +383,7 @@ class _TrainPosScreenState extends State<TrainPosScreen>
     super.dispose();
     // ステータスバーの色変更
     SystemChrome.setSystemUIOverlayStyle(
-      SystemUiOverlayStyle(
+      const SystemUiOverlayStyle(
         statusBarBrightness: Brightness.light,
         statusBarIconBrightness: Brightness.dark,
       ),
@@ -409,7 +407,7 @@ class _TrainPosScreenState extends State<TrainPosScreen>
           backgroundColor: Color(widget.lineColor),
           iconTheme: IconThemeData(color: Color(widget.lineCodeColor)),
         ),
-        body: Center(child: CircularProgressIndicator()),
+        body: const Center(child: CircularProgressIndicator()),
       );
     }
 

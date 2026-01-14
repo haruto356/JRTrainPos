@@ -67,7 +67,7 @@ class _MyLineEditScreenState extends State<MyLineEditScreen> {
             onPressed: () async {
               // 保存して画面を閉じる
               await _saveMyLine();
-              if(mounted) {
+              if(context.mounted) {
                 Navigator.pop(context, true);
               }
             },
@@ -75,7 +75,7 @@ class _MyLineEditScreenState extends State<MyLineEditScreen> {
         ],
       ),
       body: !_isWidgetCreated
-        ? Center(child: CircularProgressIndicator(),)
+        ? const Center(child: CircularProgressIndicator(),)
         : SafeArea(
           child: SingleChildScrollView(
             child: Column(
@@ -83,7 +83,7 @@ class _MyLineEditScreenState extends State<MyLineEditScreen> {
               children: [
                 for(int i = 0; i < _lineListLength; i++)...{
                   Padding(
-                    padding: EdgeInsets.all(5),
+                    padding: const EdgeInsets.all(5),
                     child: Material(
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                       color: Colors.white,
@@ -100,7 +100,7 @@ class _MyLineEditScreenState extends State<MyLineEditScreen> {
                     ),
                   ),
                 },
-                SizedBox(height: 10,),
+                const SizedBox(height: 10,),
               ],
             ),
           ),

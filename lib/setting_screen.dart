@@ -9,7 +9,7 @@ class SettingScreen extends StatefulWidget {
 }
 
 class _SettingScreenState extends State<SettingScreen> {
-  String appVersion = "";
+  String appVersion = '';
 
   @override
   void initState() {
@@ -27,7 +27,7 @@ class _SettingScreenState extends State<SettingScreen> {
   @override
   Widget build(BuildContext context) {
     if(appVersion.isEmpty){
-      return Scaffold(
+      return const Scaffold(
         body: Center(
           child: CircularProgressIndicator(),
         ),
@@ -41,9 +41,9 @@ class _SettingScreenState extends State<SettingScreen> {
           const Text('設定', style: TextStyle(fontSize: 20),),
           const SizedBox(height: 10,),
           const Divider(),
-          TextButton(
+          const TextButton(
             onPressed: null,
-            child: const Text('初期表示駅の変更'),
+            child: Text('初期表示駅の変更'),
           ),
           TextButton(
             onPressed: () {
