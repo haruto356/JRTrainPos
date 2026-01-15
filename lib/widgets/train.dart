@@ -49,9 +49,18 @@ class _TrainState extends State<Train> {
     for(int i = 0; i < trains.length; i++){
       _trainNo.add(trains[i]['no']!);
       _nickname.add(trains[i]['nickname'] ?? '');
-      _trainType.add(trains[i]['displayType']!);
       _delayMinutes.add(int.parse(trains[i]['delayMinutes'] ?? '0'));
       _numberOfCars.add(int.parse(trains[i]['numberOfCars'] ?? '0'));
+
+      String trainTypeTemp = trains[i]['displayType']!;
+      // うれシート、Aシートの表示改善
+      if(trainTypeTemp.contains('う')) {
+        trainTypeTemp = '快速 うれしートあり';
+      }
+      if(trainTypeTemp.contains('A')) {
+        trainTypeTemp = '新快速 Aシートあり';
+      }
+      _trainType.add(trainTypeTemp);
 
       String dest = trains[i]['dest'] ?? '';
       // 行先がjson文字列の場合
