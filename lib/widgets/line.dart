@@ -20,6 +20,17 @@ class Line extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       margin: const EdgeInsets.all(8),
+      decoration: BoxDecoration(
+        boxShadow: const [
+          BoxShadow(
+            color: Colors.grey,
+            offset: Offset(2, 2),
+            spreadRadius: 1.2,
+            blurRadius: 1,
+          )
+        ],
+        borderRadius: BorderRadius.circular(12),
+      ),
       child: Material(
         color: Colors.white,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
