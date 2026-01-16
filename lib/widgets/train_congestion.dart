@@ -16,10 +16,6 @@ class TrainCongestion extends StatelessWidget {
             const Icon(Icons.arrow_back),
             Row(
               children: [
-                const SizedBox(
-                  height: 40,
-                  child: VerticalDivider(),
-                ),
                 for(int i = 0; i < trainCarNo.length; i++)...{
                   Column(
                     children: [
@@ -27,10 +23,12 @@ class TrainCongestion extends StatelessWidget {
                       Text('${trainCongestion[i]}', textAlign: TextAlign.center, style: const TextStyle(fontSize: 12),),
                     ],
                   ),
-                  const SizedBox(
-                    height: 40,
-                    child: VerticalDivider(),
-                  ),
+                  if(i != trainCarNo.length - 1)...{
+                    const SizedBox(
+                      height: 40,
+                      child: VerticalDivider(),
+                    ),
+                  }
                 }
               ],
             ),
