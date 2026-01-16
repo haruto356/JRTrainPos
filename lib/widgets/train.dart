@@ -55,7 +55,11 @@ class _TrainState extends State<Train> {
       String trainTypeTemp = trains[i]['displayType']!;
       // うれシート、Aシートの表示改善
       if(trainTypeTemp.contains('う')) {
-        trainTypeTemp = '快速 うれしートあり';
+        if(trainTypeTemp.contains('快')){
+          trainTypeTemp = '快速 うれしートあり';
+        } else {
+          trainTypeTemp = '普通 うれしートあり';
+        }
       }
       if(trainTypeTemp.contains('A')) {
         trainTypeTemp = '新快速 Aシートあり';
