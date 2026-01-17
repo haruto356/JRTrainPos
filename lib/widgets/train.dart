@@ -38,6 +38,7 @@ class _TrainState extends State<Train> {
   final List<String> _dest = [];
   final List<int> _delayMinutes = [];
   final List<int> _numberOfCars = [];
+  final List<String> _typeChange = [];
   final List<List<int>> _trainCarsNo = [];
   final List<List<int>> _trainCarsCongestion = [];
 
@@ -51,6 +52,7 @@ class _TrainState extends State<Train> {
       _nickname.add(trains[i]['nickname'] ?? '');
       _delayMinutes.add(int.parse(trains[i]['delayMinutes'] ?? '0'));
       _numberOfCars.add(int.parse(trains[i]['numberOfCars'] ?? '0'));
+      _typeChange.add(trains[i]['typeChange'] ?? '');
 
       String trainTypeTemp = trains[i]['displayType']!;
       // うれシート、Aシートの表示改善
@@ -209,6 +211,8 @@ class _TrainState extends State<Train> {
                           },
                           if(_nickname[i].isNotEmpty)
                             Text(_nickname[i]),
+                          if(_typeChange[i].isNotEmpty)
+                            Text(_typeChange[i]),
 
                           // 混雑情報の表示
                           if(_trainCarsNo.isNotEmpty && _trainCarsCongestion.isNotEmpty && _trainCarsCongestion.length > i)...{
