@@ -21,10 +21,10 @@ class Line extends StatelessWidget {
     return Container(
       margin: const EdgeInsets.all(8),
       decoration: BoxDecoration(
-        boxShadow: const [
+        boxShadow: [
           BoxShadow(
-            color: Colors.grey,
-            offset: Offset(2, 2),
+            color: Colors.grey.shade300,
+            offset: const Offset(2, 2),
             spreadRadius: 1.2,
             blurRadius: 1,
           )
