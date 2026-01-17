@@ -8,34 +8,39 @@ class TrainCongestion extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Row(
-          children: [
-            const Spacer(),
-            const Icon(Icons.arrow_back),
-            Row(
-              children: [
-                for(int i = 0; i < trainCarNo.length; i++)...{
-                  Column(
-                    children: [
-                      Text('${trainCarNo[i]}', textAlign: TextAlign.center,),
-                      Text('${trainCongestion[i]}', textAlign: TextAlign.center, style: const TextStyle(fontSize: 12),),
-                    ],
+    return Center(
+      child: Scrollbar(
+        child: SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: Row(
+            children: [
+              const Icon(Icons.arrow_back),
+              const SizedBox(width: 10,),
+              for(int i = 0; i < trainCarNo.length; i++)...{
+                Column(
+                  children: [
+                    Text('${trainCarNo[i]}', textAlign: TextAlign.center,),
+                    // 混雑度が-1、999となっているときは-を表示する
+                    if(trainCongestion[i] < 0 || 500 < trainCongestion[i])...{
+                      const Text(' - ', textAlign: TextAlign.center, style: TextStyle(fontSize: 12),),
+                    } else...{
+                      Text('${trainCongestion[i]}%', textAlign: TextAlign.center, style: const TextStyle(fontSize: 12),),
+                    },
+                    const SizedBox(height: 10,),
+                  ],
+                ),
+                if(i != trainCarNo.length - 1)...{
+                  const SizedBox(
+                    height: 40,
+                    child: VerticalDivider(),
                   ),
-                  if(i != trainCarNo.length - 1)...{
-                    const SizedBox(
-                      height: 40,
-                      child: VerticalDivider(),
-                    ),
-                  }
-                }
-              ],
-            ),
-            const Spacer(),
-          ],
+                },
+              },
+              const SizedBox(width: 10,),
+            ],
+          ),
         ),
-      ],
+      ),
     );
   }
 }
