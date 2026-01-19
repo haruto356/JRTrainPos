@@ -132,7 +132,7 @@ class _TrainPosScreenState extends State<TrainPosScreen>
     if(mounted) {
       double windowHeight = MediaQuery.of(context).size.height;
       // 駅ウィジェットの高さの計算（駅、駅間は70、上下に20のウィジェット）
-      double widgetHeight = (_stationWidgetList.length - 2) * 70 + 20 * 2;
+      double widgetHeight = (_stationWidgetList.length - 2) * 70 + 20 * 2 + kToolbarHeight;
 
       if(windowHeight > widgetHeight){
         _stationWidgetList.add(
