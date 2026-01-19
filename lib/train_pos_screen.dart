@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:jr_train_pos/dev_log.dart';
 import 'package:jr_train_pos/file_operation.dart';
 import 'dart:convert';
 
@@ -28,6 +29,7 @@ class _TrainPosScreenState extends State<TrainPosScreen>
   final _fileOperation = FileOperation();
   final _getJsonFile = GetJsonFile();
   final _lineManager = LineManager();
+  final _devLog = DevLog();
 
   final ScrollController _scrollController = ScrollController();
 
@@ -52,6 +54,7 @@ class _TrainPosScreenState extends State<TrainPosScreen>
     _stationWidgetList.clear();
 
     // 駅リストを取得
+    _devLog.info('駅リスト取得開始');
     final List<String> lineList = _lineManager.changeLineNameToJsonFile(widget.lineName);
     try {
       for (var i in lineList) {
@@ -69,6 +72,7 @@ class _TrainPosScreenState extends State<TrainPosScreen>
         return;
       }
     }
+    _devLog.info('駅リスト取得完了');
 
     final List<String> lineFileList = _lineManager.changeLineNameToJsonFile(widget.lineName);
 
@@ -143,6 +147,8 @@ class _TrainPosScreenState extends State<TrainPosScreen>
         );
       }
     }
+
+    _devLog.info('駅ウィジェット作成完了');
   }
 
   // 列車を描画する関数
@@ -151,6 +157,7 @@ class _TrainPosScreenState extends State<TrainPosScreen>
     _trainPosJsonStringList.clear();
     _trainJsonMapList.clear();
 
+    _devLog.info('列車詳細情報取得開始');
     // 列車詳細情報の取得
     try {
       await _getJsonFile.getTrainInfo();
@@ -166,10 +173,12 @@ class _TrainPosScreenState extends State<TrainPosScreen>
         return;
       }
     }
+    _devLog.info('列車詳細情報取得完了');
 
     // 列車データを取得
     final List<String> lineList = _lineManager.changeLineNameToJsonFile(widget.lineName);
 
+    _devLog.info('列車走行位置取得開始');
     // 列車走行位置の取得
     for (var i in lineList) {
       try {
@@ -187,6 +196,7 @@ class _TrainPosScreenState extends State<TrainPosScreen>
         }
       }
     }
+    _devLog.info('列車走行位置取得完了');
 
     // 車両No重複検知用リスト
     List<String> addedTrainNoList = [];
@@ -281,6 +291,8 @@ class _TrainPosScreenState extends State<TrainPosScreen>
 
       addedPosList.add(currentPos);
     }
+
+    _devLog.info('列車ウィジェット作成完了');
   }
 
   // 更新ボタンが押されたとき
@@ -311,6 +323,8 @@ class _TrainPosScreenState extends State<TrainPosScreen>
 
     // 指定された駅までジャンプする関数
     onDialogOptionPressed(String stationName) {
+      _devLog.info('$stationNameに遷移');
+
       if (stationName == '一番上') {
         _scrollController.jumpTo(0);
       } else if (stationName == '一番下') {
@@ -373,6 +387,8 @@ class _TrainPosScreenState extends State<TrainPosScreen>
     super.initState();
     WidgetsBinding.instance.addObserver(this);
 
+    _devLog.info('${widget.lineName}の表示開始');
+
     // ウィジェットのキャッシュを作成
     _lineColorMarkerCache = LineColorMarker(lineColor: widget.lineColor);
     _stationBetweenWidgetCache = Station(
@@ -387,6 +403,7 @@ class _TrainPosScreenState extends State<TrainPosScreen>
       await _drawTrain();
 
       if (mounted) {
+        _devLog.info('画面更新');
         setState(() {
           _isWidgetCreated = true;
         });
@@ -397,6 +414,9 @@ class _TrainPosScreenState extends State<TrainPosScreen>
   @override
   void dispose() {
     super.dispose();
+
+    _devLog.info('${widget.lineName}の表示終了');
+
     // ステータスバーの色変更
     SystemChrome.setSystemUIOverlayStyle(
       const SystemUiOverlayStyle(
