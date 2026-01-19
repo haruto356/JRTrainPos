@@ -127,6 +127,22 @@ class _TrainPosScreenState extends State<TrainPosScreen>
 
     // 余白を追加
     _stationWidgetList.add(const StationEnd());
+
+    // 端末の下まで白背景を延長
+    if(mounted) {
+      double windowHeight = MediaQuery.of(context).size.height;
+      // 駅ウィジェットの高さの計算（駅、駅間は70、上下に20のウィジェット）
+      double widgetHeight = (_stationWidgetList.length - 2) * 70 + 20 * 2;
+
+      if(windowHeight > widgetHeight){
+        _stationWidgetList.add(
+          Container(
+            height: windowHeight - widgetHeight - kToolbarHeight, // AppBarの高さを引く
+            color: Colors.white,
+          )
+        );
+      }
+    }
   }
 
   // 列車を描画する関数
