@@ -137,7 +137,7 @@ class _TrainPosScreenState extends State<TrainPosScreen>
       if(windowHeight > widgetHeight){
         _stationWidgetList.add(
           Container(
-            height: windowHeight - widgetHeight - kToolbarHeight, // AppBarの高さを引く
+            height: windowHeight - widgetHeight,
             color: Colors.white,
           )
         );
