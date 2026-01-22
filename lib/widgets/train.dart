@@ -214,6 +214,7 @@ class _TrainState extends State<Train> {
                           if(_typeChange[i].isNotEmpty)
                             Text(_typeChange[i]),
 
+                          const SizedBox(height: 8,),
                           // 混雑情報の表示
                           if(_trainCarsNo.isNotEmpty && _trainCarsCongestion.isNotEmpty && _trainCarsCongestion.length > i)...{
                             TrainCongestion(trainCarNo: _trainCarsNo[i], trainCongestion: _trainCarsCongestion[i],)
