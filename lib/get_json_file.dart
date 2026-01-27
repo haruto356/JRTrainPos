@@ -1,10 +1,12 @@
 import 'package:http/http.dart' as http;
+import 'package:jr_train_pos/dev_log.dart';
 
 import 'package:jr_train_pos/file_operation.dart';
 
 class GetJsonFile {
   // ファイル取得のタイムアウト時間
   static const Duration timeOutDuration = Duration(seconds: 15);
+  final _devLog = DevLog();
 
   // 駅リストを取得し、ファイルに保存する関数
   Future<void> getStationList(String lineName) async {
@@ -29,6 +31,7 @@ class GetJsonFile {
       // 取得に成功したらファイルに保存する
       if (response.statusCode == 200) {
         await FileOperation().saveFileTempDir('$lineName.json', response.body);
+        _devLog.info('$lineNameの駅リスト取得完了');
       } else{
         throw Exception();
       }
@@ -58,6 +61,7 @@ class GetJsonFile {
       // 取得に成功したらファイルに保存する
       if (response.statusCode == 200) {
         await FileOperation().saveFileTempDir('train_info.json', response.body);
+        _devLog.info('列車情報取得完了');
       } else {
         throw Exception();
       }
@@ -79,6 +83,7 @@ class GetJsonFile {
 
       if (response.statusCode == 200) {
         result = response.body;
+        _devLog.info('$lineNameの車両走行位置取得完了');
       } else {
         throw Exception();
       }
