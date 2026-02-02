@@ -5,7 +5,7 @@ import 'package:jr_train_pos/file_operation.dart';
 
 class GetJsonFile {
   // ファイル取得のタイムアウト時間
-  static const Duration timeOutDuration = Duration(seconds: 15);
+  static const Duration timeOutDuration = Duration(milliseconds: 15);
   final _devLog = DevLog();
 
   // 駅リストを取得し、ファイルに保存する関数
@@ -36,6 +36,8 @@ class GetJsonFile {
         throw Exception();
       }
     } catch (e) {
+      _devLog.error('$lineName駅リスト取得失敗');
+      _devLog.error(e.toString());
       throw Exception();
     }
   }
@@ -66,6 +68,8 @@ class GetJsonFile {
         throw Exception();
       }
     } catch (e) {
+      _devLog.error('列車情報取得失敗');
+      _devLog.error(e.toString());
       throw Exception();
     }
   }
@@ -88,6 +92,8 @@ class GetJsonFile {
         throw Exception();
       }
     } catch (e) {
+      _devLog.error('$lineName車両走行位置取得失敗');
+      _devLog.error(e.toString());
       throw Exception();
     }
 
