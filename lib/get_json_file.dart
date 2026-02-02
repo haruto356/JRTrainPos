@@ -1,11 +1,11 @@
+import 'dart:async';
 import 'package:http/http.dart' as http;
 import 'package:jr_train_pos/dev_log.dart';
-
 import 'package:jr_train_pos/file_operation.dart';
 
 class GetJsonFile {
   // ファイル取得のタイムアウト時間
-  static const Duration timeOutDuration = Duration(milliseconds: 15);
+  static const Duration timeOutDuration = Duration(seconds: 15);
   final _devLog = DevLog();
 
   // 駅リストを取得し、ファイルに保存する関数
@@ -27,14 +27,25 @@ class GetJsonFile {
         'https://www.train-guide.westjr.co.jp/api/v3/${lineName}_st.json',
       );
       final response = await http.get(jsonUrl).timeout(timeOutDuration);
+      final status = response.statusCode;
 
-      // 取得に成功したらファイルに保存する
-      if (response.statusCode == 200) {
-        await FileOperation().saveFileTempDir('$lineName.json', response.body);
-        _devLog.info('$lineNameの駅リスト取得完了');
-      } else{
-        throw Exception();
+      switch(status){
+        case 200:
+          // 取得に成功したらファイルに保存する
+          await FileOperation().saveFileTempDir('$lineName.json', response.body);
+          _devLog.info('$lineNameの駅リスト取得完了');
+          break;
+        case 403:
+          throw Exception('[$status] $jsonUrlの閲覧権限がありません');
+        case 404:
+          throw Exception('[$status] $jsonUrlが見つかりません');
+        default:
+          throw Exception('[$status] $lineName駅リスト取得時にエラーが発生しました');
       }
+    } on TimeoutException catch (e) {
+      _devLog.error('$lineName駅リスト取得失敗(タイムアウト)');
+      _devLog.error(e.toString());
+      throw Exception();
     } catch (e) {
       _devLog.error('$lineName駅リスト取得失敗');
       _devLog.error(e.toString());
@@ -59,14 +70,25 @@ class GetJsonFile {
         'https://www.train-guide.westjr.co.jp/api/v3/trainmonitorinfo.json',
       );
       final response = await http.get(jsonUrl).timeout(timeOutDuration);
+      final status = response.statusCode;
 
-      // 取得に成功したらファイルに保存する
-      if (response.statusCode == 200) {
-        await FileOperation().saveFileTempDir('train_info.json', response.body);
-        _devLog.info('列車情報取得完了');
-      } else {
-        throw Exception();
+      switch(status){
+        case 200:
+          // 取得に成功したらファイルに保存する
+          await FileOperation().saveFileTempDir('train_info.json', response.body);
+          _devLog.info('列車情報取得完了');
+          break;
+        case 403:
+          throw Exception('[$status] $jsonUrlの閲覧権限がありません');
+        case 404:
+          throw Exception('[$status] $jsonUrlが見つかりません');
+        default:
+          throw Exception('[$status] 列車情報取得時にエラーが発生しました');
       }
+    } on TimeoutException catch (e) {
+      _devLog.error('列車情報取得失敗(タイムアウト)');
+      _devLog.error(e.toString());
+      throw Exception();
     } catch (e) {
       _devLog.error('列車情報取得失敗');
       _devLog.error(e.toString());
@@ -84,13 +106,24 @@ class GetJsonFile {
         'https://www.train-guide.westjr.co.jp/api/v3/$lineName.json',
       );
       final response = await http.get(jsonUrl).timeout(timeOutDuration);
+      final status = response.statusCode;
 
-      if (response.statusCode == 200) {
-        result = response.body;
-        _devLog.info('$lineNameの車両走行位置取得完了');
-      } else {
-        throw Exception();
+      switch(status){
+        case 200:
+          result = response.body;
+          _devLog.info('$lineNameの車両走行位置取得完了');
+          break;
+        case 403:
+          throw Exception('[$status] $jsonUrlの閲覧権限がありません');
+        case 404:
+          throw Exception('[$status] $jsonUrlが見つかりません');
+        default:
+          throw Exception('[$status] 車両走行位置取得時にエラーが発生しました');
       }
+    } on TimeoutException catch (e) {
+      _devLog.error('$lineName車両走行位置取得失敗(タイムアウト)');
+      _devLog.error(e.toString());
+      throw Exception();
     } catch (e) {
       _devLog.error('$lineName車両走行位置取得失敗');
       _devLog.error(e.toString());
