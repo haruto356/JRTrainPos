@@ -16,6 +16,7 @@ dependencies:
   path_provider: ^2.1.5
   shared_preferences: ^2.5.3
   package_info_plus: ^9.0.0
+  flutter_launcher_icons: ^0.14.4
 
 dev_dependencies:
   flutter_test:
@@ -48,3 +49,10 @@ flutter:
           weight: 800
         - asset: assets/fonts/NotoSansJP/NotoSansJP-Black.ttf
           weight: 900
+
+flutter_icons:
+  image_path_android: assets/launcher_icon/android_icon.png
+  adaptive_icon_background: '#77c0fe'
+  adaptive_icon_foreground: assets/launcher_icon/android_icon.png
+  android: true
+  adaptive_icon_padding: true
