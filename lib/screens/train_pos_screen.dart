@@ -393,14 +393,19 @@ class _TrainPosScreenState extends State<TrainPosScreen>
     );
 
     Future(() async {
+      // 駅を描画
       await _drawStationList();
-      await _drawTrain();
-
       if (mounted) {
         _devLog.info('画面更新');
         setState(() {
           _isWidgetCreated = true;
         });
+      }
+
+      // 列車を描画
+      await _drawTrain();
+      if (mounted) {
+        setState(() {});
       }
     });
   }
