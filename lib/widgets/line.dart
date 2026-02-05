@@ -82,9 +82,9 @@ class Line extends StatelessWidget {
                 ),
 
                 // アイコン
-                const Spacer(flex: 10),
+                const Spacer(),
                 const Icon(Icons.keyboard_arrow_right),
-                const Spacer(flex: 1),
+                const SizedBox(width: 10,),
               ],
             ),
           ),
