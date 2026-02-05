@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import 'my_line_screen.dart';
-import 'line_list_screen.dart';
-import 'setting_screen.dart';
+import 'screens/my_line_screen.dart';
+import 'screens/line_list_screen.dart';
+import 'screens/setting_screen.dart';
 
 void main() {
   runApp(const MyApp());

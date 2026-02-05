@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:jr_train_pos/train_pos_screen.dart';
+import 'package:jr_train_pos/screens/train_pos_screen.dart';
 
 class Line extends StatelessWidget {
   const Line({
