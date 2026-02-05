@@ -61,18 +61,16 @@ class _MyLineEditScreenState extends State<MyLineEditScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('My路線の編集',style: TextStyle(color: Colors.black),),
-        actions: [
-          TextButton(
-            child: const Text('保存'),
-            onPressed: () async {
-              // 保存して画面を閉じる
-              await _saveMyLine();
-              if(context.mounted) {
-                Navigator.pop(context, true);
-              }
-            },
-          )
-        ],
+        leading: IconButton(
+          onPressed: () async {
+            // 保存して画面を閉じる
+            await _saveMyLine();
+            if(context.mounted) {
+              Navigator.pop(context, true);
+            }
+          },
+          icon: const Icon(Icons.arrow_back),
+        ),
       ),
       body: !_isWidgetCreated
         ? const Center(child: CircularProgressIndicator(),)
@@ -82,21 +80,32 @@ class _MyLineEditScreenState extends State<MyLineEditScreen> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 for(int i = 0; i < _lineListLength; i++)...{
-                  Padding(
-                    padding: const EdgeInsets.all(5),
+                  Container(
+                    margin: const EdgeInsets.all(8),
+                    decoration: BoxDecoration(
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey.shade300,
+                          offset: const Offset(2, 2),
+                          spreadRadius: 1.2,
+                          blurRadius: 1,
+                        ),
+                      ],
+                      borderRadius: BorderRadius.circular(12),
+                    ),
                     child: Material(
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-                      color: Colors.white,
-                      child: CheckboxListTile(
-                        title: Text(_lineList[i]),
-                        value: _checkboxList[i],
-                        controlAffinity: ListTileControlAffinity.leading,
-                        onChanged: (value) {
-                          setState(() {
-                            _checkboxList[i] = value!;
-                          });
-                        },
-                      ),
+                        color: Colors.white,
+                        child: CheckboxListTile(
+                          title: Text(_lineList[i]),
+                          value: _checkboxList[i],
+                          controlAffinity: ListTileControlAffinity.leading,
+                          onChanged: (value) {
+                            setState(() {
+                              _checkboxList[i] = value!;
+                            });
+                          },
+                        ),
                     ),
                   ),
                 },
