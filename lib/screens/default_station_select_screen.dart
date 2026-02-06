@@ -81,6 +81,13 @@ class _DefaultStationSelectScreenState extends State<DefaultStationSelectScreen>
           child: Center(
             child: Column(
               children: [
+                TextButton(
+                  onPressed: (){
+                    _sharedPref.savePrefString('${widget.lineName}初期表示駅', '未設定');
+                    Navigator.pop(context, true);
+                  },
+                  child: const Text('設定を解除'),
+                ),
                 for(var i in _stationList)...{
                   TextButton(
                     onPressed: (){
