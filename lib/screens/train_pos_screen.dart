@@ -6,6 +6,7 @@ import 'dart:convert';
 
 import 'package:jr_train_pos/get_json_file.dart';
 import 'package:jr_train_pos/line_manager.dart';
+import 'package:jr_train_pos/shared_pref.dart';
 import 'package:jr_train_pos/widgets/train.dart';
 
 class TrainPosScreen extends StatefulWidget {
@@ -29,6 +30,7 @@ class _TrainPosScreenState extends State<TrainPosScreen>
   final _fileOperation = FileOperation();
   final _getJsonFile = GetJsonFile();
   final _lineManager = LineManager();
+  final _sharedPref = SharedPref();
   final _devLog = DevLog();
 
   final ScrollController _scrollController = ScrollController();
@@ -407,6 +409,20 @@ class _TrainPosScreenState extends State<TrainPosScreen>
       if (mounted) {
         setState(() {});
       }
+
+      // 設定された初期表示駅にジャンプする
+      String defaultStation = await _sharedPref.getPrefString('${widget.lineName}初期表示駅');
+      // 指定した駅が真ん中に来るように-4で調整
+      double jumpPos = (_stationList.indexOf(defaultStation) - 4) * 70.0;
+      // ジャンプ先が0未満
+      if (jumpPos < 0) {
+        jumpPos = 0.0;
+      }
+      // ジャンプ先がスクロール範囲外
+      else if (jumpPos > _scrollController.position.maxScrollExtent) {
+        jumpPos = _scrollController.position.maxScrollExtent;
+      }
+      _scrollController.jumpTo(jumpPos);
     });
   }
 

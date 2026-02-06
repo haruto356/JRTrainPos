@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+
+import 'package:jr_train_pos/screens/default_show_station_setting_screen.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
 class SettingScreen extends StatefulWidget {
@@ -41,9 +43,16 @@ class _SettingScreenState extends State<SettingScreen> {
           const Text('設定', style: TextStyle(fontSize: 20),),
           const SizedBox(height: 10,),
           const Divider(),
-          const TextButton(
-            onPressed: null,
-            child: Text('初期表示駅の変更'),
+          TextButton(
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const DefaultShowStationSettingScreen()
+                ),
+              );
+            },
+            child: const Text('初期表示駅の変更'),
           ),
           TextButton(
             onPressed: () {
