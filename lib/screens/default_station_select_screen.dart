@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'dart:convert';
 
-import 'package:jr_train_pos/file_operation.dart';
 import 'package:jr_train_pos/get_json_file.dart';
 import 'package:jr_train_pos/line_manager.dart';
 import 'package:jr_train_pos/shared_pref.dart';
@@ -18,7 +16,6 @@ class DefaultStationSelectScreen extends StatefulWidget {
 class _DefaultStationSelectScreenState extends State<DefaultStationSelectScreen> {
   final _getJsonFile = GetJsonFile();
   final _lineManager = LineManager();
-  final _fileOperation = FileOperation();
   final _sharedPref = SharedPref();
 
   final List<String> _stationList = [];
@@ -31,28 +28,8 @@ class _DefaultStationSelectScreenState extends State<DefaultStationSelectScreen>
 
     Future(() async {
       List<String> lineList = _lineManager.changeLineNameToJsonFile(widget.lineName);
-      for(var i in lineList){
-        await _getJsonFile.getStationList(i);
-      }
 
-      for (var i in lineList) {
-        final jsonStr = await _fileOperation.getFileContent('$i.json');
-        Map<String, dynamic> lineMap = json.decode(jsonStr);
-
-        for (int j = 0; j < lineMap['stations'].length; j++) {
-          String stationName = lineMap['stations'][j]['info']['name'];
-
-          // 羽衣線の東羽衣駅は対象外とする
-          if (stationName == '東羽衣') {
-            continue;
-          }
-
-          // 重複を排除
-          if (!_stationList.contains(stationName)) {
-            _stationList.add(stationName);
-          }
-        }
-      }
+      _stationList.addAll(await _getJsonFile.getStationList(lineList));
 
       setState(() {
         _isListGet = true;

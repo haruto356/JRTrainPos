@@ -35,7 +35,7 @@ class _TrainPosScreenState extends State<TrainPosScreen>
 
   final ScrollController _scrollController = ScrollController();
 
-  final List<String?> _stationList = ['####'];
+  final List<String> _stationList = ['####'];
   final List<String> _trainPosJsonStringList = [];
   final List<Map<String, String?>> _trainJsonMapList = [];
   final Map<String, String?> _stationPosMap = {'####': '####'}; // 駅コード、駅名の順
@@ -59,7 +59,7 @@ class _TrainPosScreenState extends State<TrainPosScreen>
     final List<String> lineList = _lineManager.changeLineNameToJsonFile(widget.lineName);
     try {
       for (var i in lineList) {
-        await _getJsonFile.getStationList(i);
+        await _getJsonFile.saveStationListTempDir(i);
       }
     } catch (e) {
       if(mounted) {
@@ -94,7 +94,7 @@ class _TrainPosScreenState extends State<TrainPosScreen>
         // 重複を排除
         if (!_stationList.contains(stationName)) {
           _stationList.add(stationName);
-          _stationList.add(null);
+          _stationList.add('');
         }
 
         // 駅コードと駅名を連想配列に格納
@@ -102,13 +102,13 @@ class _TrainPosScreenState extends State<TrainPosScreen>
       }
     }
 
-    // 不要なnullを削除
+    // 不要な空白を削除
     _stationList.removeLast();
 
     // Widgetをリストに追加
     for (var i in _stationList) {
       if (i != '####') {
-        if (i == null) {
+        if (i.isEmpty) {
           _stationWidgetList.add(_stationBetweenWidgetCache);
         } else {
           final mainStationList = _lineManager.getMainStation(widget.lineName);

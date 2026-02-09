@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:jr_train_pos/dev_log.dart';
 import 'package:jr_train_pos/file_operation.dart';
@@ -6,10 +7,11 @@ import 'package:jr_train_pos/file_operation.dart';
 class GetJsonFile {
   // ファイル取得のタイムアウト時間
   static const Duration timeOutDuration = Duration(seconds: 15);
+  final _fileOperation = FileOperation();
   final _devLog = DevLog();
 
-  // 駅リストを取得し、ファイルに保存する関数
-  Future<void> getStationList(String lineName) async {
+  // 駅リストを取得し、一時フォルダに保存する関数
+  Future<void> saveStationListTempDir(String lineName) async {
     // 日付チェック（今日既に取得しているなら取得しない）
     DateTime now = DateTime.now();
     DateTime fileDate = await FileOperation().getFileModifiedDateTempDir(
@@ -51,6 +53,34 @@ class GetJsonFile {
       _devLog.error(e.toString());
       throw Exception();
     }
+  }
+
+  // 駅のリストを取得する関数
+  Future<List<String>> getStationList(List<String> lineList) async {
+    final List<String> stationList = [];
+
+    for(var i in lineList) {
+      await saveStationListTempDir(i);
+
+      final jsonStr = await _fileOperation.getFileContent('$i.json');
+      Map<String, dynamic> lineMap = json.decode(jsonStr);
+
+      for (int j = 0; j < lineMap['stations'].length; j++) {
+        final String stationName = lineMap['stations'][j]['info']['name'];
+
+        // 羽衣線の東羽衣駅は対象外とする
+        if (stationName == '東羽衣') {
+          continue;
+        }
+
+        // 重複を排除
+        if (!stationList.contains(stationName)) {
+          stationList.add(stationName);
+        }
+      }
+    }
+
+    return stationList;
   }
 
   // 列車情報を取得し、ファイルに保存する関数
