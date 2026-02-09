@@ -404,25 +404,38 @@ class _TrainPosScreenState extends State<TrainPosScreen>
         });
       }
 
+      // scrollControllerが設定されるまで待つ
+      int count = 0;
+      while(!_scrollController.hasClients){
+        await Future.delayed(const Duration(milliseconds: 1));
+        count++;
+        if(count > 500) {
+          break;
+        }
+      }
+      if(count < 500) {
+        // 設定された初期表示駅にジャンプする
+        String defaultStation = await _sharedPref.getPrefString('${widget.lineName}初期表示駅');
+        // 指定した駅が真ん中に来るように-4で調整
+        double jumpPos = (_stationList.indexOf(defaultStation) - 4) * 70.0;
+        // ジャンプ先が0未満
+        if (jumpPos < 0) {
+          jumpPos = 0.0;
+        }
+        // ジャンプ先がスクロール範囲外
+        else if (jumpPos > _scrollController.position.maxScrollExtent) {
+          jumpPos = _scrollController.position.maxScrollExtent;
+        }
+        _scrollController.jumpTo(jumpPos);
+      }
+
       // 列車を描画
       await _drawTrain();
       if (mounted) {
         setState(() {});
       }
 
-      // 設定された初期表示駅にジャンプする
-      String defaultStation = await _sharedPref.getPrefString('${widget.lineName}初期表示駅');
-      // 指定した駅が真ん中に来るように-4で調整
-      double jumpPos = (_stationList.indexOf(defaultStation) - 4) * 70.0;
-      // ジャンプ先が0未満
-      if (jumpPos < 0) {
-        jumpPos = 0.0;
-      }
-      // ジャンプ先がスクロール範囲外
-      else if (jumpPos > _scrollController.position.maxScrollExtent) {
-        jumpPos = _scrollController.position.maxScrollExtent;
-      }
-      _scrollController.jumpTo(jumpPos);
+
     });
   }
 
