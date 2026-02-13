@@ -22,9 +22,16 @@ class TrainCongestion extends StatelessWidget {
                     Text('${trainCarNo[i]}', textAlign: TextAlign.center,),
                     // 混雑度が-1、999となっているときは-を表示する
                     if(trainCongestion[i] < 0 || 500 < trainCongestion[i])...{
-                      const Text(' - ', textAlign: TextAlign.center, style: TextStyle(fontSize: 12),),
+                      const Text(' - ', textAlign: TextAlign.center, style: TextStyle(fontSize: 13),),
                     } else...{
-                      Text('${trainCongestion[i]}%', textAlign: TextAlign.center, style: const TextStyle(fontSize: 12),),
+                      Text(
+                        '${trainCongestion[i]}%',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: getCongestionColor(trainCongestion[i]),
+                        ),
+                      ),
                     },
                     const SizedBox(height: 10,),
                   ],
@@ -42,5 +49,17 @@ class TrainCongestion extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  Color? getCongestionColor(int congestion) {
+    if(congestion < 30) {
+      return Colors.cyan;
+    } else if(congestion < 60) {
+      return Colors.yellow[800];
+    } else if(congestion < 120) {
+      return Colors.red;
+    } else {
+      return Colors.deepPurple[800];
+    }
   }
 }
