@@ -1,14 +1,13 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'package:jr_train_pos/dev_log.dart';
+
 import 'package:jr_train_pos/file_operation.dart';
 
 class GetJsonFile {
   // ファイル取得のタイムアウト時間
   static const Duration timeOutDuration = Duration(seconds: 15);
   final _fileOperation = FileOperation();
-  final _devLog = DevLog();
 
   // 駅リストを取得し、一時フォルダに保存する関数
   Future<void> saveStationListTempDir(String lineName) async {
@@ -35,7 +34,6 @@ class GetJsonFile {
         case 200:
           // 取得に成功したらファイルに保存する
           await FileOperation().saveFileTempDir('$lineName.json', response.body);
-          _devLog.info('$lineNameの駅リスト取得完了');
           break;
         case 403:
           throw Exception('[$status] $jsonUrlの閲覧権限がありません');
@@ -44,13 +42,7 @@ class GetJsonFile {
         default:
           throw Exception('[$status] $lineName駅リスト取得時にエラーが発生しました');
       }
-    } on TimeoutException catch (e) {
-      _devLog.error('$lineName駅リスト取得失敗(タイムアウト)');
-      _devLog.error(e.toString());
-      throw Exception();
     } catch (e) {
-      _devLog.error('$lineName駅リスト取得失敗');
-      _devLog.error(e.toString());
       throw Exception();
     }
   }
@@ -106,7 +98,6 @@ class GetJsonFile {
         case 200:
           // 取得に成功したらファイルに保存する
           await FileOperation().saveFileTempDir('train_info.json', response.body);
-          _devLog.info('列車情報取得完了');
           break;
         case 403:
           throw Exception('[$status] $jsonUrlの閲覧権限がありません');
@@ -115,13 +106,7 @@ class GetJsonFile {
         default:
           throw Exception('[$status] 列車情報取得時にエラーが発生しました');
       }
-    } on TimeoutException catch (e) {
-      _devLog.error('列車情報取得失敗(タイムアウト)');
-      _devLog.error(e.toString());
-      throw Exception();
     } catch (e) {
-      _devLog.error('列車情報取得失敗');
-      _devLog.error(e.toString());
       throw Exception();
     }
   }
@@ -141,7 +126,6 @@ class GetJsonFile {
       switch(status){
         case 200:
           result = response.body;
-          _devLog.info('$lineNameの車両走行位置取得完了');
           break;
         case 403:
           throw Exception('[$status] $jsonUrlの閲覧権限がありません');
@@ -150,13 +134,7 @@ class GetJsonFile {
         default:
           throw Exception('[$status] 車両走行位置取得時にエラーが発生しました');
       }
-    } on TimeoutException catch (e) {
-      _devLog.error('$lineName車両走行位置取得失敗(タイムアウト)');
-      _devLog.error(e.toString());
-      throw Exception();
     } catch (e) {
-      _devLog.error('$lineName車両走行位置取得失敗');
-      _devLog.error(e.toString());
       throw Exception();
     }
 

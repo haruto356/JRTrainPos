@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:jr_train_pos/dev_log.dart';
 import 'package:jr_train_pos/file_operation.dart';
 import 'dart:convert';
 
@@ -31,7 +30,6 @@ class _TrainPosScreenState extends State<TrainPosScreen>
   final _getJsonFile = GetJsonFile();
   final _lineManager = LineManager();
   final _sharedPref = SharedPref();
-  final _devLog = DevLog();
 
   final ScrollController _scrollController = ScrollController();
 
@@ -147,8 +145,6 @@ class _TrainPosScreenState extends State<TrainPosScreen>
         );
       }
     }
-
-    _devLog.info('駅ウィジェット作成完了');
   }
 
   // 列車を描画する関数
@@ -287,8 +283,6 @@ class _TrainPosScreenState extends State<TrainPosScreen>
 
       addedPosList.add(currentPos);
     }
-
-    _devLog.info('列車ウィジェット作成完了');
   }
 
   // 更新ボタンが押されたとき
@@ -319,8 +313,6 @@ class _TrainPosScreenState extends State<TrainPosScreen>
 
     // 指定された駅までジャンプする関数
     onDialogOptionPressed(String stationName) {
-      _devLog.info('$stationNameに遷移');
-
       if (stationName == '一番上') {
         _scrollController.jumpTo(0);
       } else if (stationName == '一番下') {
@@ -383,8 +375,6 @@ class _TrainPosScreenState extends State<TrainPosScreen>
     super.initState();
     WidgetsBinding.instance.addObserver(this);
 
-    _devLog.info('${widget.lineName}の表示開始');
-
     // ウィジェットのキャッシュを作成
     _lineColorMarkerCache = LineColorMarker(lineColor: widget.lineColor);
     _stationBetweenWidgetCache = Station(
@@ -398,7 +388,6 @@ class _TrainPosScreenState extends State<TrainPosScreen>
       // 駅を描画
       await _drawStationList();
       if (mounted) {
-        _devLog.info('画面更新');
         setState(() {
           _isWidgetCreated = true;
         });
@@ -435,15 +424,12 @@ class _TrainPosScreenState extends State<TrainPosScreen>
         setState(() {});
       }
 
-
     });
   }
 
   @override
   void dispose() {
     super.dispose();
-
-    _devLog.info('${widget.lineName}の表示終了');
 
     // ステータスバーの色変更
     SystemChrome.setSystemUIOverlayStyle(
