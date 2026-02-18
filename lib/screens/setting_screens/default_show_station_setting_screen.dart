@@ -74,17 +74,34 @@ class _DefaultShowStationSettingScreenState extends State<DefaultShowStationSett
                 Row(
                   children: [
                     const SizedBox(width: 30,),
-                    TextButton(
-                      onPressed: () async {
-                        await Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => DefaultShowStationSelectScreen(lineName: i,),
+                    DecoratedBox(
+                      decoration: BoxDecoration(
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.shade300,
+                            offset: const Offset(2, 2),
+                            spreadRadius: 1.2,
+                            blurRadius: 1,
                           ),
-                        );
-                        await _setDefaultStationList();
-                      },
-                      child: Text(i),
+                        ],
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: Material(
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                        color: Colors.white,
+                        child: TextButton(
+                          onPressed: () async {
+                            await Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => DefaultShowStationSelectScreen(lineName: i,),
+                              ),
+                            );
+                            await _setDefaultStationList();
+                          },
+                          child: Text('   $i   '),
+                        ),
+                      ),
                     ),
                     const Spacer(),
                     Text(_defaultStationList[_lineList.indexOf(i)]),
