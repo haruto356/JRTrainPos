@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:jr_train_pos/screens/default_show_station_setting_screen.dart';
+import 'package:jr_train_pos/screens/setting_screens/default_show_station_setting_screen.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
 class SettingScreen extends StatefulWidget {

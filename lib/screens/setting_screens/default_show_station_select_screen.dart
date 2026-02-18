@@ -4,16 +4,16 @@ import 'package:jr_train_pos/get_json_file.dart';
 import 'package:jr_train_pos/line_manager.dart';
 import 'package:jr_train_pos/shared_pref.dart';
 
-class DefaultStationSelectScreen extends StatefulWidget {
-  const DefaultStationSelectScreen({super.key, required this.lineName});
+class DefaultShowStationSelectScreen extends StatefulWidget {
+  const DefaultShowStationSelectScreen({super.key, required this.lineName});
 
   final String lineName;
 
   @override
-  State<DefaultStationSelectScreen> createState() => _DefaultStationSelectScreenState();
+  State<DefaultShowStationSelectScreen> createState() => _DefaultShowStationSelectScreenState();
 }
 
-class _DefaultStationSelectScreenState extends State<DefaultStationSelectScreen> {
+class _DefaultShowStationSelectScreenState extends State<DefaultShowStationSelectScreen> {
   final _getJsonFile = GetJsonFile();
   final _lineManager = LineManager();
   final _sharedPref = SharedPref();

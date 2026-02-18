@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:jr_train_pos/line_manager.dart';
-import 'package:jr_train_pos/screens/default_station_select_screen.dart';
+import 'package:jr_train_pos/screens/setting_screens/default_show_station_select_screen.dart';
 import 'package:jr_train_pos/shared_pref.dart';
 
 class DefaultShowStationSettingScreen extends StatefulWidget {
@@ -79,7 +79,7 @@ class _DefaultShowStationSettingScreenState extends State<DefaultShowStationSett
                         await Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => DefaultStationSelectScreen(lineName: i,),
+                            builder: (context) => DefaultShowStationSelectScreen(lineName: i,),
                           ),
                         );
                         await _setDefaultStationList();
