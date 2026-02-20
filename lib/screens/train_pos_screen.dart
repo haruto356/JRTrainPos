@@ -155,7 +155,7 @@ class _TrainPosScreenState extends State<TrainPosScreen>
 
     // 列車詳細情報の取得
     try {
-      await _getJsonFile.getTrainInfo();
+      await _getJsonFile.saveTrainInfoTempDir();
     } catch (e) {
       if(mounted) {
         Navigator.pop(context);

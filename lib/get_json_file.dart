@@ -76,7 +76,7 @@ class GetJsonFile {
   }
 
   // 列車情報を取得し、ファイルに保存する関数
-  Future<void> getTrainInfo() async {
+  Future<void> saveTrainInfoTempDir() async {
     // 日付チェック
     DateTime now = DateTime.now();
     DateTime fileDate = await FileOperation().getFileModifiedDateTempDir(
