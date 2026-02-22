@@ -195,14 +195,16 @@ class _TrainState extends State<Train> {
             builder: (BuildContext context) {
               return Column(
                 children: [
+                  // ModalBottomSheetを横いっぱいに表示するためにRowを使用
                   const Row(
-                    children: [SizedBox(height: 20),],
+                    children: [SizedBox(height: 10),],
                   ),
                   for(int i = 0; i < _trainNo.length; i++)...{
                     Padding(
                       padding: const EdgeInsets.all(5),
                       child: Column(
                         children: [
+                          // 車両の基本情報の表示
                           if(_numberOfCars[i] == 0)...{
                             Text('${_trainType[i]}   ${_dest[i]}行き', textAlign: TextAlign.center,),
                           }
@@ -214,12 +216,36 @@ class _TrainState extends State<Train> {
                           if(_typeChange[i].isNotEmpty)
                             Text(_typeChange[i]),
 
-                          const SizedBox(height: 8,),
+                          const SizedBox(height: 6,),
+
+
+
                           // 混雑情報の表示
                           if(_trainCarsNo.isNotEmpty && _trainCarsCongestion.isNotEmpty && _trainCarsCongestion.length > i)...{
+                            // 進行方向の表示
+                            const Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Spacer(),
+                                Icon(Icons.arrow_back, size: 16,),
+                                Text('進行方向'),
+                                Spacer(),
+                              ],
+                            ),
+                            const SizedBox(height: 6,),
+
                             TrainCongestion(trainCarNo: _trainCarsNo[i], trainCongestion: _trainCarsCongestion[i],)
                           },
-                          Text('${_delayMinutes[i]}分遅れ'),
+
+                          // 遅延情報の表示
+                          if(_delayMinutes[i] == 0)...{
+                            const Text('遅れなし'),
+                          }
+                          else...{
+                            Text('${_delayMinutes[i]}分遅れ'),
+                          },
+
+                          const SizedBox(height: 10,),
                         ],
                       ),
                     )

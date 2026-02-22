@@ -14,7 +14,6 @@ class TrainCongestion extends StatelessWidget {
           scrollDirection: Axis.horizontal,
           child: Row(
             children: [
-              const Icon(Icons.arrow_back),
               const SizedBox(width: 10,),
               for(int i = 0; i < trainCarNo.length; i++)...{
                 Column(
