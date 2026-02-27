@@ -238,10 +238,7 @@ class _TrainState extends State<Train> {
                               },
 
                               // 遅延情報の表示
-                              if(_delayMinutes[i] == 0)...{
-                                const Text('遅れなし'),
-                              }
-                              else...{
+                              if(_delayMinutes[i] != 0)...{
                                 Text('${_delayMinutes[i]}分遅れ'),
                               },
 
