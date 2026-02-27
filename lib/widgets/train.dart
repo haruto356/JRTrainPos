@@ -199,10 +199,6 @@ class _TrainState extends State<Train> {
                 child: SingleChildScrollView(
                   child: Column(
                     children: [
-                      // ModalBottomSheetを横いっぱいに表示するためにRowを使用
-                      const Row(
-                        children: [SizedBox(height: 10),],
-                      ),
                       for(int i = 0; i < _trainNo.length; i++)...{
                         Padding(
                           padding: const EdgeInsets.all(5),
