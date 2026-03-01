@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
-import 'package:jr_train_pos/get_json_file.dart';
-import 'package:jr_train_pos/line_manager.dart';
-import 'package:jr_train_pos/shared_pref.dart';
+import 'package:jr_train_pos/core/get_json_file.dart';
+import 'package:jr_train_pos/core/line_manager.dart';
+import 'package:jr_train_pos/core/shared_pref.dart';
 
 class DefaultShowStationSelectScreen extends StatefulWidget {
   const DefaultShowStationSelectScreen({super.key, required this.lineName});

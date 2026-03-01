@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
-import 'package:jr_train_pos/line_manager.dart';
+import 'package:jr_train_pos/core/line_manager.dart';
 import 'package:jr_train_pos/screens/setting_screens/default_show_station_select_screen.dart';
-import 'package:jr_train_pos/shared_pref.dart';
+import 'package:jr_train_pos/core/shared_pref.dart';
 
 class DefaultShowStationSettingScreen extends StatefulWidget {
   const DefaultShowStationSettingScreen({super.key});

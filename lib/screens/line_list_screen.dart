@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:jr_train_pos/line_manager.dart';
+import 'package:jr_train_pos/core/line_manager.dart';
 
 class LineListScreen extends StatefulWidget {
   const LineListScreen({super.key});

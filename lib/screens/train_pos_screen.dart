@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:jr_train_pos/file_operation.dart';
 import 'dart:convert';
 
-import 'package:jr_train_pos/get_json_file.dart';
-import 'package:jr_train_pos/line_manager.dart';
-import 'package:jr_train_pos/shared_pref.dart';
+import 'package:jr_train_pos/core/file_operation.dart';
+import 'package:jr_train_pos/core/get_json_file.dart';
+import 'package:jr_train_pos/core/line_manager.dart';
+import 'package:jr_train_pos/core/shared_pref.dart';
 import 'package:jr_train_pos/widgets/train.dart';
 
 class TrainPosScreen extends StatefulWidget {

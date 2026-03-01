@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 
-import 'package:jr_train_pos/file_operation.dart';
+import 'package:jr_train_pos/core/file_operation.dart';
 
 class GetJsonFile {
   // ファイル取得のタイムアウト時間
