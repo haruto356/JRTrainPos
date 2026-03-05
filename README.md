@@ -1,16 +1,22 @@
-# jr_train_pos
+# JR西日本列車位置アプリ（非公式）
+　JR西日本公式から提供されている列車走行位置アプリの見た目や機能をカスタマイズしたアプリです。  
+  
+# 主な機能
+　基本的な機能はJR西日本公式アプリと同じですが、異なる点について記述します。
+  
+## 一部路線の一括表示  
+　JR西日本公式アプリでは東海道本線は北陸線、琵琶湖線、京都線、神戸線のように複数の画面に分かれています。このアプリではそれらを分割せず、1つの画面で見れるようにしています。  
+　一括表示している路線は以下の通りです。
+* 東海道本線（敦賀～三石）
+* 嵯峨野山陰線（京都～福知山）
+* 宝塚線（大阪～福知山）
+* 東西線・学研都市線（木津～尼崎）
+* 和歌山線（王寺～和歌山）
+  
+## 主要駅へのジャンプ機能
+　東海道本線などの距離が長い路線では、見たい駅へ移動するためのスクロールが大変になります。この対策として、列車走行位置画面の右下に特定の駅へのジャンプボタンを付けています。  
+　このジャンプボタンで移動できる場所は画面の一番上と一番下、見ている路線の主要駅です。
 
-A new Flutter project.
-
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## 列車走行位置画面の初期表示駅の変更
+　走行位置画面を開いた際に、デフォルトでは一番上が表示されます。この初期表示位置を、路線ごとに設定することが可能です。例えば東海道本線の初期表示駅を大阪駅に設定すると、今後東海道本線を表示したときは必ず大阪駅が中央に表示されます。  
+　この設定では主要駅に関わらず、その路線にある全ての駅から選択することが可能です。ただし、選択できる駅は1つのみです。
