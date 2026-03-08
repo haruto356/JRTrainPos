@@ -51,11 +51,13 @@ class TrainCongestion extends StatelessWidget {
   }
 
   Color? getCongestionColor(int congestion) {
-    if(congestion < 30) {
+    if(congestion < 40) {
       return Colors.cyan;
     } else if(congestion < 60) {
+      return Colors.green[700];
+    } else if(congestion < 80) {
       return Colors.yellow[800];
-    } else if(congestion < 120) {
+    } else if(congestion < 100) {
       return Colors.red;
     } else {
       return Colors.deepPurple[800];
