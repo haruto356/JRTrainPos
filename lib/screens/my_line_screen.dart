@@ -46,6 +46,14 @@ class _MyLineScreenState extends State<MyLineScreen> {
         color: Colors.blue[100],
         border: Border.all(color: Colors.blue),
         borderRadius: BorderRadius.circular(10),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.shade300,
+            offset: const Offset(2, 2),
+            spreadRadius: 1.2,
+            blurRadius: 1,
+          ),
+        ]
       ),
       child: InkWell(
         onTap: (){
