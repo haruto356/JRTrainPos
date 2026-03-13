@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:jr_train_pos/core/line_manager.dart';
 import 'package:jr_train_pos/screens/setting_screens/default_show_station_select_screen.dart';
 import 'package:jr_train_pos/core/shared_pref.dart';
+import 'package:jr_train_pos/widgets/color_button.dart';
 
 class DefaultShowStationSettingScreen extends StatefulWidget {
   const DefaultShowStationSettingScreen({super.key});
@@ -74,33 +75,20 @@ class _DefaultShowStationSettingScreenState extends State<DefaultShowStationSett
                 Row(
                   children: [
                     const SizedBox(width: 30,),
-                    DecoratedBox(
-                      decoration: BoxDecoration(
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.grey.shade300,
-                            offset: const Offset(2, 2),
-                            spreadRadius: 1.2,
-                            blurRadius: 1,
+                    ColorButton(
+                      color: Colors.white,
+                      onPressed: () async {
+                        await Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => DefaultShowStationSelectScreen(lineName: i,),
                           ),
-                        ],
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: Material(
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-                        color: Colors.white,
-                        child: TextButton(
-                          onPressed: () async {
-                            await Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => DefaultShowStationSelectScreen(lineName: i,),
-                              ),
-                            );
-                            await _setDefaultStationList();
-                          },
-                          child: Text('   $i   '),
-                        ),
+                        );
+                        await _setDefaultStationList();
+                      },
+                      child: Padding(
+                        padding: const EdgeInsetsGeometry.fromSTEB(30, 3, 30, 3),
+                        child: Text(i),
                       ),
                     ),
                     const Spacer(),

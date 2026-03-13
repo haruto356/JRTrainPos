@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:jr_train_pos/core/line_manager.dart';
 import 'package:jr_train_pos/core/shared_pref.dart';
+import 'package:jr_train_pos/widgets/color_button.dart';
 
 class MyLineEditScreen extends StatefulWidget {
   const MyLineEditScreen({super.key});
@@ -80,32 +81,19 @@ class _MyLineEditScreenState extends State<MyLineEditScreen> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 for(int i = 0; i < _lineListLength; i++)...{
-                  Container(
+                  ColorButton(
+                    color: Colors.white,
                     margin: const EdgeInsets.all(8),
-                    decoration: BoxDecoration(
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.grey.shade300,
-                          offset: const Offset(2, 2),
-                          spreadRadius: 1.2,
-                          blurRadius: 1,
-                        ),
-                      ],
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: Material(
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-                        color: Colors.white,
-                        child: CheckboxListTile(
-                          title: Text(_lineList[i]),
-                          value: _checkboxList[i],
-                          controlAffinity: ListTileControlAffinity.leading,
-                          onChanged: (value) {
-                            setState(() {
-                              _checkboxList[i] = value!;
-                            });
-                          },
-                        ),
+                    onPressed: (){},
+                    child: CheckboxListTile(
+                      title: Text(_lineList[i]),
+                      value: _checkboxList[i],
+                      controlAffinity: ListTileControlAffinity.leading,
+                      onChanged: (value) {
+                        setState(() {
+                          _checkboxList[i] = value!;
+                        });
+                      },
                     ),
                   ),
                 },

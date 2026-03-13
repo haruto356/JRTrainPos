@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
+
 import 'package:jr_train_pos/core/line_manager.dart';
 import 'package:jr_train_pos/screens/my_line_edit_screen.dart';
 import 'package:jr_train_pos/core/shared_pref.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:jr_train_pos/widgets/color_button.dart';
 
 class MyLineScreen extends StatefulWidget {
   const MyLineScreen({super.key});
@@ -41,29 +43,16 @@ class _MyLineScreenState extends State<MyLineScreen> {
     );
 
     // JR公式情報遷移ボタン
-    _goJrOfficialInfoButton = Ink(
-      decoration: BoxDecoration(
-        color: Colors.blue[100],
-        border: Border.all(color: Colors.blue),
-        borderRadius: BorderRadius.circular(10),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.shade300,
-            offset: const Offset(2, 2),
-            spreadRadius: 1.2,
-            blurRadius: 1,
-          ),
-        ]
+    _goJrOfficialInfoButton = ColorButton(
+      color: Colors.blue.shade100,
+      borderColor: Colors.blue,
+      onPressed: (){
+        launchUrl(Uri.parse('https://trafficinfo.westjr.co.jp/kinki.html'));
+      },
+      child: const Padding(
+        padding: EdgeInsetsGeometry.fromLTRB(35, 3, 35, 3),
+        child: Text('JR西日本公式遅延情報'),
       ),
-      child: InkWell(
-        onTap: (){
-          launchUrl(Uri.parse('https://trafficinfo.westjr.co.jp/kinki.html'));
-        },
-        child: const Padding(
-          padding: EdgeInsetsGeometry.fromLTRB(35, 3, 35, 3),
-          child: Text('JR西日本公式遅延情報'),
-        ),
-      )
     );
 
     super.initState();
