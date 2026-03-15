@@ -539,7 +539,7 @@ class Station extends StatelessWidget {
             Text(
               stationName!,
               style: TextStyle(
-                fontSize: isMainStation ? 17 : 14,
+                fontSize: isMainStation ? 17 : (stationName!.length > 5 ? 11 : 14),
                 fontWeight: FontWeight.w600,
               ),
             ),
@@ -551,7 +551,7 @@ class Station extends StatelessWidget {
               stationName!,
               style: TextStyle(
                 color: Colors.white12,
-                fontSize: isMainStation ? 17 : 14,
+                fontSize: isMainStation ? 17 : (stationName!.length > 5 ? 11 : 14),
                 fontWeight: FontWeight.w600,
               ),
             ),
