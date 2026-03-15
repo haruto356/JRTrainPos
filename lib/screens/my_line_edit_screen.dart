@@ -61,17 +61,20 @@ class _MyLineEditScreenState extends State<MyLineEditScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         title: const Text('My路線の編集',style: TextStyle(color: Colors.black),),
-        leading: IconButton(
-          onPressed: () async {
-            // 保存して画面を閉じる
-            await _saveMyLine();
-            if(context.mounted) {
-              Navigator.pop(context, true);
-            }
-          },
-          icon: const Icon(Icons.arrow_back),
-        ),
+        actions: [
+          TextButton(
+            onPressed: () async {
+              // 保存して画面を閉じる
+              await _saveMyLine();
+              if(context.mounted) {
+                Navigator.pop(context, true);
+              }
+            },
+            child: const Text('保存'),
+          ),
+        ],
       ),
       body: !_isWidgetCreated
         ? const Center(child: CircularProgressIndicator(),)
