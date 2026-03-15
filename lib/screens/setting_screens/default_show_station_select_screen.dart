@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:jr_train_pos/core/get_json_file.dart';
 import 'package:jr_train_pos/core/line_manager.dart';
 import 'package:jr_train_pos/core/shared_pref.dart';
+import 'package:jr_train_pos/widgets/color_button.dart';
 
 class DefaultShowStationSelectScreen extends StatefulWidget {
   const DefaultShowStationSelectScreen({super.key, required this.lineName});
@@ -58,25 +59,35 @@ class _DefaultShowStationSelectScreenState extends State<DefaultShowStationSelec
           child: Center(
             child: Column(
               children: [
-                TextButton(
+                ColorButton(
+                  color: Colors.white,
+                  margin: const EdgeInsets.all(5),
                   onPressed: (){
                     _sharedPref.savePrefString('${widget.lineName}初期表示駅', '未設定');
                     Navigator.pop(context, true);
                   },
-                  child: const Text('設定を解除'),
+                  child: const Padding(
+                    padding: EdgeInsetsGeometry.fromSTEB(15, 3, 15, 3),
+                    child: Text('設定を解除'),
+                  ),
                 ),
                 for(var i in _stationList)...{
-                  TextButton(
+                  ColorButton(
+                    color: Colors.white,
+                    margin: const EdgeInsets.all(5),
                     onPressed: (){
                       _sharedPref.savePrefString('${widget.lineName}初期表示駅', i);
                       Navigator.pop(context, true);
                     },
-                    child: Text(i),
+                    child: Padding(
+                      padding: const EdgeInsetsGeometry.fromSTEB(15, 3, 15, 3),
+                      child: Text(i),
+                    ),
                   ),
-                }
+                },
               ],
             ),
-          )
+          ),
         ),
       ),
     );
