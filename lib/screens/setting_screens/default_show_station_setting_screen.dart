@@ -87,7 +87,7 @@ class _DefaultShowStationSettingScreenState extends State<DefaultShowStationSett
                         await _setDefaultStationList();
                       },
                       child: Padding(
-                        padding: const EdgeInsetsGeometry.fromSTEB(30, 3, 30, 3),
+                        padding: const EdgeInsetsGeometry.fromSTEB(30, 5, 30, 5),
                         child: Text(i),
                       ),
                     ),

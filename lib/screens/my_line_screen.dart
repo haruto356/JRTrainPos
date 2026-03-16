@@ -50,7 +50,7 @@ class _MyLineScreenState extends State<MyLineScreen> {
         launchUrl(Uri.parse('https://trafficinfo.westjr.co.jp/kinki.html'));
       },
       child: const Padding(
-        padding: EdgeInsetsGeometry.fromLTRB(35, 3, 35, 3),
+        padding: EdgeInsetsGeometry.fromLTRB(35, 5, 35, 5),
         child: Text('JR西日本公式遅延情報'),
       ),
     );

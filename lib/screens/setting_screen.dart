@@ -55,7 +55,7 @@ class _SettingScreenState extends State<SettingScreen> {
               );
             },
             child: const Padding(
-              padding: EdgeInsetsGeometry.fromSTEB(20, 3, 20, 3),
+              padding: EdgeInsetsGeometry.fromSTEB(20, 5, 20, 5),
               child: Text('初期表示駅の変更'),
             ),
           ),
@@ -74,7 +74,7 @@ class _SettingScreenState extends State<SettingScreen> {
               );
             },
             child: const Padding(
-              padding: EdgeInsetsGeometry.fromSTEB(20, 3, 20, 3),
+              padding: EdgeInsetsGeometry.fromSTEB(20, 5, 20, 5),
               child: Text('ライセンス'),
             ),
           ),

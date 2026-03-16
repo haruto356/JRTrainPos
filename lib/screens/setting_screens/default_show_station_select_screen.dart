@@ -67,7 +67,7 @@ class _DefaultShowStationSelectScreenState extends State<DefaultShowStationSelec
                     Navigator.pop(context, true);
                   },
                   child: const Padding(
-                    padding: EdgeInsetsGeometry.fromSTEB(15, 3, 15, 3),
+                    padding: EdgeInsetsGeometry.fromSTEB(20, 4, 20, 4),
                     child: Text('設定を解除'),
                   ),
                 ),
@@ -80,7 +80,7 @@ class _DefaultShowStationSelectScreenState extends State<DefaultShowStationSelec
                       Navigator.pop(context, true);
                     },
                     child: Padding(
-                      padding: const EdgeInsetsGeometry.fromSTEB(15, 3, 15, 3),
+                      padding: const EdgeInsetsGeometry.fromSTEB(20, 4, 20, 4),
                       child: Text(i),
                     ),
                   ),
