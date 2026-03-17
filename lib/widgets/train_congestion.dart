@@ -11,60 +11,57 @@ class TrainCongestion extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: Scrollbar(
+      child: SingleChildScrollView(
         controller: _scrollController,
-        child: SingleChildScrollView(
-          controller: _scrollController,
-          scrollDirection: Axis.horizontal,
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const SizedBox(width: 10,),
-              for(int i = 0; i < trainCarNo.length; i++)...{
-                Column(
-                  children: [
-                    Text('${trainCarNo[i]}', textAlign: TextAlign.center,),
-                    // 混雑度が-1、999となっているときは-を表示する
-                    if(trainCongestion[i] < 0 || 500 < trainCongestion[i])...{
-                      const Text(' - ', textAlign: TextAlign.center, style: TextStyle(fontSize: 13),),
-                    } else...{
-                      Text(
-                        '${trainCongestion[i]}%',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontSize: 12,
-                          color: getCongestionColor(trainCongestion[i]),
-                        ),
+        scrollDirection: Axis.horizontal,
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const SizedBox(width: 10,),
+            for(int i = 0; i < trainCarNo.length; i++)...{
+              Column(
+                children: [
+                  Text('${trainCarNo[i]}', textAlign: TextAlign.center,),
+                  // 混雑度が-1、999となっているときは-を表示する
+                  if(trainCongestion[i] < 0 || 500 < trainCongestion[i])...{
+                    const Text(' - ', textAlign: TextAlign.center, style: TextStyle(fontSize: 13),),
+                  } else...{
+                    Text(
+                      '${trainCongestion[i]}%',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: getCongestionColor(trainCongestion[i]),
                       ),
-                    },
-                    const SizedBox(height: 5,),
+                    ),
+                  },
+                  const SizedBox(height: 5,),
 
-                    if(carTypes[i].contains('1'))...{
-                      const Text('A', style: TextStyle(fontSize: 12),),
-                      const SizedBox(height: 5,),
-                    }
-                    else if(carTypes[i].contains('3'))...{
-                      const Text('弱冷', style: TextStyle(fontSize: 12, color: Colors.blue),),
-                      const SizedBox(height: 5,),
-                    }
-                    else if(carTypes[i].contains('4'))...{
-                      const Text('女専', style: TextStyle(fontSize: 12, color: Color(0xffff5555)),),
-                      const SizedBox(height: 5,),
-                    },
-                  ],
+                  if(carTypes[i].contains('1'))...{
+                    const Text('A', style: TextStyle(fontSize: 12),),
+                    const SizedBox(height: 5,),
+                  }
+                  else if(carTypes[i].contains('3'))...{
+                    const Text('弱冷', style: TextStyle(fontSize: 12, color: Colors.blue),),
+                    const SizedBox(height: 5,),
+                  }
+                  else if(carTypes[i].contains('4'))...{
+                    const Text('女専', style: TextStyle(fontSize: 12, color: Color(0xffff5555)),),
+                    const SizedBox(height: 5,),
+                  },
+                ],
+              ),
+              if(i != trainCarNo.length - 1)...{
+                const SizedBox(
+                  height: 60,
+                  child: VerticalDivider(),
                 ),
-                if(i != trainCarNo.length - 1)...{
-                  const SizedBox(
-                    height: 60,
-                    child: VerticalDivider(),
-                  ),
-                },
               },
-              const SizedBox(width: 10,),
-            ],
-          ),
+            },
+            const SizedBox(width: 10,),
+          ],
         ),
-      ),
+      )
     );
   }
 
