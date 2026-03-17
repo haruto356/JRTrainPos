@@ -59,13 +59,13 @@ class _TrainState extends State<Train> {
       // うれシート、Aシートの表示改善
       if(trainTypeTemp.contains('う')) {
         if(trainTypeTemp.contains('快')){
-          trainTypeTemp = '快速 うれしートあり';
+          trainTypeTemp = '快速うれしート有';
         } else {
-          trainTypeTemp = '普通 うれしートあり';
+          trainTypeTemp = '普通うれしート有';
         }
       }
       if(trainTypeTemp.contains('A')) {
-        trainTypeTemp = '新快速 Aシートあり';
+        trainTypeTemp = '新快速Aシート有';
       }
       _trainType.add(trainTypeTemp);
 
@@ -201,62 +201,64 @@ class _TrainState extends State<Train> {
                 child: SingleChildScrollView(
                   child: Column(
                     children: [
+                      const SizedBox(height: 15,),
                       for(int i = 0; i < _trainNo.length; i++)...{
-                        Padding(
-                          padding: const EdgeInsets.all(5),
-                          child: Column(
-                            children: [
-                              // 車両の基本情報の表示
-                              Row(
-                                children: [
-                                  const Spacer(),
-                                  Text(_trainType[i]),
-                                  const SizedBox(width: 20,),
-                                  Text('${_dest[i]}行き'),
+                        Column(
+                          children: [
+                            const SizedBox(height: 10,),
+                            // 車両の基本情報の表示
+                            Row(
+                              children: [
+                                const Spacer(flex: 2,),
+                                Text(_trainType[i]),
+                                const SizedBox(width: 12,),
+                                Text('${_dest[i]}行き'),
 
-                                  if(_numberOfCars[i] != 0)...{
-                                    const SizedBox(width: 20,),
-                                    Text('${_numberOfCars[i]}両'),
-                                    const Spacer(),
-                                  }
-                                  else...{
-                                    const Spacer(),
-                                  }
+                                if(_numberOfCars[i] != 0)...{
+                                  const SizedBox(width: 12,),
+                                  Text('${_numberOfCars[i]}両'),
+                                  const Spacer(flex: 1,),
+                                }
+                                else...{
+                                  const Spacer(),
+                                },
+                                Text(_trainNo[i]),
+                                const SizedBox(width: 5,),
+                              ],
+                            ),
+                            if(_nickname[i].isNotEmpty)
+                              Text(_nickname[i]),
+                            if(_typeChange[i].isNotEmpty)
+                              Text(_typeChange[i]),
+
+                            const SizedBox(height: 6,),
+
+                            // 混雑情報の表示
+                            if(_trainCarsCongestion[i].isNotEmpty)...{
+                              // 進行方向の表示
+                              const Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Spacer(),
+                                  Icon(Icons.arrow_back, size: 16,),
+                                  Text('進行方向'),
+                                  Spacer(),
                                 ],
                               ),
-                              if(_nickname[i].isNotEmpty)
-                                Text(_nickname[i]),
-                              if(_typeChange[i].isNotEmpty)
-                                Text(_typeChange[i]),
-
                               const SizedBox(height: 6,),
 
-                              // 混雑情報の表示
-                              if(_trainCarsCongestion[i].isNotEmpty)...{
-                                // 進行方向の表示
-                                const Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Spacer(),
-                                    Icon(Icons.arrow_back, size: 16,),
-                                    Text('進行方向'),
-                                    Spacer(),
-                                  ],
-                                ),
-                                const SizedBox(height: 6,),
+                              TrainCongestion(trainCarNo: _trainCarsNo[i], trainCongestion: _trainCarsCongestion[i],)
+                            },
 
-                                TrainCongestion(trainCarNo: _trainCarsNo[i], trainCongestion: _trainCarsCongestion[i],)
-                              },
+                            // 遅延情報の表示
+                            if(_delayMinutes[i] != 0)...{
+                              Text('${_delayMinutes[i]}分遅れ'),
+                            },
 
-                              // 遅延情報の表示
-                              if(_delayMinutes[i] != 0)...{
-                                Text('${_delayMinutes[i]}分遅れ'),
-                              },
-
-                              const SizedBox(height: 10,),
-                            ],
-                          ),
-                        )
+                            const SizedBox(height: 10,),
+                            const Divider(),
+                          ],
+                        ),
                       }
                     ],
                   )
