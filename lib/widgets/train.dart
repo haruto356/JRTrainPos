@@ -42,6 +42,7 @@ class _TrainState extends State<Train> {
   final List<String> _typeChange = [];
   final List<List<int>> _trainCarsNo = [];
   final List<List<int>> _trainCarsCongestion = [];
+  final List<List<String>> _carTypes = [];
 
   // 車両詳細情報を変数に格納する
   Future<void> _updateTrainInfo() async {
@@ -93,6 +94,7 @@ class _TrainState extends State<Train> {
       if (carList == null) {
         _trainCarsCongestion.add([]);
         _trainCarsNo.add([]);
+        _carTypes.add([]);
         continue;
       }
 
@@ -110,12 +112,15 @@ class _TrainState extends State<Train> {
       // 情報表示用リストに追加
       final List<int> noTemp = [];
       final List<int> congestionTemp = [];
+      final List<String> carTypeTemp = [];
       for (var j in trainInfoJsonList) {
         noTemp.add(j['carNo']);
         congestionTemp.add(j['congestion']);
+        carTypeTemp.add(j['types'].toString());
       }
       _trainCarsNo.add(noTemp);
       _trainCarsCongestion.add(congestionTemp);
+      _carTypes.add(carTypeTemp);
 
       if(_numberOfCars[i] == 0){
         _numberOfCars[i] = _trainCarsNo[i].length;
@@ -247,7 +252,11 @@ class _TrainState extends State<Train> {
                               ),
                               const SizedBox(height: 6,),
 
-                              TrainCongestion(trainCarNo: _trainCarsNo[i], trainCongestion: _trainCarsCongestion[i],)
+                              TrainCongestion(
+                                trainCarNo: _trainCarsNo[i],
+                                trainCongestion: _trainCarsCongestion[i],
+                                carTypes: _carTypes[i],
+                              ),
                             },
 
                             // 遅延情報の表示

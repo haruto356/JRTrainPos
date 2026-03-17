@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 
 class TrainCongestion extends StatelessWidget {
-  TrainCongestion({super.key, required this.trainCarNo, required this.trainCongestion});
+  TrainCongestion({super.key, required this.trainCarNo, required this.trainCongestion, required this.carTypes});
 
   final List<int> trainCarNo;
   final List<int> trainCongestion;
+  final List<String> carTypes;
   final ScrollController _scrollController = ScrollController();
 
   @override
@@ -16,6 +17,7 @@ class TrainCongestion extends StatelessWidget {
           controller: _scrollController,
           scrollDirection: Axis.horizontal,
           child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const SizedBox(width: 10,),
               for(int i = 0; i < trainCarNo.length; i++)...{
@@ -35,12 +37,25 @@ class TrainCongestion extends StatelessWidget {
                         ),
                       ),
                     },
-                    const SizedBox(height: 10,),
+                    const SizedBox(height: 5,),
+
+                    if(carTypes[i].contains('1'))...{
+                      const Text('A', style: TextStyle(fontSize: 12),),
+                      const SizedBox(height: 5,),
+                    }
+                    else if(carTypes[i].contains('3'))...{
+                      const Text('弱冷', style: TextStyle(fontSize: 12, color: Colors.blue),),
+                      const SizedBox(height: 5,),
+                    }
+                    else if(carTypes[i].contains('4'))...{
+                      const Text('女専', style: TextStyle(fontSize: 12, color: Color(0xffff5555)),),
+                      const SizedBox(height: 5,),
+                    },
                   ],
                 ),
                 if(i != trainCarNo.length - 1)...{
                   const SizedBox(
-                    height: 40,
+                    height: 60,
                     child: VerticalDivider(),
                   ),
                 },
