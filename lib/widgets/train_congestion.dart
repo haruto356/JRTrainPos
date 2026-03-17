@@ -1,16 +1,19 @@
 import 'package:flutter/material.dart';
 
 class TrainCongestion extends StatelessWidget {
-  const TrainCongestion({super.key, required this.trainCarNo, required this.trainCongestion});
+  TrainCongestion({super.key, required this.trainCarNo, required this.trainCongestion});
 
   final List<int> trainCarNo;
   final List<int> trainCongestion;
+  final ScrollController _scrollController = ScrollController();
 
   @override
   Widget build(BuildContext context) {
     return Center(
       child: Scrollbar(
+        controller: _scrollController,
         child: SingleChildScrollView(
+          controller: _scrollController,
           scrollDirection: Axis.horizontal,
           child: Row(
             children: [
