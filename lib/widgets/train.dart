@@ -91,6 +91,8 @@ class _TrainState extends State<Train> {
       final carList = json.decode(jsonStr)['trains'][_trainNo[i]];
       // 列車詳細情報がないなら終了
       if (carList == null) {
+        _trainCarsCongestion.add([]);
+        _trainCarsNo.add([]);
         continue;
       }
 
@@ -184,10 +186,9 @@ class _TrainState extends State<Train> {
 
     return Positioned(
       top: _posTop * 70 + 25,
-      left:
-          _direction == 0
-              ? MediaQuery.of(context).size.width / 2 - 75
-              : MediaQuery.of(context).size.width / 2 + 30,
+      left: _direction == 0
+        ? MediaQuery.of(context).size.width / 2 - 75
+        : MediaQuery.of(context).size.width / 2 + 30,
       child: GestureDetector(
         onTap: () {
           // 下から列車情報画面を表示
@@ -206,12 +207,23 @@ class _TrainState extends State<Train> {
                           child: Column(
                             children: [
                               // 車両の基本情報の表示
-                              if(_numberOfCars[i] == 0)...{
-                                Text('${_trainType[i]}   ${_dest[i]}行き', textAlign: TextAlign.center,),
-                              }
-                              else...{
-                                Text('${_trainType[i]}   ${_dest[i]}行き   ${_numberOfCars[i]}両', textAlign: TextAlign.center,),
-                              },
+                              Row(
+                                children: [
+                                  const Spacer(),
+                                  Text(_trainType[i]),
+                                  const SizedBox(width: 20,),
+                                  Text('${_dest[i]}行き'),
+
+                                  if(_numberOfCars[i] != 0)...{
+                                    const SizedBox(width: 20,),
+                                    Text('${_numberOfCars[i]}両'),
+                                    const Spacer(),
+                                  }
+                                  else...{
+                                    const Spacer(),
+                                  }
+                                ],
+                              ),
                               if(_nickname[i].isNotEmpty)
                                 Text(_nickname[i]),
                               if(_typeChange[i].isNotEmpty)
@@ -219,10 +231,8 @@ class _TrainState extends State<Train> {
 
                               const SizedBox(height: 6,),
 
-
-
                               // 混雑情報の表示
-                              if(_trainCarsNo.isNotEmpty && _trainCarsCongestion.isNotEmpty && _trainCarsCongestion.length > i)...{
+                              if(_trainCarsCongestion[i].isNotEmpty)...{
                                 // 進行方向の表示
                                 const Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
@@ -256,103 +266,102 @@ class _TrainState extends State<Train> {
           );
         },
         child:
-            _direction == 0
-                ?
-                // 上向き
-                Column(
+          _direction == 0
+            // 上向き
+            ? Column(
+              children: [
+                Stack(
                   children: [
-                    Stack(
-                      children: [
-                        Image(
-                          image: const AssetImage('assets/images/train.png'),
-                          height: 50,
-                          width: 50,
-                          color:
-                          widget.trainMap.length == 1
-                              ? Color(widget.lineColor)
-                              : Colors.black,
-                        ),
-                        Positioned.fill(
-                          top: 4,
-                          child: Center(
-                            child: Text(_trainTypeChar, style: const TextStyle(fontSize: 18, color: Colors.white),),
-                          ),
-                        ),
-                      ],
+                    Image(
+                      image: const AssetImage('assets/images/train.png'),
+                      height: 50,
+                      width: 50,
+                      color:
+                      widget.trainMap.length == 1
+                          ? Color(widget.lineColor)
+                          : Colors.black,
                     ),
-
-                    // 遅延分数
-                    if (_maxDelayMinutes > 0) ...{
-                      Transform.translate(
-                        offset: const Offset(0, -5),
-                        child: Container(
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(5),
-                            color: _delayMinuteAccentColor,
-                          ),
-                          padding: const EdgeInsets.only(
-                            left: 5,
-                            right: 5,
-                            bottom: 2,
-                          ),
-                          child: Text(
-                            '$_maxDelayMinutes分遅れ',
-                            style: const TextStyle(fontSize: 10, color: Colors.white),
-                          ),
-                        ),
+                    Positioned.fill(
+                      top: 4,
+                      child: Center(
+                        child: Text(_trainTypeChar, style: const TextStyle(fontSize: 18, color: Colors.white),),
                       ),
-                    },
-                  ],
-                )
-                // 下向き
-                : Column(
-                  children: [
-                    // 遅延分数
-                    if (_maxDelayMinutes > 0) ...{
-                      Transform.translate(
-                        offset: const Offset(0, 5),
-                        child: Container(
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(5),
-                            color: _delayMinuteAccentColor,
-                          ),
-                          padding: const EdgeInsets.only(
-                            left: 5,
-                            right: 5,
-                            bottom: 2,
-                          ),
-                          child: Text(
-                            '$_maxDelayMinutes分遅れ',
-                            style: const TextStyle(fontSize: 10, color: Colors.white),
-                          ),
-                        ),
-                      ),
-                    },
-
-                    Stack(
-                      children: [
-                        Transform.scale(
-                          scaleY: -1,
-                          child: Image(
-                            image: const AssetImage('assets/images/train.png'),
-                            height: 50,
-                            width: 50,
-                            color:
-                            widget.trainMap.length == 1
-                                ? Color(widget.lineColor)
-                                : Colors.black,
-                          ),
-                        ),
-                        Positioned.fill(
-                          top: -8,
-                          child: Center(
-                            child: Text(_trainTypeChar, style: const TextStyle(fontSize: 18, color: Colors.white),),
-                          ),
-                        ),
-                      ],
                     ),
                   ],
                 ),
+
+                // 遅延分数
+                if (_maxDelayMinutes > 0) ...{
+                  Transform.translate(
+                    offset: const Offset(0, -5),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(5),
+                        color: _delayMinuteAccentColor,
+                      ),
+                      padding: const EdgeInsets.only(
+                        left: 5,
+                        right: 5,
+                        bottom: 2,
+                      ),
+                      child: Text(
+                        '$_maxDelayMinutes分遅れ',
+                        style: const TextStyle(fontSize: 10, color: Colors.white),
+                      ),
+                    ),
+                  ),
+                },
+              ],
+            )
+            // 下向き
+            : Column(
+              children: [
+                // 遅延分数
+                if (_maxDelayMinutes > 0) ...{
+                  Transform.translate(
+                    offset: const Offset(0, 5),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(5),
+                        color: _delayMinuteAccentColor,
+                      ),
+                      padding: const EdgeInsets.only(
+                        left: 5,
+                        right: 5,
+                        bottom: 2,
+                      ),
+                      child: Text(
+                        '$_maxDelayMinutes分遅れ',
+                        style: const TextStyle(fontSize: 10, color: Colors.white),
+                      ),
+                    ),
+                  ),
+                },
+
+                Stack(
+                  children: [
+                    Transform.scale(
+                      scaleY: -1,
+                      child: Image(
+                        image: const AssetImage('assets/images/train.png'),
+                        height: 50,
+                        width: 50,
+                        color:
+                        widget.trainMap.length == 1
+                            ? Color(widget.lineColor)
+                            : Colors.black,
+                      ),
+                    ),
+                    Positioned.fill(
+                      top: -8,
+                      child: Center(
+                        child: Text(_trainTypeChar, style: const TextStyle(fontSize: 18, color: Colors.white),),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
       ),
     );
   }
