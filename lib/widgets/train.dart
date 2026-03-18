@@ -51,10 +51,13 @@ class _TrainState extends State<Train> {
 
     for(int i = 0; i < trains.length; i++){
       _trainNo.add(trains[i]['no']!);
-      _nickname.add(trains[i]['nickname'] ?? '');
       _delayMinutes.add(int.parse(trains[i]['delayMinutes'] ?? '0'));
       _numberOfCars.add(int.parse(trains[i]['numberOfCars'] ?? '0'));
       _typeChange.add(trains[i]['typeChange'] ?? '');
+
+      // ニックネームから[]を削除
+      String trainNicknameTemp = trains[i]['nickname'] ?? '';
+      _nickname.add(trainNicknameTemp.replaceAll('[', '').replaceAll(']', ''));
 
       String trainTypeTemp = trains[i]['displayType']!;
       // うれシート、Aシートの表示改善
@@ -241,20 +244,24 @@ class _TrainState extends State<Train> {
                             // 車両の基本情報の表示
                             Row(
                               children: [
-                                const Spacer(flex: 2,),
-                                Text(_trainType[i]),
-                                const SizedBox(width: 12,),
-                                Text('${_dest[i]}行き'),
+                                // バランスをとるためのダミー
+                                const SizedBox(width: 5,),
+                                Text(_trainNo[i],
+                                  style: const TextStyle(color: Color(0xfff0f4f8),
+                                  fontSize: 12,
+                                  ),
+                                ),
 
+                                const Spacer(),
                                 if(_numberOfCars[i] != 0)...{
-                                  const SizedBox(width: 12,),
-                                  Text('${_numberOfCars[i]}両'),
-                                  const Spacer(flex: 1,),
+                                  Text('${_trainType[i]}   ${_dest[i]}行き   ${_numberOfCars[i]}両'),
                                 }
                                 else...{
-                                  const Spacer(),
+                                  Text('${_trainType[i]}   ${_dest[i]}行き'),
                                 },
-                                Text(_trainNo[i]),
+                                const Spacer(),
+
+                                Text(_trainNo[i], style: const TextStyle(fontSize: 12),),
                                 const SizedBox(width: 5,),
                               ],
                             ),
