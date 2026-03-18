@@ -198,6 +198,7 @@ class _TrainState extends State<Train> {
         onTap: () {
           // 下から列車情報画面を表示
           showModalBottomSheet(
+            scrollControlDisabledMaxHeightRatio: 0.7,
             context: context,
             builder: (BuildContext context) {
               return SizedBox(
@@ -206,7 +207,33 @@ class _TrainState extends State<Train> {
                 child: SingleChildScrollView(
                   child: Column(
                     children: [
-                      const SizedBox(height: 15,),
+                      // 上部のレイアウト
+                      const SizedBox(height: 10,),
+                      DecoratedBox(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          color: Colors.grey,
+                        ),
+                        child: const SizedBox(
+                          width: 80,
+                          height: 5,
+                        ),
+                      ),
+                      Row(
+                        children: [
+                          const Spacer(),
+                          IconButton(
+                            onPressed: (){
+                              Navigator.pop(context);
+                            },
+                            icon: const Icon(Icons.close),
+                          ),
+                          const SizedBox(width: 10,),
+                        ],
+                      ),
+                      const Divider(),
+
+                      // 列車詳細情報
                       for(int i = 0; i < _trainNo.length; i++)...{
                         Column(
                           children: [
