@@ -17,7 +17,10 @@ class TrainCongestion extends StatelessWidget {
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const SizedBox(width: 10,),
+            const SizedBox(
+              height: 60,
+              child: VerticalDivider(),
+            ),
             for(int i = 0; i < trainCarNo.length; i++)...{
               Column(
                 children: [
@@ -51,12 +54,10 @@ class TrainCongestion extends StatelessWidget {
                   },
                 ],
               ),
-              if(i != trainCarNo.length - 1)...{
-                const SizedBox(
-                  height: 60,
-                  child: VerticalDivider(),
-                ),
-              },
+              const SizedBox(
+                height: 60,
+                child: VerticalDivider(),
+              ),
             },
             const SizedBox(width: 10,),
           ],
