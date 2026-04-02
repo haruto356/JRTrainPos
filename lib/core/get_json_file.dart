@@ -11,14 +11,13 @@ class GetJsonFile {
 
   // 駅リストを取得し、一時フォルダに保存する関数
   Future<void> saveStationListTempDir(String lineName) async {
-    // 日付チェック（今日既に取得しているなら取得しない）
+    // 日付チェック
     DateTime now = DateTime.now();
     DateTime fileDate = await FileOperation().getFileModifiedDateTempDir(
       '$lineName.json',
     );
-    if (now.year == fileDate.year &&
-        now.month == fileDate.month &&
-        now.day == fileDate.day) {
+    // 今日既に取得しているなら新たに取得しない
+    if (now.difference(fileDate).inDays == 0) {
       return;
     }
 
