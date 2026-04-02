@@ -140,4 +140,32 @@ class GetJsonFile {
 
     return result;
   }
+
+  // 近畿エリアの運行状況を取得する関数
+  Future<String> getKinkiTrafficInfo() async {
+    String result = '';
+
+    // 取得
+    try {
+      final jsonUrl = Uri.parse('https://www.train-guide.westjr.co.jp/api/v3/area_kinki_trafficinfo.json');
+      final response = await http.get(jsonUrl).timeout(timeOutDuration);
+      final status = response.statusCode;
+
+      switch(status){
+        case 200:
+          result = response.body;
+          break;
+        case 403:
+          throw Exception('[$status] $jsonUrlの閲覧権限がありません');
+        case 404:
+          throw Exception('[$status] $jsonUrlが見つかりません');
+        default:
+          throw Exception('[$status] 近畿エリアの運行状況取得時にエラーが発生しました');
+      }
+    } catch (e) {
+      throw Exception();
+    }
+
+    return result;
+  }
 }
